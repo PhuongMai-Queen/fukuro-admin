@@ -1,0 +1,29 @@
+<h5>Thêm Mới Loại Bài Viết</h5>
+<div *ngIf="!submitted">
+  <div class="row">
+    <div class="col-sm-9">
+      <nb-card>
+        <nb-card-header>Tên Loại Bài Viết</nb-card-header>
+        <nb-card-body>
+          <div class="form-group">
+              <input type="text" nbInput fullWidth [(ngModel)]="blogCategories.name">
+            </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-sm-3">
+      <nb-card>
+        <nb-card-header>Trạng thái</nb-card-header>
+        <nb-card-body>
+          <div class="form-group">
+            <nb-radio-group [(ngModel)]="blogCategories.status">
+              <nb-radio value="1">Kích hoạt</nb-radio>
+              <nb-radio value="0">Vô hiệu hoá</nb-radio>
+            </nb-radio-group>
+          </div>
+        </nb-card-body>
+      </nb-card>
+      <button type="submit" nbButton status="success" fullWidth (click)="saveBlogCategories()">Lưu</button>
+    </div>
+  </div>
+</div>

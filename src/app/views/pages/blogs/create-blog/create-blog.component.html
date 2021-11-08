@@ -1,0 +1,97 @@
+<h5>Thêm Mới Bài Viết</h5>
+<div *ngIf="!submitted">
+  <nb-card>
+    <nb-card-header>Tên bài viết</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <input type="text" [(ngModel)]="blogs.title" nbInput fullWidth (ngModelChange)="modelChangeFn($event)">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label class="label col-form-label">Link bài viết</label>
+            <input type="text" nbInput fullWidth [(ngModel)]="blogs.slug" [value]="blogs.slug">
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+  <div class="row">
+      <div class="col-sm-9">
+        <nb-card>
+          <nb-card-header>Tóm tắt bài viết</nb-card-header>
+          <nb-card-body>
+            <div class="form-group">
+              <textarea rows="5" nbInput fullWidth placeholder="Text Area" [(ngModel)]="blogs.summary"></textarea>
+            </div>
+          </nb-card-body>
+        </nb-card>
+
+        <nb-card>
+          <nb-card-header>Nội dung</nb-card-header>
+          <nb-card-body>
+            <div class="form-group">
+              <ckeditor [config]="{ extraPlugins: 'divarea', height: '320' }" [(ngModel)]="blogs.description"></ckeditor>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col-sm-3">
+        <nb-card>
+          <nb-card-header>Ảnh bài viết</nb-card-header>
+          <nb-card-body>
+            <div class="form-group">
+
+              <!-- Image Preview -->
+              <div class="imagePreview" *ngIf="blogs.thumbnail && blogs.thumbnail !== ''">
+                <img [src]="blogs.thumbnail" [alt]="uploadForm.value.name">
+              </div>
+
+              <!-- Select File -->
+              <input type="file" nbInput fullWidth accept="image/*" (change)="showPreview($event)" />
+            </div>
+          </nb-card-body>
+        </nb-card>
+
+        <nb-card>
+          <nb-card-header>Trạng thái</nb-card-header>
+          <nb-card-body>
+            <div class="form-group">
+              <nb-radio-group [(ngModel)]="blogs.status">
+                <nb-radio value="1">Đăng</nb-radio>
+                <nb-radio value="0">Bản nháp</nb-radio>
+              </nb-radio-group>
+            </div>
+
+          </nb-card-body>
+        </nb-card>
+
+        <nb-card>
+          <nb-card-header>Loại bài viết</nb-card-header>
+          <nb-card-body>
+            <div class="form-group" >
+              <nb-select selected="1" fullWidth [(ngModel)]="blogs.blog_category_id">
+                <nb-option value="1">Option 1</nb-option>
+                <nb-option value="2">Option 2</nb-option>
+              </nb-select>
+            </div>
+          </nb-card-body>
+        </nb-card>
+
+        <nb-card>
+          <nb-card-header>Tag</nb-card-header>
+          <nb-card-body>
+            <div class="form-group">
+              <tag-input [(ngModel)]="blogs.tag"></tag-input>
+            </div>
+          </nb-card-body>
+        </nb-card>
+
+        <button type="submit" nbButton status="success" fullWidth (click)="saveBlog()">Lưu</button>
+      </div>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+<form>
+  <nb-card>
+    <nb-card-header>Tên bài viết</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <input type="text" nbInput fullWidth placeholder="Ví dụ: Bài Viết Đầu Tiên">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label class="label col-form-label">Link bài viết</label>
+            <input type="text" nbInput fullWidth>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+  <div class="row">
+      <div class="col-sm-9">
+        <nb-card>
+          <nb-card-header>Tóm tắt bài viết</nb-card-header>
+          <nb-card-body>
+            <div class="form-group">
+              <textarea rows="5" nbInput fullWidth placeholder="Text Area"></textarea>
+            </div>
+          </nb-card-body>
+        </nb-card>
+
+        <nb-card>
+          <nb-card-header>Nội dung</nb-card-header>
+          <nb-card-body>
+            <div class="form-group">
+              <ckeditor [config]="{ extraPlugins: 'divarea', height: '320' }"></ckeditor>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col-sm-3">
+        <nb-card>
+          <nb-card-header>Ảnh bài viết</nb-card-header>
+          <nb-card-body>
+            <div class="form-group">
+              <input type="file" nbInput fullWidth>
+            </div>
+          </nb-card-body>
+        </nb-card>
+
+        <nb-card>
+          <nb-card-header>Trạng thái</nb-card-header>
+          <nb-card-body>
+            <div class="form-group">
+              <nb-radio-group>
+                <nb-radio>Đăng</nb-radio>
+                <nb-radio>Bản nháp</nb-radio>
+              </nb-radio-group>
+            </div>
+
+          </nb-card-body>
+        </nb-card>
+
+        <nb-card>
+          <nb-card-header>Loại bài viết</nb-card-header>
+          <nb-card-body>
+            <div class="form-group">
+              <nb-select selected="1" fullWidth>
+                <nb-option value="1">Option 1</nb-option>
+                <nb-option value="2">Option 2</nb-option>
+              </nb-select>
+            </div>
+          </nb-card-body>
+        </nb-card>
+
+        <nb-card>
+          <nb-card-header>Tag</nb-card-header>
+          <nb-card-body>
+            <div class="form-group">
+              <tag-input></tag-input>
+            </div>
+          </nb-card-body>
+        </nb-card>
+
+        <button type="submit" nbButton status="success" fullWidth>Lưu</button>
+      </div>
+    </div>
+
+</form>

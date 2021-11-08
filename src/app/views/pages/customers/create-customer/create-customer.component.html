@@ -1,0 +1,84 @@
+<h5>Thêm Mới Tài Khoản Khách Hàng</h5>
+<div *ngIf="!submitted">
+  <div class="row">
+      <div class="col-sm-9">
+        <nb-card>
+          <nb-card-header>Thông tin cơ bản</nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label class="label col-form-label">Họ</label>
+                  <input type="text" nbInput fullWidth  [(ngModel)]="customers.last_name">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label class="label col-form-label">Tên</label>
+                  <input type="text" nbInput fullWidth  [(ngModel)]="customers.first_name">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label class="label col-form-label">Username</label>
+                  <input type="text" nbInput fullWidth  [(ngModel)]="customers.username">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label class="label col-form-label">Mật Khẩu</label>
+                  <input type="password" nbInput fullWidth  [(ngModel)]="customers.password">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label class="label col-form-label">Email</label>
+                  <input type="email" nbInput fullWidth  [(ngModel)]="customers.email">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label class="label col-form-label">Số điện thoại</label>
+                  <input type="text" nbInput fullWidth  [(ngModel)]="customers.phone">
+                </div>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col-sm-3">
+        <nb-card>
+          <nb-card-header>Ảnh đại diện</nb-card-header>
+          <nb-card-body>
+            <div class="form-group">
+              <!-- Image Preview -->
+              <div class="imagePreview" *ngIf="customers.avatar && customers.avatar !== ''">
+                <img [src]="customers.avatar" [alt]="uploadForm.value.name">
+              </div>
+
+              <!-- Select File -->
+              <input type="file" nbInput fullWidth accept="image/*" (change)="showPreview($event)" />
+            </div>
+          </nb-card-body>
+        </nb-card>
+
+        <nb-card>
+          <nb-card-header>Trạng thái</nb-card-header>
+          <nb-card-body>
+            <div class="form-group">
+              <nb-radio-group  [(ngModel)]="customers.status">
+                <nb-radio value="1">Kích hoạt</nb-radio>
+                <nb-radio value="0">Vô hiệu hoá</nb-radio>
+              </nb-radio-group>
+            </div>
+          </nb-card-body>
+        </nb-card>
+
+        <button type="submit" nbButton status="success" fullWidth (click)="saveCustomer()">Tạo mới</button>
+      </div>
+    </div>
+</div>

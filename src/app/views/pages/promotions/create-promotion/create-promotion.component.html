@@ -1,0 +1,48 @@
+<h5>Thêm Mới Khuyến Mãi</h5>
+<div *ngIf="!submitted">
+  <div class="row">
+    <div class="col-sm-9">
+      <nb-card>
+        <nb-card-header>Thông tin cơ bản</nb-card-header>
+        <nb-card-body>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label col-form-label">Tên khuyến mãi</label>
+                <input type="text" nbInput fullWidth [(ngModel)]="promotions.name">
+              </div>
+              <div class="form-group">
+                <label class="label col-form-label">Ngày bắt đầu</label>
+                <input type="text" nbInput fullWidth [(ngModel)]="promotions.start_date">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label col-form-label">Giảm giá</label>
+                <input type="text" nbInput fullWidth [(ngModel)]="promotions.discount">
+              </div>
+              <div class="form-group">
+                <label class="label col-form-label">Ngày kết thúc</label>
+                <input type="text" nbInput fullWidth [(ngModel)]="promotions.end_date">
+              </div>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-sm-3">
+      <nb-card>
+        <nb-card-header>Trạng thái</nb-card-header>
+        <nb-card-body>
+          <div class="form-group">
+            <nb-radio-group [(ngModel)]="promotions.status">
+              <nb-radio value="1">Kích hoạt</nb-radio>
+              <nb-radio value="0">Vô hiệu hoá</nb-radio>
+            </nb-radio-group>
+          </div>
+        </nb-card-body>
+      </nb-card>
+      <button type="submit" nbButton status="success" fullWidth (click)="savePromotion()">Lưu</button>
+    </div>
+  </div>
+</div>
