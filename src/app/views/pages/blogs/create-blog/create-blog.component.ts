@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Blogs } from '../../../../models/blogs.model';
 import { BlogsService } from '../../../../services/blogs.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 import './create-blog.loader';
 import 'ckeditor';
@@ -12,6 +13,8 @@ import 'ckeditor';
   styleUrls: ['./create-blog.component.scss'],
 })
 export class CreateBlogComponent implements OnInit {
+  result = false;
+  images;
   blogs: Blogs = {
     title: '',
     slug: '',
@@ -20,12 +23,12 @@ export class CreateBlogComponent implements OnInit {
     description: '',
     tag: '',
     status: '',
-    customer_id: '',
+    customer_id: '1',
     blog_category_id: '',
   };
   submitted = false;
   uploadForm: FormGroup;
-  constructor(private blogsService: BlogsService, public fb: FormBuilder) {
+  constructor(private blogsService: BlogsService, public fb: FormBuilder, private http: HttpClient) {
     // Reactive Form
     this.uploadForm = this.fb.group({
       thumbnail: [null],
@@ -39,9 +42,10 @@ export class CreateBlogComponent implements OnInit {
   ngOnInit() {}
   modelChangeFn(e) {
     const text = this.transform(e);
-      setTimeout(() => {
-        this.blogs.slug = text;
-      }, 2000);
+    this.blogs.slug = text;
+      // setTimeout(() => {
+      //   this.blogs.slug = text;
+      // }, 2000);
   }
 
   transform(value) {
@@ -73,32 +77,42 @@ export class CreateBlogComponent implements OnInit {
   }
 
   saveBlog(): void {
-    const data = {
-      title: this.blogs.title,
-      slug: this.blogs.slug,
-      thumbnail: this.blogs.thumbnail,
-      summary: this.blogs.summary,
-      description: this.blogs.description,
-      tag: this.blogs.tag,
-      status: this.blogs.status,
-      customer_id: this.blogs.customer_id,
-      blog_category_id: this.blogs.blog_category_id,
-    };
-    this.blogsService.callServer(data.thumbnail);
-    // const formData = new FormData();
-    // formData.append('data', this.blogs.thumbnail);
-    // console.log(data);
-    // this.blogsService.create(data).subscribe(
-    //   (response) => {
-    //     console.log(response);
-    //     this.submitted = true;
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   });
+
+    const formData = new FormData();
+    formData.append('file', this.images);
+    this.http.post('http://localhost:3000/file', formData).toPromise().then(res => {
+      this.blogs.thumbnail = 'http://fukuro.local/img/'+res['filename'];
+      this.result = true;
+      if(this.result == true){
+        const data = {
+          title: this.blogs.title,
+          slug: this.blogs.slug,
+          thumbnail: this.blogs.thumbnail,
+          summary: this.blogs.summary,
+          description: this.blogs.description,
+          tag: this.blogs.tag,
+          status: this.blogs.status,
+          customer_id: this.blogs.customer_id,
+          blog_category_id: this.blogs.blog_category_id,
+        };
+        // console.log(data);
+        this.blogsService.create(data).subscribe(
+          (response) => {
+            console.log(response);
+            this.submitted = true;
+          },
+          (error) => {
+            console.log(error);
+          });
+      }
+    });
   }
   // Image Preview
   showPreview(event) {
+    if (event.target.files.length > 0) {
+      const file2 = event.target.files[0];
+      this.images = file2;
+    }
     const file = (event.target as HTMLInputElement).files[0];
     this.uploadForm.patchValue({
       thumbnail: file,

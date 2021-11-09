@@ -11,8 +11,6 @@ import {BlogCategoriesService} from '../../../../services/blog-categories.servic
 export class BlogCategoryListComponent implements OnInit {
   blogCategories?: BlogCategories[];
   currentBlogCategories: BlogCategories = {};
-  currentIndex = -1;
-  // data = [];
 
   settings = {
     add: {

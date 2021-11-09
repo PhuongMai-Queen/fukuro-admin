@@ -20,7 +20,7 @@ export class BlogsService {
   }
 
   create(data: any): Observable<any> {
-    return this.http.post(baseUrl, JSON.stringify(data));
+    return this.http.post(baseUrl, data);
   }
 
   update(id: any, data: any): Observable<any> {
@@ -37,11 +37,5 @@ export class BlogsService {
 
   findByTitle(title: any): Observable<Blogs[]> {
     return this.http.get<Blogs[]>(`${baseUrl}?title=${title}`);
-  }
-  callServer(data: any) {
-    this.http.post('http://localhost:8080/file', { images: JSON.stringify(data) })
-      .subscribe(data => {
-        console.log(data);
-      });
   }
 }

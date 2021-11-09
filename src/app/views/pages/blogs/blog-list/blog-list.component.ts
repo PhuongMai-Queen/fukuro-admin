@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 
 import { SmartTableData } from '../../../@core/data/smart-table';
+import {Blogs} from '../../../../models/blogs.model';
+import {BlogsService} from '../../../../services/blogs.service';
 
 @Component({
   selector: 'ngx-blog-list',
@@ -9,7 +11,7 @@ import { SmartTableData } from '../../../@core/data/smart-table';
   styleUrls: ['./blog-list.component.scss'],
 })
 export class BlogListComponent {
-
+  blogs?: Blogs[];
   settings = {
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -26,40 +28,43 @@ export class BlogListComponent {
       confirmDelete: true,
     },
     columns: {
-      id: {
-        title: 'ID',
+      title: {
+        title: 'Tên bài viết',
         type: 'number',
       },
-      firstName: {
-        title: 'First Name',
+      thumbnail: {
+        title: 'Hình ảnh',
         type: 'string',
       },
-      lastName: {
-        title: 'Last Name',
+      summary: {
+        title: 'Tóm tắt bài viết',
         type: 'string',
       },
-      username: {
-        title: 'Username',
+      status: {
+        title: 'Trang thái',
         type: 'string',
-      },
-      email: {
-        title: 'E-mail',
-        type: 'string',
-      },
-      age: {
-        title: 'Age',
-        type: 'number',
       },
     },
   };
 
   source: LocalDataSource = new LocalDataSource();
 
-  constructor(private service: SmartTableData) {
-    const data = this.service.getData();
-    this.source.load(data);
-  }
+  constructor(private blogsService: BlogsService) {}
 
+  ngOnInit(): void {
+    this.retrieveBlogs();
+  }
+  retrieveBlogs(): void {
+    this.blogsService.getAll()
+      .subscribe(
+        data => {
+          this.source = new LocalDataSource(data);
+          // console.log(data);
+        },
+        error => {
+          // console.log(error);
+        });
+  }
   onDeleteConfirm(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
       event.confirm.resolve();

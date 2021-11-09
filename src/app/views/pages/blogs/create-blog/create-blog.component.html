@@ -62,8 +62,8 @@
           <nb-card-body>
             <div class="form-group">
               <nb-radio-group [(ngModel)]="blogs.status">
-                <nb-radio value="1">Đăng</nb-radio>
-                <nb-radio value="0">Bản nháp</nb-radio>
+                <nb-radio value="active">Đăng</nb-radio>
+                <nb-radio value="inactive">Bản nháp</nb-radio>
               </nb-radio-group>
             </div>
 
@@ -86,7 +86,8 @@
           <nb-card-header>Tag</nb-card-header>
           <nb-card-body>
             <div class="form-group">
-              <tag-input [(ngModel)]="blogs.tag"></tag-input>
+              <tag-input></tag-input>
+<!--              <tag-input [(ngModel)]="blogs.tag"></tag-input>-->
             </div>
           </nb-card-body>
         </nb-card>
