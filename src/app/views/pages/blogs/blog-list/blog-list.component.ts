@@ -41,7 +41,7 @@ export class BlogListComponent {
         type: 'string',
       },
       status: {
-        title: 'Trang thái',
+        title: 'Trạng thái',
         type: 'string',
       },
     },

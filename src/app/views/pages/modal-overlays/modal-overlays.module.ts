@@ -14,7 +14,7 @@ import {
 } from '@nebular/theme';
 
 // modules
-import { ThemeModule } from '../../@theme/theme.module';
+import { ThemeModule } from '../../layouts/theme.module';
 import { ModalOverlaysRoutingModule } from './modal-overlays-routing.module';
 
 // components

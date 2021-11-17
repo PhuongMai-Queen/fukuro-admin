@@ -8,9 +8,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './views/@core/core.module';
-import { ThemeModule } from './views/@theme/theme.module';
+import { ThemeModule } from './views/layouts/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+
 import {
   NbChatModule,
   NbDatepickerModule,
@@ -21,6 +22,7 @@ import {
   NbWindowModule,
 } from '@nebular/theme';
 
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [AppComponent],
@@ -40,6 +42,11 @@ import {
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
+    ToastrModule.forRoot({
+      closeButton: true,
+      timeOut: 3000, // 2 seconds
+      progressBar: true,
+    }),
   ],
   bootstrap: [AppComponent],
 })

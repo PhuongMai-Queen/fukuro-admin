@@ -98,11 +98,11 @@ export class CreateBlogComponent implements OnInit {
         // console.log(data);
         this.blogsService.create(data).subscribe(
           (response) => {
-            console.log(response);
+            // console.log(response);
             this.submitted = true;
           },
           (error) => {
-            console.log(error);
+            // console.log(error);
           });
       }
     });

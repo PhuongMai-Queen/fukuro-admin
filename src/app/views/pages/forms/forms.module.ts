@@ -11,7 +11,7 @@ import {
   NbUserModule,
 } from '@nebular/theme';
 
-import { ThemeModule } from '../../@theme/theme.module';
+import { ThemeModule } from '../../layouts/theme.module';
 import { FormsRoutingModule } from './forms-routing.module';
 import { FormsComponent } from './forms.component';
 import { FormInputsComponent } from './form-inputs/form-inputs.component';
@@ -21,27 +21,30 @@ import { ButtonsComponent } from './buttons/buttons.component';
 import { FormsModule as ngFormsModule } from '@angular/forms';
 
 @NgModule({
-  imports: [
-    ThemeModule,
-    NbInputModule,
-    NbCardModule,
-    NbButtonModule,
-    NbActionsModule,
-    NbUserModule,
-    NbCheckboxModule,
-    NbRadioModule,
-    NbDatepickerModule,
-    FormsRoutingModule,
-    NbSelectModule,
-    NbIconModule,
-    ngFormsModule,
-  ],
-  declarations: [
-    FormsComponent,
-    ButtonsComponent,
-    FormInputsComponent,
-    FormLayoutsComponent,
-    DatepickerComponent,
-  ],
+    imports: [
+        ThemeModule,
+        NbInputModule,
+        NbCardModule,
+        NbButtonModule,
+        NbActionsModule,
+        NbUserModule,
+        NbCheckboxModule,
+        NbRadioModule,
+        NbDatepickerModule,
+        FormsRoutingModule,
+        NbSelectModule,
+        NbIconModule,
+        ngFormsModule,
+    ],
+    declarations: [
+        FormsComponent,
+        ButtonsComponent,
+        FormInputsComponent,
+        FormLayoutsComponent,
+        DatepickerComponent,
+    ],
+    exports: [
+        FormLayoutsComponent,
+    ],
 })
 export class FormsModule { }

@@ -5,6 +5,9 @@ import { UserData } from '../../@core/data/users';
 import { LayoutService } from '../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { AdminsService } from '../../../services/admins.service';
+import {LocalDataSource} from 'ng2-smart-table';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'ngx-header',
@@ -16,7 +19,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   user: any;
-
+  avatar: any;
+  name: any;
   themes = [
     {
       value: 'default',
@@ -38,22 +42,40 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [ { title: 'Hồ sơ' }, { title: 'Đăng xuất' } ];
-
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
               private userService: UserData,
               private layoutService: LayoutService,
-              private breakpointService: NbMediaBreakpointsService) {
+              private breakpointService: NbMediaBreakpointsService,
+              private adminsService: AdminsService,
+              public auth: AuthService,
+  ) {
   }
-
+  userMenu = [ { title: 'Hồ sơ', link: '/pages/profile' }, { title: 'Đăng xuất'} ];
+  onContecxtItemSelection(title) {
+    if(title == 'Đăng xuất'){
+      this.auth.logout();
+    }
+  }
   ngOnInit() {
-    this.currentTheme = this.themeService.currentTheme;
+    this.menuService.onItemClick()
+      .subscribe((event) => {
+        this.onContecxtItemSelection(event.item.title);
+      });
 
-    this.userService.getUsers()
+
+    this.currentTheme = this.themeService.currentTheme;
+    const id = localStorage.getItem('id');
+    this.adminsService.get(1)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => this.user = users.nick);
+      .subscribe(
+        data => {
+          this.user = data;
+          this.avatar = data['avatar'];
+          this.name = data['firstName']+' '+data['lastName'];
+        },
+      );
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
@@ -91,4 +113,5 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.menuService.navigateHome();
     return false;
   }
+
 }

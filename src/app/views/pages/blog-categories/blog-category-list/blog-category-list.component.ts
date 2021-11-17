@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
 import {BlogCategories} from '../../../../models/blog-categories.model';
 import {BlogCategoriesService} from '../../../../services/blog-categories.service';
+import { EditBlogCategoryComponent } from '../edit-blog-category/edit-blog-category.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'ngx-blog-category-list',
@@ -22,6 +24,7 @@ export class BlogCategoryListComponent implements OnInit {
       editButtonContent: '<i class="nb-edit"></i>',
       saveButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
+      confirmSave: true,
     },
     delete: {
       deleteButtonContent: '<i class="nb-trash"></i>',
@@ -41,7 +44,7 @@ export class BlogCategoryListComponent implements OnInit {
 
   source: LocalDataSource;
 
-  constructor(private blogCategoriesService: BlogCategoriesService) {}
+  constructor(private blogCategoriesService: BlogCategoriesService, private _router: Router,) {}
   ngOnInit(): void {
     this.retrieveTutorials();
   }
@@ -57,11 +60,24 @@ export class BlogCategoryListComponent implements OnInit {
         });
   }
 
+  onAddClient(data){
+    console.log(data);
+    this._router.navigate(['/pages/blog-categories/create']);
+  }
   onDeleteConfirm(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
       event.confirm.resolve();
     } else {
       event.confirm.reject();
     }
+  }
+
+  onEditConfirm(event): void {
+    console.log(event);
+    // if (window.confirm('Are you sure you want to delete?')) {
+    //   event.confirm.resolve();
+    // } else {
+    //   event.confirm.reject();
+    // }
   }
 }

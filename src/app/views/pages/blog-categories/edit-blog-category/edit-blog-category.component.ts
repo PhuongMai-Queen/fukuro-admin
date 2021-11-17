@@ -5,9 +5,9 @@ import {BlogCategoriesService} from '../../../../services/blog-categories.servic
 
 @Component({
   selector: 'ngx-create-blog-category',
-  templateUrl: './create-blog-category.component.html',
+  templateUrl: './edit-blog-category.component.html',
 })
-export class CreateBlogCategoryComponent implements OnInit {
+export class EditBlogCategoryComponent implements OnInit {
   blogCategories: BlogCategories = {
     name: '',
     status: '',

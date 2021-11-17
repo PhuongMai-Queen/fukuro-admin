@@ -10,7 +10,9 @@ const baseUrl = 'http://localhost:8000/api/admins';
 })
 export class AdminsService {
   constructor(private http: HttpClient) {}
-
+  login(data: any): Observable<any> {
+    return this.http.post(`${baseUrl}/login`, data);
+  }
   getAll(): Observable<Admins[]> {
     return this.http.get<Admins[]>(baseUrl);
   }

@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { BlogCategoriesComponent } from './blog-categories.component';
 import { CreateBlogCategoryComponent } from './create-blog-category/create-blog-category.component';
 import { BlogCategoryListComponent } from './blog-category-list/blog-category-list.component';
+import { EditBlogCategoryComponent } from './edit-blog-category/edit-blog-category.component';
 
 const routes: Routes = [{
   path: '',
@@ -16,7 +17,12 @@ const routes: Routes = [{
     {
       path: 'create',
       component: CreateBlogCategoryComponent,
-  }],
+    },
+    {
+      path: 'edit',
+      component: EditBlogCategoryComponent,
+    },
+  ],
 }];
 
 @NgModule({
@@ -29,4 +35,5 @@ export const routedComponents = [
   BlogCategoriesComponent,
   BlogCategoryListComponent,
   CreateBlogCategoryComponent,
+  EditBlogCategoryComponent,
 ];
