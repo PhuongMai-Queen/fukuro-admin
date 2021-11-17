@@ -2,7 +2,7 @@ export class Promotions {
   id?: any;
   name?: string;
   discount?: string;
-  start_date?: string;
-  end_date?: string;
+  startDate?: string;
+  endDate?: string;
   status?: string;
 }

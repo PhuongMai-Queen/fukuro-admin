@@ -1,4 +1,4 @@
-<h5>Thêm Mới Bài Viết</h5>
+<h5>Chỉnh Sửa Bài Viết</h5>
 <div *ngIf="!submitted">
   <nb-card>
     <nb-card-header>Tên bài viết</nb-card-header>
@@ -75,7 +75,6 @@
           <nb-card-body>
             <div class="form-group" >
               <nb-select selected="1" fullWidth [(ngModel)]="blogs.blogCategoryId">
-                <nb-option value="">Chọn loại bài viết</nb-option>
                 <nb-option *ngFor='let blog_cate of blogCategories' [value]="blog_cate.id">{{ blog_cate.name }}</nb-option>
               </nb-select>
             </div>

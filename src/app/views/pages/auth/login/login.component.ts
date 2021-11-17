@@ -54,12 +54,6 @@ export class LoginComponent implements OnInit {
         const time_to_login = Date.now() + 604800000;
         localStorage.setItem('timer', JSON.stringify(time_to_login));
         localStorage.setItem('id', res.data['id']);
-        // localStorage.setItem("token", res.token);
-        // localStorage.setItem("currentUser", JSON.stringify(res.data.id));
-
-        // console.log(localStorage.getItem('currentUser'));
-        // console.log(this.userData);
-
         this.auth.loggedIn();
         this._router.navigate(['/pages/dashboard']);
         this.toastrService.success('Đăng nhập thành công!');

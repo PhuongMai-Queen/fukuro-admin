@@ -4,8 +4,8 @@ export class Customers {
   username?: string;
   password?: string;
   email?: string;
-  first_name?: string;
-  last_name?: string;
+  firstName?: string;
+  lastName?: string;
   phone?: string;
   status?: string;
 }

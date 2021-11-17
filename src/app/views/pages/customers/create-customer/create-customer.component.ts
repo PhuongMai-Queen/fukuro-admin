@@ -14,8 +14,8 @@ export class CreateCustomerComponent implements OnInit {
     username: '',
     password: '',
     email: '',
-    first_name: '',
-    last_name: '',
+    firstName: '',
+    lastName: '',
     phone: '',
     status: '',
   };
@@ -35,8 +35,8 @@ export class CreateCustomerComponent implements OnInit {
       username: this.customers.username,
       password: this.customers.password,
       email: this.customers.email,
-      first_name: this.customers.first_name,
-      last_name: this.customers.last_name,
+      first_name: this.customers.firstName,
+      last_name: this.customers.lastName,
       phone: this.customers.phone,
       status: this.customers.status,
     };

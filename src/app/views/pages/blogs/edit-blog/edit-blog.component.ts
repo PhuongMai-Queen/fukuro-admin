@@ -8,16 +8,18 @@ import {Router} from '@angular/router';
 import {BlogCategories} from '../../../../models/blog-categories.model';
 import {BlogCategoriesService} from '../../../../services/blog-categories.service';
 import {LocalDataSource} from 'ng2-smart-table';
+import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../../../../environments/environment';
 
-import './create-blog.loader';
+import './edit-blog.loader';
 import 'ckeditor';
 
 @Component({
-  selector: 'ngx-create-blog',
-  templateUrl: './create-blog.component.html',
-  styleUrls: ['./create-blog.component.scss'],
+  selector: 'ngx-edit-blog',
+  templateUrl: './edit-blog.component.html',
+  styleUrls: ['./edit-blog.component.scss'],
 })
-export class CreateBlogComponent implements OnInit {
+export class EditBlogComponent implements OnInit {
   result = false;
   images = null;
   blogs: Blogs = {
@@ -34,12 +36,14 @@ export class CreateBlogComponent implements OnInit {
   uploadForm: FormGroup;
   error = '';
   blogCategories?: BlogCategories[];
+  id: null;
   constructor(private blogsService: BlogsService,
               public fb: FormBuilder,
               private http: HttpClient,
               private toastrService: ToastrService,
               private _router: Router,
               private blogCategoriesService: BlogCategoriesService,
+              private activatedRoute: ActivatedRoute,
   ) {
     // Reactive Form
     this.uploadForm = this.fb.group({
@@ -51,7 +55,23 @@ export class CreateBlogComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.retrieveBlogCategories();
+    this.id = this.activatedRoute.snapshot.params.id;
+    this.getBlogs(this.id);
+  }
+
+  getBlogs(id): void {
+    this.blogsService.get(id)
+      .subscribe(
+        data => {
+          this.blogs = data;
+          if(data.tag != ''){
+            this.blogs.tag = JSON.parse(data.tag);
+          }
+          this.retrieveBlogCategories(data.blogCategoryId);
+        },
+        error => {
+          console.log(error);
+        });
   }
 
   // Create slug
@@ -122,29 +142,27 @@ export class CreateBlogComponent implements OnInit {
         description: this.blogs.description,
         tag: JSON.stringify(this.blogs.tag),
         status: this.blogs.status,
-        blog_category_id: this.blogs.blogCategoryId,
-        admin_id: localStorage.getItem('id'),
+        blogCategoryId: this.blogs.blogCategoryId,
+        adminId: localStorage.getItem('id'),
       };
-      this.blogsService.create(data).subscribe(
+      this.blogsService.update(this.id, data).subscribe(
         (response) => {
-          // console.log(response);
-          this.submitted = true;
-          // this._router.navigate(['/pages/dashboard']);
-          this.newBlog();
-          this.toastrService.success('Thêm mới thành công!');
+          this.retrieveBlogCategories(data.blogCategoryId);
+          this.toastrService.success(response.message);
         },
         (error) => {
-          this.toastrService.success('Thêm mới thất bại!');
+          this.toastrService.success(error.message);
         });
-    }else{
-      this.http.post('http://localhost:3000/file', formData).toPromise().then(res => {
-        this.blogs.thumbnail = 'http://fukuro.local/img/'+res['filename'];
+    }
+    else{
+      this.http.post(environment.apiPostImg, formData).toPromise().then(res => {
+        // this.blogs.thumbnail = environment.linkImg+res['filename'];
         this.result = true;
         if(this.result == true){
           const data = {
             title: this.blogs.title,
             slug: this.blogs.slug,
-            thumbnail: this.blogs.thumbnail,
+            thumbnail: environment.linkImg+res['filename'],
             summary: this.blogs.summary,
             description: this.blogs.description,
             tag: JSON.stringify(this.blogs.tag),
@@ -152,14 +170,10 @@ export class CreateBlogComponent implements OnInit {
             blogCategoryId: this.blogs.blogCategoryId,
             adminId: localStorage.getItem('id'),
           };
-          // console.log(data);
-          this.blogsService.create(data).subscribe(
+          this.blogsService.update(this.id, data).subscribe(
             (response) => {
-              // console.log(response);
-              this.submitted = true;
-              // this._router.navigate(['/pages/dashboard']);
-              this.newBlog();
-              this.toastrService.success('Thêm mới thành công!');
+              this.retrieveBlogCategories(data.blogCategoryId);
+              this.toastrService.success(response.message);
             },
             (error) => {
               this.toastrService.success('Thêm mới thất bại!');
@@ -169,26 +183,25 @@ export class CreateBlogComponent implements OnInit {
     }
   }
 
-  newBlog(): void {
-    this.submitted = false;
-    this.images = null;
-    this.blogs = {
-      title: '',
-      slug: '',
-      thumbnail: '',
-      summary: '',
-      description: '',
-      tag: '',
-      status: '',
-      blogCategoryId: '',
-    };
-  }
+  retrieveBlogCategories(blog_cate_id): void {
 
-  retrieveBlogCategories(): void {
     this.blogCategoriesService.getAll()
       .subscribe(
         data => {
-          this.blogCategories = data;
+          const customData = data;
+          const obj = [];
+          customData.forEach((currentValue, index) => {
+            if(currentValue.id == blog_cate_id){
+              console.log(blog_cate_id);
+              obj.push({ id: currentValue.id, name: currentValue.name });
+              customData.splice(index,1);
+            }
+          });
+          customData.forEach((currentValue, index) => {
+            obj.push({ id: currentValue.id, name: currentValue.name });
+          });
+          this.blogCategories = obj;
+          console.log(this.blogCategories);
         },
         error => {
           console.log(error);

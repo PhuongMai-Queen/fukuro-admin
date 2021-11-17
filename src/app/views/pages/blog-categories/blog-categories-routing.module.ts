@@ -19,7 +19,7 @@ const routes: Routes = [{
       component: CreateBlogCategoryComponent,
     },
     {
-      path: 'edit',
+      path: 'edit/:id',
       component: EditBlogCategoryComponent,
     },
   ],

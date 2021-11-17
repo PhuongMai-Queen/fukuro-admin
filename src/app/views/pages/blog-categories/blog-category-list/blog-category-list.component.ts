@@ -4,6 +4,7 @@ import {BlogCategories} from '../../../../models/blog-categories.model';
 import {BlogCategoriesService} from '../../../../services/blog-categories.service';
 import { EditBlogCategoryComponent } from '../edit-blog-category/edit-blog-category.component';
 import {Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'ngx-blog-category-list',
@@ -15,20 +16,21 @@ export class BlogCategoryListComponent implements OnInit {
   currentBlogCategories: BlogCategories = {};
 
   settings = {
-    add: {
-      addButtonContent: '<i class="nb-plus"></i>',
-      createButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    edit: {
-      editButtonContent: '<i class="nb-edit"></i>',
-      saveButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-      confirmSave: true,
-    },
-    delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
-      confirmDelete: true,
+    actions: {
+      custom: [
+        {
+          name: 'edit',
+          title: '<i class="nb-edit text-success" title="Edit"></i>'
+        },
+        {
+          name: 'delete',
+          title: '<i class="nb-trash text-danger" title="delete"></i>'
+        },
+      ],
+      add: false,
+      edit: false,
+      delete: false,
+      position: 'right',
     },
     columns: {
       name: {
@@ -37,47 +39,50 @@ export class BlogCategoryListComponent implements OnInit {
       },
       status: {
         title: 'Trạng Thái',
-        type: 'string',
+        type: 'html',
+        valuePrepareFunction: (value) => {
+          return value == 1 ? 'Kích hoạt' : 'Vô hiệu hoá';
+        },
       },
     },
   };
 
   source: LocalDataSource;
 
-  constructor(private blogCategoriesService: BlogCategoriesService, private _router: Router) {}
+  constructor(private blogCategoriesService: BlogCategoriesService,
+              private _router: Router,
+              private toastrService: ToastrService,
+  ) {}
   ngOnInit(): void {
-    this.retrieveTutorials();
+    this.retrieveBlogCategories();
   }
-  retrieveTutorials(): void {
+  retrieveBlogCategories(): void {
     this.blogCategoriesService.getAll()
       .subscribe(
         data => {
           this.source = new LocalDataSource(data);
-          // console.log(data);
         },
         error => {
-          // console.log(error);
+          console.log(error);
         });
   }
 
-  onAddClient(data){
-    console.log(data);
-    this._router.navigate(['/pages/blog-categories/create']);
-  }
-  onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
+  onCustomAction(event) {
+    if(event.action == 'edit'){
+      this._router.navigate(['pages/blog-categories/edit/'+event.data['id']]);
     }
-  }
-
-  onEditConfirm(event): void {
-    console.log(event);
-    // if (window.confirm('Are you sure you want to delete?')) {
-    //   event.confirm.resolve();
-    // } else {
-    //   event.confirm.reject();
-    // }
+    if(event.action == 'delete'){
+      if (window.confirm('Bạn có chắn chắn sẽ xoá không?')) {
+        this.blogCategoriesService.delete(event.data['id'])
+          .subscribe(
+            response => {
+              this.retrieveBlogCategories();
+              this.toastrService.success(response.message);
+            },
+            error => {
+              this.toastrService.success(error);
+            });
+      }
+    }
   }
 }

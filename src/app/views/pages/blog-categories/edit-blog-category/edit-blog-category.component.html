@@ -17,13 +17,13 @@
         <nb-card-body>
           <div class="form-group">
             <nb-radio-group [(ngModel)]="blogCategories.status">
-              <nb-radio value="active">Kích hoạt</nb-radio>
-              <nb-radio value="inactive">Vô hiệu hoá</nb-radio>
+              <nb-radio value="1">Kích hoạt</nb-radio>
+              <nb-radio value="0">Vô hiệu hoá</nb-radio>
             </nb-radio-group>
           </div>
         </nb-card-body>
       </nb-card>
-      <button type="submit" nbButton status="success" fullWidth (click)="saveBlogCategories()">Lưu</button>
+      <button type="submit" nbButton status="success" fullWidth (click)="saveBlogCategory()">Lưu</button>
     </div>
   </div>
 </div>

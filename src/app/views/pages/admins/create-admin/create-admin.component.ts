@@ -17,8 +17,8 @@ export class CreateAdminComponent implements OnInit {
     username: '',
     password: '',
     email: '',
-    first_name: '',
-    last_name: '',
+    firstName: '',
+    lastName: '',
     phone: '',
     role: '',
     status: '',
@@ -33,14 +33,15 @@ export class CreateAdminComponent implements OnInit {
     });
   }
   ngOnInit(): void {}
+
   saveAdmin(): void {
     const data = {
       avatar: this.admins.avatar,
       username: this.admins.username,
       password: this.admins.password,
       email: this.admins.email,
-      first_name: this.admins.first_name,
-      last_name: this.admins.last_name,
+      first_name: this.admins.firstName,
+      last_name: this.admins.lastName,
       phone: this.admins.phone,
       role: this.admins.role,
       status: this.admins.status,

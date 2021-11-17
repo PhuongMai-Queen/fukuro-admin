@@ -11,8 +11,8 @@ export class CreatePromotionComponent implements OnInit {
   promotions: Promotions = {
     name: '',
     discount: '',
-    start_date: '',
-    end_date: '',
+    startDate: '',
+    endDate: '',
     status: '',
   };
   submitted = false;
@@ -22,8 +22,8 @@ export class CreatePromotionComponent implements OnInit {
     const data = {
       name: this.promotions.name,
       discount: this.promotions.discount,
-      start_date: this.promotions.start_date,
-      end_date: this.promotions.end_date,
+      start_date: this.promotions.startDate,
+      end_date: this.promotions.endDate,
       status: this.promotions.status,
     };
     // console.log(data);

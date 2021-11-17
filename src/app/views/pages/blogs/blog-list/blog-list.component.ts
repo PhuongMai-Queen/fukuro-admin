@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-
 import { SmartTableData } from '../../../@core/data/smart-table';
 import {Blogs} from '../../../../models/blogs.model';
 import {BlogsService} from '../../../../services/blogs.service';
+import {Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'ngx-blog-list',
@@ -13,51 +14,56 @@ import {BlogsService} from '../../../../services/blogs.service';
 export class BlogListComponent {
   blogs?: Blogs[];
   settings = {
-    add: {
-      addButtonContent: '<i class="nb-plus"></i>',
-      createButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    edit: {
-      editButtonContent: '<i class="nb-edit"></i>',
-      saveButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
-      confirmDelete: true,
+    actions: {
+      custom: [
+        {
+          name: 'edit',
+          title: '<i class="nb-edit text-success" title="Edit"></i>'
+        },
+        {
+          name: 'delete',
+          title: '<i class="nb-trash text-danger" title="delete"></i>'
+        },
+      ],
+      add: false,
+      edit: false,
+      delete: false,
+      position: 'right',
     },
     columns: {
-      id: {
-        title: 'ID',
-        type: 'number',
-      },
       thumbnail: {
         title: 'Hình ảnh',
         filter: false,
         type: 'html',
         valuePrepareFunction: (thumbnail) => {
-          return `<img class='table-thumbnail-img' src="${thumbnail}" width="80px" />`
+          return `<img class='table-thumbnail-img' src="${thumbnail}" width="120px" />`
         },
       },
       title: {
         title: 'Tên bài viết',
         type: 'number',
       },
+      slug: {
+        title: 'Đường dẫn',
+        type: 'string',
+      },
       summary: {
         title: 'Tóm tắt bài viết',
         type: 'string',
       },
       status: {
-        title: 'Trạng thái',
-        type: 'string',
+        title: 'Trạng Thái',
+        type: 'html',
+        valuePrepareFunction: (value) => {
+          return value == 1 ? 'Đăng' : 'Bản nháp';
+        },
       },
     },
   };
 
   source: LocalDataSource = new LocalDataSource();
 
-  constructor(private blogsService: BlogsService) {}
+  constructor(private blogsService: BlogsService, private _router: Router, private toastrService: ToastrService) {}
 
   ngOnInit(): void {
     this.retrieveBlogs();
@@ -78,6 +84,24 @@ export class BlogListComponent {
       event.confirm.resolve();
     } else {
       event.confirm.reject();
+    }
+  }
+  onCustomAction(event) {
+    if(event.action == 'edit'){
+      this._router.navigate(['pages/blogs/edit/'+event.data['id']]);
+    }
+    if(event.action == 'delete'){
+      if (window.confirm('Bạn có chắn chắn sẽ xoá không?')) {
+        this.blogsService.delete(event.data['id'])
+          .subscribe(
+            response => {
+              this.retrieveBlogs();
+              this.toastrService.success(response.message);
+            },
+            error => {
+              this.toastrService.success(error);
+            });
+      }
     }
   }
 }
