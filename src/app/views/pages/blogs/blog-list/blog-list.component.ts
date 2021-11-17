@@ -28,13 +28,21 @@ export class BlogListComponent {
       confirmDelete: true,
     },
     columns: {
-      title: {
-        title: 'Tên bài viết',
+      id: {
+        title: 'ID',
         type: 'number',
       },
       thumbnail: {
         title: 'Hình ảnh',
-        type: 'string',
+        filter: false,
+        type: 'html',
+        valuePrepareFunction: (thumbnail) => {
+          return `<img class='table-thumbnail-img' src="${thumbnail}" width="80px" />`
+        },
+      },
+      title: {
+        title: 'Tên bài viết',
+        type: 'number',
       },
       summary: {
         title: 'Tóm tắt bài viết',

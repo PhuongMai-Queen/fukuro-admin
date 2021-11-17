@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Promotions } from '../models/promotions.model';
+import { environment } from '../../environments/environment';
 
-const baseUrl = 'http://localhost:8000/api/promotions';
-
+const baseUrl = environment.apiURL+'/promotions';
 @Injectable({
   providedIn: 'root',
 })

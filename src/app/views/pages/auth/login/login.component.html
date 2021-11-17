@@ -1,0 +1,51 @@
+<div class="container">
+  <nb-card>
+    <nb-card-header>
+      <div class="text-center">
+        <img src="assets/images/logofukuro.png" width="15%">
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="css-form-login row pb-5">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
+          <form [formGroup]="login" (ngSubmit)="onSubmit()">
+            <h5 class="text-center">ĐĂNG NHẬP</h5>
+            <div class="form-group">
+              <label class="label col-form-label" >Tên người dùng</label>
+              <input type="text" nbInput fullWidth status="primary" formControlName="username">
+              <div *ngIf="submitted && f.username.errors">
+                <small *ngIf="f.username.errors.required" class="text-danger small-popup">Tên đăng nhập không được bỏ
+                  trống!</small>
+                <small *ngIf="f.username.errors.minlength" class="text-danger small-popup">Tên đăng nhập phải ít nhất
+                  6 kí tự!</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="label col-form-label">Mật khẩu</label>
+              <input type="password" nbInput fullWidth status="primary" formControlName="password">
+              <div *ngIf="submitted && f.password.errors">
+                <small *ngIf="f.password.errors.required" class="text-danger small-popup">Password không được bỏ
+                  trống!</small>
+                <small *ngIf="f.password.errors.minlength" class="text-danger small-popup">Password phải ít nhất 6 kí
+                  tự! <br></small>
+                <small *ngIf="f.password.errors.pattern" class="text-danger small-popup">Mật khẩu không được chứa
+                  khoảng trắng!</small>
+              </div>
+            </div>
+            <div class="form-group pb-2">
+              <nb-checkbox>Ghi nhớ</nb-checkbox>
+              <a routerLink="/forgot-password" class="css-link-forget-pass text-primary float-right">Quên mật khẩu?</a>
+            </div>
+            <div class="text-center d-block">
+              <button type="submit" nbButton status="primary" fullWidth>Đăng nhập</button>
+            </div>
+          </form>
+        </div>
+        <div class="col-lg-3"></div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</div>
+
+

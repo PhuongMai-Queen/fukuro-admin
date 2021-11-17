@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 
 import { SmartTableData } from '../../../@core/data/smart-table';
+import {AdminsService} from '../../../../services/admins.service';
+import {Router} from '@angular/router';
+import {Admins} from "../../../../models/admins.model";
 
 @Component({
   selector: 'ngx-admin-list',
@@ -9,7 +12,7 @@ import { SmartTableData } from '../../../@core/data/smart-table';
   styleUrls: ['./admin-list.component.scss'],
 })
 export class AdminListComponent {
-
+  admins?: Admins[];
   settings = {
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -30,34 +33,55 @@ export class AdminListComponent {
         title: 'ID',
         type: 'number',
       },
-      firstName: {
-        title: 'First Name',
-        type: 'string',
-      },
-      lastName: {
-        title: 'Last Name',
-        type: 'string',
+      avatar: {
+        title: 'Hình ảnh',
+        filter: false,
+        type: 'html',
+        valuePrepareFunction: (avatar) => {
+          return `<img class='table-thumbnail-img' src="${avatar}" width="80px"/>`
+        },
       },
       username: {
         title: 'Username',
         type: 'string',
       },
-      email: {
-        title: 'E-mail',
+      lastName: {
+        title: 'Họ',
         type: 'string',
       },
-      age: {
-        title: 'Age',
+      firstName: {
+        title: 'Tên',
+        type: 'string',
+      },
+      email: {
+        title: 'Email',
+        type: 'string',
+      },
+      phone: {
+        title: 'Số điện thoại',
         type: 'number',
       },
     },
   };
 
-  source: LocalDataSource = new LocalDataSource();
+  source: LocalDataSource;
 
-  constructor(private service: SmartTableData) {
-    const data = this.service.getData();
-    this.source.load(data);
+  constructor(private adminsService: AdminsService, private _router: Router) {}
+
+  ngOnInit(): void {
+    this.retrieveAdmins();
+  }
+
+  retrieveAdmins(): void {
+    this.adminsService.getAll()
+      .subscribe(
+        data => {
+          this.source = new LocalDataSource(data);
+          // console.log(data);
+        },
+        error => {
+          // console.log(error);
+        });
   }
 
   onDeleteConfirm(event): void {

@@ -44,7 +44,7 @@ export class BlogCategoryListComponent implements OnInit {
 
   source: LocalDataSource;
 
-  constructor(private blogCategoriesService: BlogCategoriesService, private _router: Router,) {}
+  constructor(private blogCategoriesService: BlogCategoriesService, private _router: Router) {}
   ngOnInit(): void {
     this.retrieveTutorials();
   }

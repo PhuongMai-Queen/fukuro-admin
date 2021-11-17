@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 
 import { SmartTableData } from '../../../@core/data/smart-table';
+import {CustomersService} from '../../../../services/customers.service';
+import {Router} from '@angular/router';
+import {Customers} from '../../../../models/customers.model';
 
 @Component({
   selector: 'ngx-customer-list',
@@ -9,7 +12,7 @@ import { SmartTableData } from '../../../@core/data/smart-table';
   styleUrls: ['./customer-list.component.scss'],
 })
 export class CustomerListComponent {
-
+  customers?: Customers[];
   settings = {
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -30,34 +33,55 @@ export class CustomerListComponent {
         title: 'ID',
         type: 'number',
       },
-      firstName: {
-        title: 'First Name',
-        type: 'string',
-      },
-      lastName: {
-        title: 'Last Name',
-        type: 'string',
+      avatar: {
+        title: 'Hình ảnh',
+        filter: false,
+        type: 'html',
+        valuePrepareFunction: (avatar) => {
+          return `<img class='table-thumbnail-img' src="${avatar}" width="120px" />`
+        },
       },
       username: {
         title: 'Username',
         type: 'string',
       },
-      email: {
-        title: 'E-mail',
+      lastName: {
+        title: 'Họ',
         type: 'string',
       },
-      age: {
-        title: 'Age',
+      firstName: {
+        title: 'Tên',
+        type: 'string',
+      },
+      email: {
+        title: 'Email',
+        type: 'string',
+      },
+      phone: {
+        title: 'Số điện thoại',
         type: 'number',
       },
     },
   };
 
-  source: LocalDataSource = new LocalDataSource();
+  source: LocalDataSource;
 
-  constructor(private service: SmartTableData) {
-    const data = this.service.getData();
-    this.source.load(data);
+  constructor(private customersService: CustomersService, private _router: Router) {}
+
+  ngOnInit(): void {
+    this.retrieveCustomers();
+  }
+
+  retrieveCustomers(): void {
+    this.customersService.getAll()
+      .subscribe(
+        data => {
+          this.source = new LocalDataSource(data);
+          // console.log(data);
+        },
+        error => {
+          // console.log(error);
+        });
   }
 
   onDeleteConfirm(event): void {
