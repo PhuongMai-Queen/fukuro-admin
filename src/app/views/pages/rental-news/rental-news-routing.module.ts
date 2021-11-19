@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { RentalNewsComponent } from './rental-news.component';
-import { CreateRentalNewsComponent } from './create-rental-news/create-rental-news.component';
 import { RentalNewsListComponent } from './rental-news-list/rental-news-list.component';
 
 const routes: Routes = [{
@@ -13,10 +12,7 @@ const routes: Routes = [{
       path: 'list',
       component: RentalNewsListComponent,
     },
-    {
-      path: 'create',
-      component: CreateRentalNewsComponent,
-  }],
+    ],
 }];
 
 @NgModule({
@@ -28,5 +24,4 @@ export class RentalNewsRoutingModule { }
 export const routedComponents = [
   RentalNewsComponent,
   RentalNewsListComponent,
-  CreateRentalNewsComponent,
 ];

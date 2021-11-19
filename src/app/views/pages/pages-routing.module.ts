@@ -54,6 +54,16 @@ const routes: Routes = [{
         .then(m => m.ProfileModule),
     },
     {
+      path: 'contacts',
+      loadChildren: () => import('./contacts/contacts.module')
+        .then(m => m.ContactsModule),
+    },
+    {
+      path: 'premium-bills',
+      loadChildren: () => import('./premium-bills/premium-bills.module')
+        .then(m => m.PremiumBillsModule),
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',

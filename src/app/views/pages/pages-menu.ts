@@ -40,22 +40,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     group: true,
   },
   {
-    title: 'Đơn Hàng',
+    title: 'Hoá Đơn',
     icon: 'calendar-outline',
     children: [
       {
         title: 'Danh sách',
-        link: '/pages/orders/list',
-      },
-    ],
-  },
-  {
-    title: 'Hoá Đơn',
-    icon: 'browser-outline',
-    children: [
-      {
-        title: 'Danh sách',
-        link: '/pages/bills/list',
+        link: '/pages/premium-bills/list',
       },
     ],
   },
@@ -69,7 +59,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Danh sách',
-        link: '/pages/contact/list',
+        link: '/pages/contacts/list',
       },
     ],
   },

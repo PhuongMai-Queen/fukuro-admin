@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import {PromotionsService} from '../../../../services/promotions.service';
+import {ContactsService} from '../../../../services/contacts.service';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 
 @Component({
-  selector: 'ngx-promotion-list',
-  templateUrl: './promotion-list.component.html',
-  styleUrls: ['./promotion-list.component.scss'],
+  selector: 'ngx-contacts-list',
+  templateUrl: './contacts-list.component.html',
+  styleUrls: ['./contacts-list.component.scss'],
 })
-export class PromotionListComponent implements OnInit {
+export class ContactsListComponent implements OnInit {
 
   settings = {
     actions: {
@@ -33,20 +33,20 @@ export class PromotionListComponent implements OnInit {
       position: 'right',
     },
     columns: {
-      name: {
-        title: 'Tên khuyến mãi',
+      firstName: {
+        title: 'Tên',
         type: 'number',
       },
-      discount: {
-        title: 'Giảm giá',
+      phone: {
+        title: 'Số điện thoại',
         type: 'string',
       },
-      startDate: {
-        title: 'Ngày bắt đầu',
+      email: {
+        title: 'Email',
         type: 'string',
       },
-      endDate: {
-        title: 'Ngày kết thúc',
+      subject: {
+        title: 'Chủ đề',
         type: 'string',
       },
     },
@@ -54,16 +54,16 @@ export class PromotionListComponent implements OnInit {
 
   source: LocalDataSource;
 
-  constructor(private promotionsService: PromotionsService,
+  constructor(private contactsService: ContactsService,
               private _router: Router,
               private toastrService: ToastrService,
   ) {}
 
   ngOnInit(): void {
-    this.retrievePromotions();
+    this.retrieveContacts();
   }
-  retrievePromotions(): void {
-    this.promotionsService.getAll()
+  retrieveContacts(): void {
+    this.contactsService.getAll()
       .subscribe(
         data => {
           this.source = new LocalDataSource(data);
@@ -72,20 +72,19 @@ export class PromotionListComponent implements OnInit {
           console.log(error);
         });
   }
-
   onCustomAction(event) {
     if(event.action == 'info'){
-      this._router.navigate(['pages/promotions/info/'+event.data['id']]);
+      this._router.navigate(['pages/contacts/info/'+event.data['id']]);
     }
     if(event.action == 'edit'){
-      this._router.navigate(['pages/promotions/edit/'+event.data['id']]);
+      this._router.navigate(['pages/contacts/edit/'+event.data['id']]);
     }
     if(event.action == 'delete'){
       if (window.confirm('Bạn có chắn chắn sẽ xoá không?')) {
-        this.promotionsService.delete(event.data['id'])
+        this.contactsService.delete(event.data['id'])
           .subscribe(
             response => {
-              this.retrievePromotions();
+              this.retrieveContacts();
               this.toastrService.success(response.message);
             },
             error => {

@@ -1,16 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import {RentalNewsService} from '../../../../services/rental-news.service';
+import {PremiumBillsService} from '../../../../services/premium-bills.service';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 
 @Component({
-  selector: 'ngx-rental-news-list',
-  templateUrl: './rental-news-list.component.html',
-  styleUrls: ['./rental-news-list.component.scss'],
+  selector: 'ngx-premium-bill-list',
+  templateUrl: './premium-bill-list.component.html',
+  styleUrls: ['./premium-bill-list.component.scss'],
 })
-export class RentalNewsListComponent implements OnInit {
-
+export class PremiumBillListComponent implements OnInit {
   settings = {
     actions: {
       custom: [
@@ -26,23 +25,23 @@ export class RentalNewsListComponent implements OnInit {
     },
     columns: {
       name: {
-        title: 'Tên nhà trọ',
+        title: 'Tên hóa đơn',
         type: 'string',
       },
       price: {
-        title: 'Giá',
+        title: 'Giá tiền',
         type: 'string',
       },
-      quantity: {
-        title: 'Số lượng',
+      expire: {
+        title: 'Thời hạn',
         type: 'string',
       },
-      type: {
-        title: 'Loại hình',
+      totalPrice: {
+        title: 'Tổng tiền',
         type: 'string',
       },
-      address: {
-        title: 'Địa chỉ',
+      paymentStatus: {
+        title: 'Trạng thái hoá đơn',
         type: 'string',
       },
     },
@@ -50,16 +49,16 @@ export class RentalNewsListComponent implements OnInit {
 
   source: LocalDataSource;
 
-  constructor(private rentalNewsService: RentalNewsService,
+  constructor(private premiumBillsService: PremiumBillsService,
               private _router: Router,
               private toastrService: ToastrService,
   ) {}
 
   ngOnInit(): void {
-    this.retrieveRentalNews();
+    this.retrievePremiumBills();
   }
-  retrieveRentalNews(): void {
-    this.rentalNewsService.getAll()
+  retrievePremiumBills(): void {
+    this.premiumBillsService.getAll()
       .subscribe(
         data => {
           this.source = new LocalDataSource(data);
@@ -72,10 +71,10 @@ export class RentalNewsListComponent implements OnInit {
   onCustomAction(event) {
     if(event.action == 'delete'){
       if (window.confirm('Bạn có chắn chắn sẽ xoá không?')) {
-        this.rentalNewsService.delete(event.data['id'])
+        this.premiumBillsService.delete(event.data['id'])
           .subscribe(
             response => {
-              this.retrieveRentalNews();
+              this.retrievePremiumBills();
               this.toastrService.success(response.message);
             },
             error => {

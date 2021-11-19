@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
 import {BlogCategories} from '../../../../models/blog-categories.model';
 import {BlogCategoriesService} from '../../../../services/blog-categories.service';
-import { EditBlogCategoryComponent } from '../edit-blog-category/edit-blog-category.component';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 
