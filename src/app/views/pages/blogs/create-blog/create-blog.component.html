@@ -1,12 +1,15 @@
 <h5>Thêm Mới Bài Viết</h5>
-<div *ngIf="!submitted">
+<form [formGroup]="blogs" (ngSubmit)="saveBlog()">
   <nb-card>
     <nb-card-header>Tên bài viết</nb-card-header>
     <nb-card-body>
       <div class="row">
         <div class="col-sm-12">
           <div class="form-group">
-            <input type="text" [(ngModel)]="blogs.title" nbInput fullWidth (ngModelChange)="modelChangeFn($event)">
+            <input type="text" formControlName="title" nbInput fullWidth (ngModelChange)="modelChangeFn($event)">
+            <div *ngIf="submitted && f.title.errors">
+              <small *ngIf="f.title.errors.required" class="text-danger small-popup">Tên bài viết không được bỏ trống!</small>
+            </div>
           </div>
         </div>
       </div>
@@ -14,7 +17,10 @@
         <div class="col-sm-12">
           <div class="form-group">
             <label class="label col-form-label">Link bài viết</label>
-            <input type="text" nbInput fullWidth [(ngModel)]="blogs.slug" [value]="blogs.slug">
+            <input type="text" nbInput fullWidth formControlName="slug">
+            <div *ngIf="submitted && f.slug.errors">
+              <small *ngIf="f.slug.errors.required" class="text-danger small-popup">Link bài viết không được bỏ trống!</small>
+            </div>
           </div>
         </div>
       </div>
@@ -26,7 +32,10 @@
           <nb-card-header>Tóm tắt bài viết</nb-card-header>
           <nb-card-body>
             <div class="form-group">
-              <textarea rows="5" nbInput fullWidth placeholder="Text Area" [(ngModel)]="blogs.summary"></textarea>
+              <textarea rows="5" nbInput fullWidth placeholder="Text Area" formControlName="summary"></textarea>
+              <div *ngIf="submitted && f.summary.errors">
+                <small *ngIf="f.summary.errors.required" class="text-danger small-popup">Tóm tắt bài viết không được bỏ trống!</small>
+              </div>
             </div>
           </nb-card-body>
         </nb-card>
@@ -35,7 +44,10 @@
           <nb-card-header>Nội dung</nb-card-header>
           <nb-card-body>
             <div class="form-group">
-              <ckeditor [config]="{ extraPlugins: 'divarea', height: '320' }" [(ngModel)]="blogs.description"></ckeditor>
+              <ckeditor [config]="{ extraPlugins: 'divarea', height: '320' }" formControlName="description"></ckeditor>
+              <div *ngIf="submitted && f.description.errors">
+                <small *ngIf="f.description.errors.required" class="text-danger small-popup">Nội dung bài viết không được bỏ trống!</small>
+              </div>
             </div>
           </nb-card-body>
         </nb-card>
@@ -47,12 +59,15 @@
             <div class="form-group">
 
               <!-- Image Preview -->
-              <div class="imagePreview" *ngIf="blogs.thumbnail && blogs.thumbnail !== ''">
-                <img [src]="blogs.thumbnail" [alt]="uploadForm.value.name">
+              <div class="imagePreview" *ngIf="blogs.value['thumbnail']" >
+                <img [src]="blogs.value['thumbnail']">
               </div>
 
               <!-- Select File -->
               <input type="file" nbInput fullWidth accept="image/*" (change)="showPreview($event)" />
+              <div *ngIf="submitted && f.thumbnail.errors">
+                <small *ngIf="f.thumbnail.errors.required" class="text-danger small-popup">Chọn ảnh bài viết!</small>
+              </div>
             </div>
           </nb-card-body>
         </nb-card>
@@ -61,7 +76,7 @@
           <nb-card-header>Trạng thái</nb-card-header>
           <nb-card-body>
             <div class="form-group">
-              <nb-radio-group [(ngModel)]="blogs.status">
+              <nb-radio-group formControlName="status">
                 <nb-radio value="1">Đăng</nb-radio>
                 <nb-radio value="0">Bản nháp</nb-radio>
               </nb-radio-group>
@@ -74,10 +89,13 @@
           <nb-card-header>Loại bài viết</nb-card-header>
           <nb-card-body>
             <div class="form-group" >
-              <nb-select selected="1" fullWidth [(ngModel)]="blogs.blogCategoryId">
+              <nb-select selected="1" fullWidth formControlName="blogCategoryId">
                 <nb-option value="">Chọn loại bài viết</nb-option>
                 <nb-option *ngFor='let blog_cate of blogCategories' [value]="blog_cate.id">{{ blog_cate.name }}</nb-option>
               </nb-select>
+              <div *ngIf="submitted && f.blogCategoryId.errors">
+                <small *ngIf="f.blogCategoryId.errors.required" class="text-danger small-popup">Chọn loại bài viết!</small>
+              </div>
             </div>
           </nb-card-body>
         </nb-card>
@@ -86,12 +104,15 @@
           <nb-card-header>Tag</nb-card-header>
           <nb-card-body>
             <div class="form-group">
-              <tag-input [(ngModel)]="blogs.tag"></tag-input>
+              <tag-input formControlName="tag"></tag-input>
+              <div *ngIf="submitted && f.tag.errors">
+                <small *ngIf="f.tag.errors.required" class="text-danger small-popup">Tạo thẻ bài viết!</small>
+              </div>
             </div>
           </nb-card-body>
         </nb-card>
 
-        <button type="submit" nbButton status="success" fullWidth (click)="saveBlog()">Lưu</button>
+        <button type="submit" nbButton status="success" fullWidth>Lưu</button>
       </div>
     </div>
-</div>
+</form>

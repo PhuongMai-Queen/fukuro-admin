@@ -102,3 +102,14 @@ $nb-themes: nb-register-theme((
 :host /deep/ ng2-st-tbody- custom a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
   color: #5dcfe3;
 }
+.imagePreview{
+  text-align: center;
+  margin-bottom: 10px;
+  img{
+    margin: 0 auto;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}

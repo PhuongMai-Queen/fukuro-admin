@@ -1,0 +1,89 @@
+<form [formGroup]="admins" (ngSubmit)="saveAdmin()">
+  <div class="row">
+    <div class="col-sm-12">
+      <nb-card>
+        <nb-card-header>CẬP NHẬT HỒ SƠ</nb-card-header>
+        <nb-card-body>
+          <div class="row">
+            <div class="form-group form-group-avatar">
+
+              <!-- Image Preview -->
+              <div class="imagePreview" *ngIf="admins.value['avatar']" >
+                <img [src]="admins.value['avatar']">
+              </div>
+
+              <!-- Select File -->
+              <input type="file" nbInput fullWidth accept="image/*" (change)="showPreview($event)" />
+              <div *ngIf="submitted && f.thumbnail.errors">
+                <small *ngIf="f.thumbnail.errors.required" class="text-danger small-popup">Chọn ảnh bài viết!</small>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label">Họ</label>
+                <input type="text" nbInput fullWidth formControlName="lastName">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label">Tên</label>
+                <input type="text" nbInput fullWidth formControlName="firstName">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label">Tên người dùng</label>
+                <input type="email" nbInput fullWidth formControlName="username">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label">Mật khẩu</label>
+                <input type="password" nbInput fullWidth readonly formControlName="password">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label">Email</label>
+                <input type="email" nbInput fullWidth formControlName="email">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label">Số điện thoại</label>
+                <input type="text" nbInput fullWidth formControlName="phone">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label" >Vai trò</label>
+                <nb-radio-group formControlName="role">
+                  <nb-radio value="1">Quản trị viên</nb-radio>
+                  <nb-radio value="0">Nhân viên</nb-radio>
+                </nb-radio-group>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label">Trạng thái</label>
+                <nb-radio-group formControlName="status">
+                  <nb-radio value="1">Đăng</nb-radio>
+                  <nb-radio value="0">Bản nháp</nb-radio>
+                </nb-radio-group>
+              </div>
+            </div>
+          </div>
+          <button type="submit" nbButton status="success" class="float-right">Cập nhật</button>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+</form>

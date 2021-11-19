@@ -39,7 +39,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       name: 'Corporate',
     },
   ];
-
   currentTheme = 'default';
 
   constructor(private sidebarService: NbSidebarService,
@@ -52,7 +51,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
               public auth: AuthService,
   ) {
   }
-  userMenu = [ { title: 'Hồ sơ', link: '/pages/profile' }, { title: 'Đăng xuất'} ];
+  userMenu = [
+    { title: 'Hồ sơ', link: '/pages/profile/update-profile/'+localStorage.getItem('id') },
+    { title: 'Đổi mật khẩu', link: '/pages/profile/change-password/'+localStorage.getItem('id') },
+    { title: 'Đăng xuất'} ];
   onContecxtItemSelection(title) {
     if(title == 'Đăng xuất'){
       this.auth.logout();
@@ -67,30 +69,34 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.currentTheme = this.themeService.currentTheme;
     const id = localStorage.getItem('id');
-    this.adminsService.get(1)
-      .pipe(takeUntil(this.destroy$))
+    if (id) {
+      this.getById(id);
+    }
+
+    // const { xl } = this.breakpointService.getBreakpointsMap();
+    // this.themeService.onMediaQueryChange()
+    //   .pipe(
+    //     map(([, currentBreakpoint]) => currentBreakpoint.width < xl),
+    //     takeUntil(this.destroy$),
+    //   )
+    //   .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
+    //
+    // this.themeService.onThemeChange()
+    //   .pipe(
+    //     map(({ name }) => name),
+    //     takeUntil(this.destroy$),
+    //   )
+    //   .subscribe(themeName => this.currentTheme = themeName);
+  }
+
+  getById(id: string): void {
+    this.adminsService.get(id)
       .subscribe(
         data => {
           this.user = data;
           this.avatar = data['avatar'];
           this.name = data['firstName']+' '+data['lastName'];
-        },
-      );
-
-    const { xl } = this.breakpointService.getBreakpointsMap();
-    this.themeService.onMediaQueryChange()
-      .pipe(
-        map(([, currentBreakpoint]) => currentBreakpoint.width < xl),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
-
-    this.themeService.onThemeChange()
-      .pipe(
-        map(({ name }) => name),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(themeName => this.currentTheme = themeName);
+        });
   }
 
   ngOnDestroy() {

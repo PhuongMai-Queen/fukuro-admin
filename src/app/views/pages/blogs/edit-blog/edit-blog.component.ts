@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Blogs } from '../../../../models/blogs.model';
 import { BlogsService } from '../../../../services/blogs.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
@@ -22,21 +22,9 @@ import 'ckeditor';
 export class EditBlogComponent implements OnInit {
   result = false;
   images = null;
-  blogs: Blogs = {
-    title: '',
-    slug: '',
-    thumbnail: '',
-    summary: '',
-    description: '',
-    tag: '',
-    status: '',
-    blogCategoryId: '',
-  };
   submitted = false;
-  uploadForm: FormGroup;
+  blogs: FormGroup;
   error = '';
-  blogCategories?: BlogCategories[];
-  id: null;
   constructor(private blogsService: BlogsService,
               public fb: FormBuilder,
               private http: HttpClient,
@@ -46,27 +34,43 @@ export class EditBlogComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
   ) {
     // Reactive Form
-    this.uploadForm = this.fb.group({
-      thumbnail: [null],
-      name: [''],
-      title: [''],
-      slug: [''],
+    this.blogs = this.fb.group({
+      title: ['', Validators.compose([Validators.required])],
+      slug: ['', Validators.compose([Validators.required])],
+      thumbnail: ['', Validators.compose([Validators.required])],
+      summary: ['', Validators.compose([Validators.required])],
+      description: ['', Validators.compose([Validators.required])],
+      tag: ['', Validators.compose([Validators.required])],
+      status: [''],
+      blogCategoryId: ['', Validators.compose([Validators.required])],
     });
   }
+  blogCategories?: BlogCategories[];
+  id: null;
 
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.params.id;
     this.getBlogs(this.id);
   }
 
+  get f() {
+    return this.blogs.controls;
+  }
+
   getBlogs(id): void {
     this.blogsService.get(id)
       .subscribe(
         data => {
-          this.blogs = data;
-          if(data.tag != ''){
-            this.blogs.tag = JSON.parse(data.tag);
-          }
+          this.blogs = this.fb.group({
+            title: [data.title, Validators.compose([Validators.required])],
+            slug: [data.slug, Validators.compose([Validators.required])],
+            thumbnail: [data.thumbnail, Validators.compose([Validators.required])],
+            summary: [data.summary, Validators.compose([Validators.required])],
+            description: [data.description, Validators.compose([Validators.required])],
+            tag: [JSON.parse(data.tag), Validators.compose([Validators.required])],
+            status: [data.status],
+            blogCategoryId: [data.blogCategoryId, Validators.compose([Validators.required])],
+          });
           this.retrieveBlogCategories(data.blogCategoryId);
         },
         error => {
@@ -77,7 +81,7 @@ export class EditBlogComponent implements OnInit {
   // Create slug
   modelChangeFn(e) {
     const text = this.transform(e);
-    this.blogs.slug = text;
+    this.blogs.patchValue({slug: text});
   }
 
   // Handle slug
@@ -116,15 +120,17 @@ export class EditBlogComponent implements OnInit {
       this.images = file2;
     }
     const file = (event.target as HTMLInputElement).files[0];
-    this.uploadForm.patchValue({
+    this.blogs.patchValue({
       thumbnail: file,
     });
-    this.uploadForm.get('thumbnail').updateValueAndValidity();
+    this.blogs.get('thumbnail').updateValueAndValidity();
 
     // File Preview
     const reader = new FileReader();
     reader.onload = () => {
-      this.blogs.thumbnail = reader.result as string;
+      this.blogs.patchValue({
+        thumbnail: reader.result as string,
+      });
     };
     reader.readAsDataURL(file);
   }
@@ -135,14 +141,14 @@ export class EditBlogComponent implements OnInit {
     formData.append('file', this.images);
     if(this.images == null){
       const data = {
-        title: this.blogs.title,
-        slug: this.blogs.slug,
-        thumbnail: this.blogs.thumbnail,
-        summary: this.blogs.summary,
-        description: this.blogs.description,
-        tag: JSON.stringify(this.blogs.tag),
-        status: this.blogs.status,
-        blogCategoryId: this.blogs.blogCategoryId,
+        title: this.blogs.value['title'],
+        slug: this.blogs.value['slug'],
+        thumbnail: this.blogs.value['thumbnail'],
+        summary: this.blogs.value['summary'],
+        description: this.blogs.value['description'],
+        tag: JSON.stringify(this.blogs.value['tag']),
+        status: this.blogs.value['status'],
+        blogCategoryId: this.blogs.value['blogCategoryId'],
         adminId: localStorage.getItem('id'),
       };
       this.blogsService.update(this.id, data).subscribe(
@@ -151,23 +157,22 @@ export class EditBlogComponent implements OnInit {
           this.toastrService.success(response.message);
         },
         (error) => {
-          this.toastrService.success(error.message);
+          this.toastrService.success('Thêm mới thất bại!');
         });
     }
     else{
       this.http.post(environment.apiPostImg, formData).toPromise().then(res => {
-        // this.blogs.thumbnail = environment.linkImg+res['filename'];
         this.result = true;
         if(this.result == true){
           const data = {
-            title: this.blogs.title,
-            slug: this.blogs.slug,
+            title: this.blogs.value['title'],
+            slug: this.blogs.value['slug'],
             thumbnail: environment.linkImg+res['filename'],
-            summary: this.blogs.summary,
-            description: this.blogs.description,
-            tag: JSON.stringify(this.blogs.tag),
-            status: this.blogs.status,
-            blogCategoryId: this.blogs.blogCategoryId,
+            summary: this.blogs.value['summary'],
+            description: this.blogs.value['description'],
+            tag: JSON.stringify(this.blogs.value['tag']),
+            status: this.blogs.value['status'],
+            blogCategoryId: this.blogs.value['blogCategoryId'],
             adminId: localStorage.getItem('id'),
           };
           this.blogsService.update(this.id, data).subscribe(
@@ -184,7 +189,6 @@ export class EditBlogComponent implements OnInit {
   }
 
   retrieveBlogCategories(blog_cate_id): void {
-
     this.blogCategoriesService.getAll()
       .subscribe(
         data => {
@@ -192,7 +196,6 @@ export class EditBlogComponent implements OnInit {
           const obj = [];
           customData.forEach((currentValue, index) => {
             if(currentValue.id == blog_cate_id){
-              console.log(blog_cate_id);
               obj.push({ id: currentValue.id, name: currentValue.name });
               customData.splice(index,1);
             }
@@ -201,7 +204,6 @@ export class EditBlogComponent implements OnInit {
             obj.push({ id: currentValue.id, name: currentValue.name });
           });
           this.blogCategories = obj;
-          console.log(this.blogCategories);
         },
         error => {
           console.log(error);

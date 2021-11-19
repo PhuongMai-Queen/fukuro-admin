@@ -49,6 +49,11 @@ const routes: Routes = [{
         .then(m => m.RentalNewsModule),
     },
     {
+      path: 'profile',
+      loadChildren: () => import('./profile/profile.module')
+        .then(m => m.ProfileModule),
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',

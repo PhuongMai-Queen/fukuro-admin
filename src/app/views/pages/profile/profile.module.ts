@@ -3,9 +3,8 @@ import { CKEditorModule } from 'ng2-ckeditor';
 
 import { ThemeModule } from '../../layouts/theme.module';
 
-import { BlogsRoutingModule, routedComponents } from './blogs-routing.module';
+import { ProfileRoutingModule, routedComponents } from './profile-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import {
   NbActionsModule,
   NbButtonModule,
@@ -27,7 +26,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
     FormsModule,
     TagInputModule,
     ThemeModule,
-    BlogsRoutingModule,
+    ProfileRoutingModule,
     CKEditorModule,
     NbActionsModule,
     NbButtonModule,
@@ -44,4 +43,4 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
     ...routedComponents,
   ],
 })
-export class BlogsModule { }
+export class ProfileModule { }

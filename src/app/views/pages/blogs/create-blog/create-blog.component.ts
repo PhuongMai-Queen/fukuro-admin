@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Blogs } from '../../../../models/blogs.model';
 import { BlogsService } from '../../../../services/blogs.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {BlogCategories} from '../../../../models/blog-categories.model';
 import {BlogCategoriesService} from '../../../../services/blog-categories.service';
 import {LocalDataSource} from 'ng2-smart-table';
+import { environment } from '../../../../../environments/environment';
 
 import './create-blog.loader';
 import 'ckeditor';
@@ -20,20 +21,11 @@ import 'ckeditor';
 export class CreateBlogComponent implements OnInit {
   result = false;
   images = null;
-  blogs: Blogs = {
-    title: '',
-    slug: '',
-    thumbnail: '',
-    summary: '',
-    description: '',
-    tag: '',
-    status: '',
-    blogCategoryId: '',
-  };
   submitted = false;
-  uploadForm: FormGroup;
+  blogs: FormGroup;
   error = '';
   blogCategories?: BlogCategories[];
+  showImg: '';
   constructor(private blogsService: BlogsService,
               public fb: FormBuilder,
               private http: HttpClient,
@@ -42,22 +34,28 @@ export class CreateBlogComponent implements OnInit {
               private blogCategoriesService: BlogCategoriesService,
   ) {
     // Reactive Form
-    this.uploadForm = this.fb.group({
-      thumbnail: [null],
-      name: [''],
-      title: [''],
-      slug: [''],
+    this.blogs = this.fb.group({
+      title: ['', Validators.compose([Validators.required])],
+      slug: ['', Validators.compose([Validators.required])],
+      thumbnail: ['', Validators.compose([Validators.required])],
+      summary: ['', Validators.compose([Validators.required])],
+      description: ['', Validators.compose([Validators.required])],
+      tag: ['', Validators.compose([Validators.required])],
+      status: [''],
+      blogCategoryId: ['', Validators.compose([Validators.required])],
     });
   }
 
   ngOnInit() {
     this.retrieveBlogCategories();
   }
-
+  get f() {
+    return this.blogs.controls;
+  }
   // Create slug
   modelChangeFn(e) {
     const text = this.transform(e);
-    this.blogs.slug = text;
+    this.blogs.patchValue({slug: text});
   }
 
   // Handle slug
@@ -96,68 +94,49 @@ export class CreateBlogComponent implements OnInit {
       this.images = file2;
     }
     const file = (event.target as HTMLInputElement).files[0];
-    this.uploadForm.patchValue({
+    this.blogs.patchValue({
       thumbnail: file,
     });
-    this.uploadForm.get('thumbnail').updateValueAndValidity();
+    this.blogs.get('thumbnail').updateValueAndValidity();
 
     // File Preview
     const reader = new FileReader();
     reader.onload = () => {
-      this.blogs.thumbnail = reader.result as string;
+      // this.showImg = reader.result as string;
+      this.blogs.patchValue({
+        thumbnail: reader.result as string,
+      });
     };
     reader.readAsDataURL(file);
   }
 
   // Create blog
-  saveBlog(): void {
+  saveBlog(): any {
     const formData = new FormData();
     formData.append('file', this.images);
-    if(this.images == null){
-      const data = {
-        title: this.blogs.title,
-        slug: this.blogs.slug,
-        thumbnail: this.blogs.thumbnail,
-        summary: this.blogs.summary,
-        description: this.blogs.description,
-        tag: JSON.stringify(this.blogs.tag),
-        status: this.blogs.status,
-        blog_category_id: this.blogs.blogCategoryId,
-        admin_id: localStorage.getItem('id'),
-      };
-      this.blogsService.create(data).subscribe(
-        (response) => {
-          // console.log(response);
-          this.submitted = true;
-          // this._router.navigate(['/pages/dashboard']);
-          this.newBlog();
-          this.toastrService.success('Thêm mới thành công!');
-        },
-        (error) => {
-          this.toastrService.success('Thêm mới thất bại!');
-        });
-    }else{
-      this.http.post('http://localhost:3000/file', formData).toPromise().then(res => {
-        this.blogs.thumbnail = 'http://fukuro.local/img/'+res['filename'];
+    this.submitted = true;
+
+    // return validators
+    if (this.blogs.invalid) {
+      return false;
+    }
+    this.http.post(environment.apiPostImg, formData).toPromise().then(res => {
         this.result = true;
         if(this.result == true){
           const data = {
-            title: this.blogs.title,
-            slug: this.blogs.slug,
-            thumbnail: this.blogs.thumbnail,
-            summary: this.blogs.summary,
-            description: this.blogs.description,
-            tag: JSON.stringify(this.blogs.tag),
-            status: this.blogs.status,
-            blogCategoryId: this.blogs.blogCategoryId,
-            adminId: localStorage.getItem('id'),
+            title: this.blogs.value['title'],
+            slug: this.blogs.value['slug'],
+            thumbnail: environment.linkImg+res['filename'],
+            summary: this.blogs.value['summary'],
+            description: this.blogs.value['description'],
+            tag: JSON.stringify(this.blogs.value['tag']),
+            status: this.blogs.value['status'],
+            blog_category_id: this.blogs.value['blogCategoryId'],
+            admin_id: localStorage.getItem('id'),
           };
-          // console.log(data);
           this.blogsService.create(data).subscribe(
             (response) => {
-              // console.log(response);
               this.submitted = true;
-              // this._router.navigate(['/pages/dashboard']);
               this.newBlog();
               this.toastrService.success('Thêm mới thành công!');
             },
@@ -166,22 +145,21 @@ export class CreateBlogComponent implements OnInit {
             });
         }
       });
-    }
   }
 
   newBlog(): void {
     this.submitted = false;
     this.images = null;
-    this.blogs = {
-      title: '',
-      slug: '',
-      thumbnail: '',
-      summary: '',
-      description: '',
-      tag: '',
-      status: '',
-      blogCategoryId: '',
-    };
+    this.blogs = this.fb.group({
+      title: [''],
+      slug: [''],
+      thumbnail: [null],
+      summary: [''],
+      description: [''],
+      tag: [''],
+      status: [''],
+      blogCategoryId: [''],
+    });
   }
 
   retrieveBlogCategories(): void {

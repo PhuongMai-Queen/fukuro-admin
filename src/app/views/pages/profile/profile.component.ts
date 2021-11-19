@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'ngx-promotions',
+  selector: 'ngx-profile',
   template: `
     <router-outlet></router-outlet>
   `,
 })
-export class PromotionsComponent {
+export class ProfileComponent {
 
 }

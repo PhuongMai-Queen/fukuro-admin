@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {BlogCategories} from '../../../../models/blog-categories.model';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {BlogCategoriesService} from '../../../../services/blog-categories.service';
 import {ToastrService} from 'ngx-toastr';
 
@@ -9,23 +8,27 @@ import {ToastrService} from 'ngx-toastr';
   templateUrl: './create-blog-category.component.html',
 })
 export class CreateBlogCategoryComponent implements OnInit {
-  blogCategories: BlogCategories = {
-    name: '',
-    status: '',
-  };
+  error = '';
   submitted = false;
   constructor(private blogCategoriesService: BlogCategoriesService,
               public fb: FormBuilder,
               private toastrService: ToastrService,
   ) {}
+  blogCategories = this.fb.group(
+    {
+      name: ['', Validators.compose([Validators.required])],
+      status: ['']});
   ngOnInit(): void {}
-  saveBlogCategories(): void {
-    const data = {
-      name: this.blogCategories.name,
-      status: this.blogCategories.status,
-    };
-    // console.log(data);
-    this.blogCategoriesService.create(data).subscribe(
+  get f() {
+    return this.blogCategories.controls;
+  }
+  saveBlogCategories(): any {
+    this.submitted = true;
+    // return validators
+    if (this.blogCategories.invalid) {
+      return false;
+    }
+    this.blogCategoriesService.create(this.blogCategories.value).subscribe(
       (response) => {
         this.newBlogCategory();
         this.toastrService.success('Thêm mới thành công!');
@@ -36,9 +39,9 @@ export class CreateBlogCategoryComponent implements OnInit {
   }
   newBlogCategory(): void {
     this.submitted = false;
-    this.blogCategories = {
-      name: '',
-      status: '',
-    };
+    this.blogCategories = this.fb.group(
+      {
+        name: [''],
+        status: ['']});
   }
 }

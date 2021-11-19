@@ -1,4 +1,4 @@
-<h5>Thêm Mới Tài Khoản Người Quản Trị</h5>
+<h5>Cập Nhật Tài Khoản Người Quản Trị</h5>
 <div *ngIf="!submitted">
   <div class="row">
     <div class="col-sm-9">
@@ -51,8 +51,8 @@
             <div class="col-sm-6">
               <label class="label col-form-label">Phân quyền</label>
               <nb-radio-group [(ngModel)]="admins.role">
-                <nb-radio value="1">Quản trị viên</nb-radio>
-                <nb-radio value="0">Nhân viên</nb-radio>
+                <nb-radio [value]="1">Quản trị viên</nb-radio>
+                <nb-radio [value]="0">Nhân viên</nb-radio>
               </nb-radio-group>
             </div>
           </div>
@@ -87,7 +87,7 @@
         </nb-card-body>
       </nb-card>
 
-      <button type="submit" nbButton status="success" fullWidth (click)="saveAdmin()">Tạo mới</button>
+      <button type="submit" nbButton status="success" fullWidth (click)="updateAdmin()">Cập nhật</button>
     </div>
   </div>
 </div>

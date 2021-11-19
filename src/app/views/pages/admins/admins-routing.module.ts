@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdminsComponent } from './admins.component';
 import { CreateAdminComponent } from './create-admin/create-admin.component';
 import { AdminListComponent } from './admin-list/admin-list.component';
+import { EditAdminComponent } from './edit-admin/edit-admin.component';
 
 const routes: Routes = [{
   path: '',
@@ -16,7 +17,12 @@ const routes: Routes = [{
     {
       path: 'create',
       component: CreateAdminComponent,
-  }],
+    },
+    {
+      path: 'edit/:id',
+      component: EditAdminComponent,
+    },
+  ],
 }];
 
 @NgModule({
@@ -29,4 +35,5 @@ export const routedComponents = [
   AdminsComponent,
   AdminListComponent,
   CreateAdminComponent,
+  EditAdminComponent
 ];
