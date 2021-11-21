@@ -11,8 +11,8 @@ import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'ngx-header',
-  styleUrls: ['./header.component.scss'],
   templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
@@ -52,9 +52,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {
   }
   userMenu = [
-    { title: 'Hồ sơ', link: '/pages/profile/update-profile/'+localStorage.getItem('id') },
-    { title: 'Đổi mật khẩu', link: '/pages/profile/change-password/'+localStorage.getItem('id') },
-    { title: 'Đăng xuất'} ];
+    { icon: 'person-outline', title: 'Hồ sơ', link: '/pages/profile/update-profile/'+localStorage.getItem('id') },
+    { icon: 'unlock-outline', title: 'Đổi mật khẩu', link: '/pages/profile/change-password/'+localStorage.getItem('id') },
+    { icon: 'power-outline', title: 'Đăng xuất'} ];
   onContecxtItemSelection(title) {
     if(title == 'Đăng xuất'){
       this.auth.logout();

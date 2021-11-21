@@ -3,6 +3,7 @@
 @import '../../../../assets/styles/themes';
 
 @include nb-install-component() {
+
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -11,6 +12,12 @@
     display: flex;
     align-items: center;
     width: calc(#{nb-theme(sidebar-width)} - #{nb-theme(header-padding)});
+  }
+
+  nb-menu{
+    .menu-item a {
+      text-align: left;
+    }
   }
 
   nb-action {
@@ -69,6 +76,3 @@
   }
 }
 
-.menu-items{
-  text-align: left !important;
-}

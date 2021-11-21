@@ -40,15 +40,15 @@ export class UpdateProfileComponent implements OnInit {
         .subscribe(
           data => {
             this.admins = this.fb.group({
-              avatar: [data.avatar, Validators.compose([Validators.required])],
-              username: [data.username, Validators.compose([Validators.required])],
-              password: [data.password, Validators.compose([Validators.required])],
-              email: [data.email, Validators.compose([Validators.required])],
-              firstName: [data.firstName, Validators.compose([Validators.required])],
-              lastName: [data.lastName, Validators.compose([Validators.required])],
-              phone: [data.phone, Validators.compose([Validators.required])],
-              role: [data.role, Validators.compose([Validators.required])],
-              status: [data.status, Validators.compose([Validators.required])],
+              avatar: [data.avatar],
+              username: [data.username],
+              password: [data.password],
+              email: [data.email],
+              firstName: [data.firstName],
+              lastName: [data.lastName],
+              phone: [data.phone],
+              role: [data.role],
+              status: [data.status],
             });
           });
     }

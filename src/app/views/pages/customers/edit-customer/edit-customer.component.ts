@@ -1,36 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import {Admins} from '../../../../models/admins.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AdminsService} from '../../../../services/admins.service';
+import {CustomersService} from '../../../../services/customers.service';
 import {ToastrService} from 'ngx-toastr';
 import { environment } from '../../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {MustMatch} from '../../../../services/validators/must-match.validator';
-import './edit-admin.loader';
+
+import './edit-customer.loader';
 import 'ckeditor';
-
-
 
 @Component({
   selector: 'ngx-edit-admin',
-  templateUrl: './edit-admin.component.html',
-  styleUrls: ['./edit-admin.component.scss'],
+  templateUrl: './edit-customer.component.html',
+  styleUrls: ['./edit-customer.component.scss'],
 })
-export class EditAdminComponent implements OnInit {
+export class EditCustomerComponent implements OnInit {
   id = '';
   result = false;
   images = null;
   submitted = false;
-  admins: FormGroup;
+  customers: FormGroup;
   error = '';
-  constructor(private adminsService: AdminsService,
+  constructor(private customersService: CustomersService,
               public fb: FormBuilder,
               private toastrService: ToastrService,
               private http: HttpClient,
               private activatedRoute: ActivatedRoute) {
     // Reactive Form
-    this.admins = this.fb.group({
+    this.customers = this.fb.group({
         avatar: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
         username: ['', Validators.compose([Validators.required])],
         password: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
@@ -39,7 +38,6 @@ export class EditAdminComponent implements OnInit {
         firstName: ['', Validators.compose([Validators.required])],
         lastName: ['', Validators.compose([Validators.required])],
         phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
-        role: ['1', Validators.compose([Validators.required])],
         status: ['1'],
       },
       {
@@ -54,14 +52,14 @@ export class EditAdminComponent implements OnInit {
   }
 
   get f() {
-    return this.admins.controls;
+    return this.customers.controls;
   }
 
   getData(id): void {
-    this.adminsService.get(id)
+    this.customersService.get(id)
       .subscribe(
         data => {
-          this.admins = this.fb.group({
+          this.customers = this.fb.group({
             avatar: [data.avatar],
             username: [data.username],
             password: [data.password],
@@ -70,7 +68,6 @@ export class EditAdminComponent implements OnInit {
             firstName: [data.firstName],
             lastName: [data.lastName],
             phone: [data.phone],
-            role: [data.role],
             status: [data.status],
           });
         },
@@ -86,37 +83,36 @@ export class EditAdminComponent implements OnInit {
       this.images = file2;
     }
     const file = (event.target as HTMLInputElement).files[0];
-    this.admins.patchValue({
+    this.customers.patchValue({
       avatar: file,
     });
-    this.admins.get('avatar').updateValueAndValidity();
+    this.customers.get('avatar').updateValueAndValidity();
 
     // File Preview
     const reader = new FileReader();
     reader.onload = () => {
-      this.admins.patchValue({
+      this.customers.patchValue({
         avatar: reader.result as string,
       });
     };
     reader.readAsDataURL(file);
   }
   //  Update admin
-  updateAdmin(): void {
+  updateCustomer(): void {
     const formData = new FormData();
     formData.append('file', this.images);
     if(this.images == null){
       const data = {
-        avatar: this.admins.value['avatar'],
-        username: this.admins.value['username'],
-        password: this.admins.value['password'],
-        email: this.admins.value['email'],
-        first_name: this.admins.value['firstName'],
-        last_name: this.admins.value['lastName'],
-        phone: this.admins.value['phone'],
-        role: this.admins.value['role'],
-        status: this.admins.value['status'],
+        avatar: this.customers.value['avatar'],
+        username: this.customers.value['username'],
+        password: this.customers.value['password'],
+        email: this.customers.value['email'],
+        first_name: this.customers.value['firstName'],
+        last_name: this.customers.value['lastName'],
+        phone: this.customers.value['phone'],
+        status: this.customers.value['status'],
       };
-      this.adminsService.update(this.id, data).subscribe(
+      this.customersService.update(this.id, data).subscribe(
         (response) => {
           this.submitted = true;
           this.toastrService.success(response.message);
@@ -130,16 +126,15 @@ export class EditAdminComponent implements OnInit {
         if(this.result == true){
           const data = {
             avatar: environment.linkImg+res['filename'],
-            username: this.admins.value['username'],
-            password: this.admins.value['password'],
-            email: this.admins.value['email'],
-            first_name: this.admins.value['firstName'],
-            last_name: this.admins.value['lastName'],
-            phone: this.admins.value['phone'],
-            role: this.admins.value['role'],
-            status: this.admins.value['status'],
+            username: this.customers.value['username'],
+            password: this.customers.value['password'],
+            email: this.customers.value['email'],
+            first_name: this.customers.value['firstName'],
+            last_name: this.customers.value['lastName'],
+            phone: this.customers.value['phone'],
+            status: this.customers.value['status'],
           };
-          this.adminsService.update(this.id, data).subscribe(
+          this.customersService.update(this.id, data).subscribe(
             (response) => {
               this.submitted = true;
               this.toastrService.success(response.message);

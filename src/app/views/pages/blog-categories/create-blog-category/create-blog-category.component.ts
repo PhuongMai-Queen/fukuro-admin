@@ -17,7 +17,7 @@ export class CreateBlogCategoryComponent implements OnInit {
   blogCategories = this.fb.group(
     {
       name: ['', Validators.compose([Validators.required])],
-      status: ['']});
+      status: ['1']});
   ngOnInit(): void {}
   get f() {
     return this.blogCategories.controls;
@@ -42,6 +42,6 @@ export class CreateBlogCategoryComponent implements OnInit {
     this.blogCategories = this.fb.group(
       {
         name: [''],
-        status: ['']});
+        status: ['1']});
   }
 }

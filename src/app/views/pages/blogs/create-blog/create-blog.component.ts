@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Blogs } from '../../../../models/blogs.model';
 import { BlogsService } from '../../../../services/blogs.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -7,7 +6,6 @@ import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {BlogCategories} from '../../../../models/blog-categories.model';
 import {BlogCategoriesService} from '../../../../services/blog-categories.service';
-import {LocalDataSource} from 'ng2-smart-table';
 import { environment } from '../../../../../environments/environment';
 
 import './create-blog.loader';
@@ -41,7 +39,7 @@ export class CreateBlogComponent implements OnInit {
       summary: ['', Validators.compose([Validators.required])],
       description: ['', Validators.compose([Validators.required])],
       tag: ['', Validators.compose([Validators.required])],
-      status: [''],
+      status: ['1'],
       blogCategoryId: ['', Validators.compose([Validators.required])],
     });
   }
@@ -157,7 +155,7 @@ export class CreateBlogComponent implements OnInit {
       summary: [''],
       description: [''],
       tag: [''],
-      status: [''],
+      status: ['1'],
       blogCategoryId: [''],
     });
   }
@@ -166,7 +164,7 @@ export class CreateBlogComponent implements OnInit {
     this.blogCategoriesService.getAll()
       .subscribe(
         data => {
-          this.blogCategories = data;
+          this.blogCategories = data['rows'];
         },
         error => {
           console.log(error);

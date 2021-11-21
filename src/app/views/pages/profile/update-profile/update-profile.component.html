@@ -42,26 +42,18 @@
             </div>
             <div class="col-sm-6">
               <div class="form-group">
-                <label class="label">Mật khẩu</label>
-                <input type="password" nbInput fullWidth readonly formControlName="password">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
                 <label class="label">Email</label>
                 <input type="email" nbInput fullWidth formControlName="email">
               </div>
             </div>
+          </div>
+          <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="label">Số điện thoại</label>
                 <input type="text" nbInput fullWidth formControlName="phone">
               </div>
             </div>
-          </div>
-          <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="label" >Vai trò</label>
@@ -71,12 +63,14 @@
                 </nb-radio-group>
               </div>
             </div>
+          </div>
+          <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="label">Trạng thái</label>
                 <nb-radio-group formControlName="status">
-                  <nb-radio value="1">Đăng</nb-radio>
-                  <nb-radio value="0">Bản nháp</nb-radio>
+                  <nb-radio value="1">Kích hoạt</nb-radio>
+                  <nb-radio value="0">Vô hiệu hoá</nb-radio>
                 </nb-radio-group>
               </div>
             </div>

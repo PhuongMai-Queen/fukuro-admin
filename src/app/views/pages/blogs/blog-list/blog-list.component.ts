@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { SmartTableData } from '../../../@core/data/smart-table';
 import {Blogs} from '../../../../models/blogs.model';
@@ -11,7 +11,7 @@ import {ToastrService} from 'ngx-toastr';
   templateUrl: './blog-list.component.html',
   styleUrls: ['./blog-list.component.scss'],
 })
-export class BlogListComponent {
+export class BlogListComponent implements OnInit {
   blogs?: Blogs[];
   settings = {
     actions: {
@@ -72,8 +72,7 @@ export class BlogListComponent {
     this.blogsService.getAll()
       .subscribe(
         data => {
-          this.source = new LocalDataSource(data);
-          // console.log(data);
+          this.source = new LocalDataSource(data['rows']);
         },
         error => {
           // console.log(error);

@@ -1,5 +1,5 @@
 <h5>Cập Nhật Tài Khoản Người Quản Trị</h5>
-<form [formGroup]="admins" (ngSubmit)="updateAdmin()">
+<form [formGroup]="customers" (ngSubmit)="updateCustomer()">
   <div class="row">
     <div class="col-sm-9">
       <nb-card>
@@ -84,13 +84,6 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-6">
-              <label class="label col-form-label">Phân quyền</label>
-              <nb-radio-group formControlName="role">
-                <nb-radio value="1">Quản trị viên</nb-radio>
-                <nb-radio value="0">Nhân viên</nb-radio>
-              </nb-radio-group>
-            </div>
           </div>
         </nb-card-body>
       </nb-card>
@@ -101,8 +94,8 @@
         <nb-card-body>
           <div class="form-group">
             <!-- Image Preview -->
-            <div class="imagePreview" *ngIf="admins.value['avatar']">
-              <img [src]="admins.value['avatar']" [alt]="">
+            <div class="imagePreview" *ngIf="customers.value['avatar']">
+              <img [src]="customers.value['avatar']" [alt]="">
             </div>
 
             <!-- Select File -->

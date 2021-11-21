@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import {ToastrService} from 'ngx-toastr';
-import { SmartTableData } from '../../../@core/data/smart-table';
 import {AdminsService} from '../../../../services/admins.service';
 import {Router} from '@angular/router';
 import {Admins} from '../../../../models/admins.model';
@@ -11,7 +10,7 @@ import {Admins} from '../../../../models/admins.model';
   templateUrl: './admin-list.component.html',
   styleUrls: ['./admin-list.component.scss'],
 })
-export class AdminListComponent {
+export class AdminListComponent implements OnInit {
   admins?: Admins[];
   settings = {
     actions: {
@@ -43,22 +42,10 @@ export class AdminListComponent {
         title: 'Username',
         type: 'string',
       },
-      // lastName: {
-      //   title: 'Họ',
-      //   type: 'string',
-      // },
-      // firstName: {
-      //   title: 'Tên',
-      //   type: 'string',
-      // },
       email: {
         title: 'Email',
         type: 'string',
       },
-      // phone: {
-      //   title: 'Số điện thoại',
-      //   type: 'number',
-      // },
       role: {
         title: 'Vai trò',
         type: 'html',
@@ -90,7 +77,7 @@ export class AdminListComponent {
     this.adminsService.getAll()
       .subscribe(
         data => {
-          this.source = new LocalDataSource(data);
+          this.source = new LocalDataSource(data['rows']);
         },
         error => {
           console.log(error);

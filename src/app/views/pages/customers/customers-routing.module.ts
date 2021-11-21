@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { CustomersComponent } from './customers.component';
 import { CreateCustomerComponent } from './create-customer/create-customer.component';
 import { CustomerListComponent } from './customer-list/customer-list.component';
+import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 
 const routes: Routes = [{
   path: '',
@@ -16,7 +17,12 @@ const routes: Routes = [{
     {
       path: 'create',
       component: CreateCustomerComponent,
-  }],
+    },
+    {
+      path: 'edit/:id',
+      component: EditCustomerComponent,
+    }
+  ],
 }];
 
 @NgModule({
@@ -29,4 +35,5 @@ export const routedComponents = [
   CustomersComponent,
   CustomerListComponent,
   CreateCustomerComponent,
+  EditCustomerComponent
 ];

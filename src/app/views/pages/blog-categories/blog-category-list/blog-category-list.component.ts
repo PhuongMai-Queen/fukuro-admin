@@ -59,7 +59,7 @@ export class BlogCategoryListComponent implements OnInit {
     this.blogCategoriesService.getAll()
       .subscribe(
         data => {
-          this.source = new LocalDataSource(data);
+          this.source = new LocalDataSource(data['rows']);
         },
         error => {
           console.log(error);

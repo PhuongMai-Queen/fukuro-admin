@@ -1,56 +1,45 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-
-import { SmartTableData } from '../../../@core/data/smart-table';
 import {CustomersService} from '../../../../services/customers.service';
 import {Router} from '@angular/router';
 import {Customers} from '../../../../models/customers.model';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'ngx-customer-list',
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.scss'],
 })
-export class CustomerListComponent {
+export class CustomerListComponent implements OnInit {
   customers?: Customers[];
   settings = {
-    add: {
-      addButtonContent: '<i class="nb-plus"></i>',
-      createButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    edit: {
-      editButtonContent: '<i class="nb-edit"></i>',
-      saveButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
-      confirmDelete: true,
+    actions: {
+      custom: [
+        {
+          name: 'edit',
+          title: '<i class="nb-edit text-success" title="Edit"></i>'
+        },
+        {
+          name: 'delete',
+          title: '<i class="nb-trash text-danger" title="delete"></i>'
+        },
+      ],
+      add: false,
+      edit: false,
+      delete: false,
+      position: 'right',
     },
     columns: {
-      id: {
-        title: 'ID',
-        type: 'number',
-      },
       avatar: {
         title: 'Hình ảnh',
         filter: false,
         type: 'html',
         valuePrepareFunction: (avatar) => {
-          return `<img class='table-thumbnail-img' src="${avatar}" width="120px" />`
+          return `<img class='table-thumbnail-img' src="${avatar}" width="80px"/>`
         },
       },
       username: {
         title: 'Username',
-        type: 'string',
-      },
-      lastName: {
-        title: 'Họ',
-        type: 'string',
-      },
-      firstName: {
-        title: 'Tên',
         type: 'string',
       },
       email: {
@@ -58,15 +47,24 @@ export class CustomerListComponent {
         type: 'string',
       },
       phone: {
-        title: 'Số điện thoại',
-        type: 'number',
+        title: 'Điện thoại',
+        type: 'string',
+      },
+      status: {
+        title: 'Trạng Thái',
+        type: 'html',
+        valuePrepareFunction: (value) => {
+          return value == 1 ? 'Kích hoạt' : 'Vô hiệu hoá';
+        },
       },
     },
   };
 
   source: LocalDataSource;
 
-  constructor(private customersService: CustomersService, private _router: Router) {}
+  constructor(private customersService: CustomersService,
+              private _router: Router,
+              private toastrService: ToastrService) {}
 
   ngOnInit(): void {
     this.retrieveCustomers();
@@ -76,19 +74,29 @@ export class CustomerListComponent {
     this.customersService.getAll()
       .subscribe(
         data => {
-          this.source = new LocalDataSource(data);
-          // console.log(data);
+          this.source = new LocalDataSource(data['rows']);
         },
         error => {
-          // console.log(error);
+          console.log(error);
         });
   }
 
-  onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
+  onCustomAction(event) {
+    if(event.action == 'edit'){
+      this._router.navigate(['/pages/customers/edit/'+event.data['id']]);
+    }
+    if(event.action == 'delete'){
+      if (window.confirm('Bạn có chắn chắn sẽ xoá không?')) {
+        this.customersService.delete(event.data['id'])
+          .subscribe(
+            response => {
+              this.retrieveCustomers();
+              this.toastrService.success(response.message);
+            },
+            error => {
+              this.toastrService.success(error);
+            });
+      }
     }
   }
 }

@@ -62,14 +62,14 @@ export class EditBlogComponent implements OnInit {
       .subscribe(
         data => {
           this.blogs = this.fb.group({
-            title: [data.title, Validators.compose([Validators.required])],
-            slug: [data.slug, Validators.compose([Validators.required])],
-            thumbnail: [data.thumbnail, Validators.compose([Validators.required])],
-            summary: [data.summary, Validators.compose([Validators.required])],
-            description: [data.description, Validators.compose([Validators.required])],
-            tag: [JSON.parse(data.tag), Validators.compose([Validators.required])],
+            title: [data.title],
+            slug: [data.slug],
+            thumbnail: [data.thumbnail],
+            summary: [data.summary],
+            description: [data.description],
+            tag: [JSON.parse(data.tag)],
             status: [data.status],
-            blogCategoryId: [data.blogCategoryId, Validators.compose([Validators.required])],
+            blogCategoryId: [data.blogCategoryId],
           });
           this.retrieveBlogCategories(data.blogCategoryId);
         },
@@ -192,7 +192,7 @@ export class EditBlogComponent implements OnInit {
     this.blogCategoriesService.getAll()
       .subscribe(
         data => {
-          const customData = data;
+          const customData = data['rows'];
           const obj = [];
           customData.forEach((currentValue, index) => {
             if(currentValue.id == blog_cate_id){

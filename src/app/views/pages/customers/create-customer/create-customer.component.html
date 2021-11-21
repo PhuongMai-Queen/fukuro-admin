@@ -1,84 +1,125 @@
 <h5>Thêm Mới Tài Khoản Khách Hàng</h5>
-<div *ngIf="!submitted">
+<form [formGroup]="customers" (ngSubmit)="saveCustomer()">
   <div class="row">
-      <div class="col-sm-9">
-        <nb-card>
-          <nb-card-header>Thông tin cơ bản</nb-card-header>
-          <nb-card-body>
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label class="label col-form-label">Họ</label>
-                  <input type="text" nbInput fullWidth  [(ngModel)]="customers.last_name">
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label class="label col-form-label">Tên</label>
-                  <input type="text" nbInput fullWidth  [(ngModel)]="customers.first_name">
+    <div class="col-sm-9">
+      <nb-card>
+        <nb-card-header>Thông tin cơ bản</nb-card-header>
+        <nb-card-body>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label col-form-label">Họ</label>
+                <input type="text" nbInput fullWidth formControlName="lastName">
+                <div *ngIf="submitted && f.lastName.errors">
+                  <small *ngIf="f.lastName.errors.required" class="text-danger small-popup">Họ không được bỏ trống!</small>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label class="label col-form-label">Username</label>
-                  <input type="text" nbInput fullWidth  [(ngModel)]="customers.username">
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label class="label col-form-label">Mật Khẩu</label>
-                  <input type="password" nbInput fullWidth  [(ngModel)]="customers.password">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label col-form-label">Tên</label>
+                <input type="text" nbInput fullWidth formControlName="firstName">
+                <div *ngIf="submitted && f.firstName.errors">
+                  <small *ngIf="f.firstName.errors.required" class="text-danger small-popup">Tên không được bỏ trống!</small>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label class="label col-form-label">Email</label>
-                  <input type="email" nbInput fullWidth  [(ngModel)]="customers.email">
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label class="label col-form-label">Số điện thoại</label>
-                  <input type="text" nbInput fullWidth  [(ngModel)]="customers.phone">
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label col-form-label">Tên đăng nhập</label>
+                <input type="text" nbInput fullWidth formControlName="username">
+                <div *ngIf="submitted && f.username.errors">
+                  <small *ngIf="f.username.errors.required" class="text-danger small-popup">Tên đăng nhập không được bỏ trống!</small>
+                  <small *ngIf="f.username.errors.minlength" class="text-danger small-popup">Tên đăng nhập phải ít nhất 6 kí tự!!</small>
                 </div>
               </div>
             </div>
-          </nb-card-body>
-        </nb-card>
-      </div>
-      <div class="col-sm-3">
-        <nb-card>
-          <nb-card-header>Ảnh đại diện</nb-card-header>
-          <nb-card-body>
-            <div class="form-group">
-              <!-- Image Preview -->
-              <div class="imagePreview" *ngIf="customers.avatar && customers.avatar !== ''">
-                <img [src]="customers.avatar" [alt]="uploadForm.value.name">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label col-form-label">Email</label>
+                <input type="email" nbInput fullWidth formControlName="email">
+                <div *ngIf="submitted && f.email.errors">
+                  <small *ngIf="f.email.errors.required" class="text-danger small-popup">Email không được bỏ trống!</small>
+                  <small *ngIf="f.email.errors.email" class="text-danger small-popup">Email chưa đúng định dạng!</small>
+                </div>
               </div>
+            </div>
 
-              <!-- Select File -->
-              <input type="file" nbInput fullWidth accept="image/*" (change)="showPreview($event)" />
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label col-form-label">Mật Khẩu</label>
+                <input type="password" nbInput fullWidth formControlName="password">
+                <div *ngIf="submitted && f.password.errors">
+                  <small *ngIf="f.password.errors.required" class="text-danger small-popup">Mật khẩu không được bỏ trống!</small>
+                  <small *ngIf="f.password.errors.minlength" class="text-danger small-popup">Mật khẩu phải ít nhất 6 kí tự! <br></small>
+                  <small *ngIf="f.password.errors.pattern" class="text-danger small-popup">Mật khẩu không được chứa khoảng trắng!</small>
+                </div>
+              </div>
             </div>
-          </nb-card-body>
-        </nb-card>
-
-        <nb-card>
-          <nb-card-header>Trạng thái</nb-card-header>
-          <nb-card-body>
-            <div class="form-group">
-              <nb-radio-group  [(ngModel)]="customers.status">
-                <nb-radio value="1">Kích hoạt</nb-radio>
-                <nb-radio value="0">Vô hiệu hoá</nb-radio>
-              </nb-radio-group>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label col-form-label">Xác nhận mật Khẩu</label>
+                <input type="password" nbInput fullWidth formControlName="cpassword">
+                <div *ngIf="submitted && f.cpassword.errors">
+                  <small *ngIf="f.cpassword.errors.required" class="text-danger small-popup">Xác nhận mật khẩu không được bỏ trống!</small>
+                  <small *ngIf="f.cpassword.errors.minlength" class="text-danger small-popup">Mật khẩu phải ít nhất 6 kí tự! <br></small>
+                  <small *ngIf="f.cpassword.errors.pattern" class="text-danger small-popup">Mật khẩu không được chứa khoảng trắng!</small>
+                  <small *ngIf="f.cpassword.errors.mustMatch" class="text-danger small-popup">Mật khẩu không trùng khớp!</small>
+                </div>
+              </div>
             </div>
-          </nb-card-body>
-        </nb-card>
-
-        <button type="submit" nbButton status="success" fullWidth (click)="saveCustomer()">Tạo mới</button>
-      </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label col-form-label">Số điện thoại</label>
+                <input type="text" nbInput fullWidth formControlName="phone">
+                <div *ngIf="submitted && f.phone.errors">
+                  <small *ngIf="f.phone.errors.required" class="text-danger small-popup">Số điện thoại không được bỏ trống!</small>
+                  <small *ngIf="f.phone.errors.pattern" class="text-danger small-popup">Số điện thoại chưa đúng!</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
     </div>
-</div>
+    <div class="col-sm-3">
+      <nb-card>
+        <nb-card-header>Ảnh đại diện</nb-card-header>
+        <nb-card-body>
+          <div class="form-group">
+            <!-- Image Preview -->
+            <div class="imagePreview" *ngIf="customers.value['avatar']">
+              <img [src]="customers.value['avatar']" [alt]="">
+            </div>
+
+            <!-- Select File -->
+            <input type="file" nbInput fullWidth accept="image/*" (change)="showPreview($event)" />
+            <div *ngIf="submitted && f.avatar.errors">
+              <small *ngIf="f.avatar.errors.required" class="text-danger small-popup">Ảnh đại diện không được bỏ trống!</small>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+
+      <nb-card>
+        <nb-card-header>Trạng thái</nb-card-header>
+        <nb-card-body>
+          <div class="form-group">
+            <nb-radio-group formControlName="status">
+              <nb-radio value="1">Kích hoạt</nb-radio>
+              <nb-radio value="0">Vô hiệu hoá</nb-radio>
+            </nb-radio-group>
+          </div>
+        </nb-card-body>
+      </nb-card>
+
+      <button type="submit" nbButton status="success" fullWidth>Tạo mới</button>
+    </div>
+  </div>
+</form>
