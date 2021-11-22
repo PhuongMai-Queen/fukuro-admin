@@ -36,6 +36,10 @@ export class BlogCategoryListComponent implements OnInit {
         title: 'Tên loại',
         type: 'string',
       },
+      slug: {
+        title: 'Link',
+        type: 'string',
+      },
       status: {
         title: 'Trạng Thái',
         type: 'html',

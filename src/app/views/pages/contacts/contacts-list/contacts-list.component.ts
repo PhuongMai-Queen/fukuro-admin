@@ -16,11 +16,7 @@ export class ContactsListComponent implements OnInit {
       custom: [
         {
           name: 'info',
-          title: '<i class="nb-cloudy text-primary" title="Chi tiết"></i>'
-        },
-        {
-          name: 'edit',
-          title: '<i class="nb-edit text-success" title="Sửa"></i>'
+          title: '<i class="nb-edit text-success" title="Xem chi tiết"></i>'
         },
         {
           name: 'delete',
@@ -66,7 +62,7 @@ export class ContactsListComponent implements OnInit {
     this.contactsService.getAll()
       .subscribe(
         data => {
-          this.source = new LocalDataSource(data);
+          this.source = new LocalDataSource(data['rows']);
         },
         error => {
           console.log(error);
@@ -75,9 +71,6 @@ export class ContactsListComponent implements OnInit {
   onCustomAction(event) {
     if(event.action == 'info'){
       this._router.navigate(['pages/contacts/info/'+event.data['id']]);
-    }
-    if(event.action == 'edit'){
-      this._router.navigate(['pages/contacts/edit/'+event.data['id']]);
     }
     if(event.action == 'delete'){
       if (window.confirm('Bạn có chắn chắn sẽ xoá không?')) {
