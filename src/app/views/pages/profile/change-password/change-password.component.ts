@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import {AdminsService} from '../../../../services/admins.service';
 import {HttpClient} from '@angular/common/http';
@@ -14,20 +14,21 @@ export class ChangePasswordComponent implements OnInit {
   result = false;
   submitted = false;
   error = '';
+  changePass: FormGroup;
   constructor(private adminsService: AdminsService,
               public fb: FormBuilder,
               private toastrService: ToastrService,
-              private http: HttpClient) {}
-
-  changePass = this.fb.group({
-      old_password: ['', Validators.compose([Validators.required])],
-      new_password: [''],
-      cf_password: [''],
-    },
-    {
-      validator: MustMatch('new_password', 'cf_password'),
-    },
-  );
+              private http: HttpClient) {
+    this.changePass = this.fb.group({
+        old_password: ['', Validators.compose([Validators.required])],
+        new_password: [''],
+        cf_password: [''],
+      },
+      // {
+      //   validator: MustMatch('new_password', 'cf_password'),
+      // },
+    );
+  }
 
   ngOnInit(): void {}
 

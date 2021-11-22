@@ -3,6 +3,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 import {PromotionsService} from '../../../../services/promotions.service';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'ngx-promotion-list',
@@ -38,7 +39,7 @@ export class PromotionListComponent implements OnInit {
         type: 'number',
       },
       discount: {
-        title: 'Giảm giá',
+        title: 'Giảm giá (%)',
         type: 'string',
       },
       startDate: {
@@ -57,6 +58,7 @@ export class PromotionListComponent implements OnInit {
   constructor(private promotionsService: PromotionsService,
               private _router: Router,
               private toastrService: ToastrService,
+              public datepipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
@@ -66,7 +68,11 @@ export class PromotionListComponent implements OnInit {
     this.promotionsService.getAll()
       .subscribe(
         data => {
-          this.source = new LocalDataSource(data);
+          for (var i = 0; i < data['rows'].length; i++){
+            data['rows'][i].startDate = this.datepipe.transform(data['rows'][i].startDate, 'yyyy-MM-dd');
+            data['rows'][i].endDate = this.datepipe.transform(data['rows'][i].endDate, 'yyyy-MM-dd');
+          }
+          this.source = new LocalDataSource(data['rows']);
         },
         error => {
           console.log(error);

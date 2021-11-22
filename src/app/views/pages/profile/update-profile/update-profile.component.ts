@@ -75,15 +75,15 @@ export class UpdateProfileComponent implements OnInit {
     }
     const file = (event.target as HTMLInputElement).files[0];
     this.admins.patchValue({
-      thumbnail: file,
+      avatar: file,
     });
-    this.admins.get('thumbnail').updateValueAndValidity();
+    this.admins.get('avatar').updateValueAndValidity();
 
     // File Preview
     const reader = new FileReader();
     reader.onload = () => {
       this.admins.patchValue({
-        thumbnail: reader.result as string,
+        avatar: reader.result as string,
       });
     };
     reader.readAsDataURL(file);
@@ -108,6 +108,7 @@ export class UpdateProfileComponent implements OnInit {
         (response) => {
           this.submitted = true;
           this.toastrService.success(response.message);
+          location.reload();
         },
         (error) => {
           this.toastrService.success(error.message);
@@ -131,6 +132,7 @@ export class UpdateProfileComponent implements OnInit {
             (response) => {
               this.submitted = true;
               this.toastrService.success(response.message);
+              location.reload();
             },
             (error) => {
               this.toastrService.success(error.message);

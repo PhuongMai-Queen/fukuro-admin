@@ -16,7 +16,7 @@
               </div>
               <div class="form-group">
                 <label class="label col-form-label">Ngày bắt đầu</label>
-                <input type="text" nbInput fullWidth formControlName="startDate">
+                <input type="date" nbInput fullWidth formControlName="startDate">
                 <div *ngIf="submitted && f.startDate.errors">
                   <small *ngIf="f.startDate.errors.required" class="text-danger small-popup">Ngày bắt đầu không được bỏ trống!</small>
                 </div>
@@ -32,9 +32,12 @@
               </div>
               <div class="form-group">
                 <label class="label col-form-label">Ngày kết thúc</label>
-                <input type="text" nbInput fullWidth formControlName="endDate">
+                <input type="date" nbInput fullWidth formControlName="endDate">
                 <div *ngIf="submitted && f.endDate.errors">
                   <small *ngIf="f.endDate.errors.required" class="text-danger small-popup">Ngày kết thúc không được bỏ trống!</small>
+                </div>
+                <div *ngIf="submitted && f.endDate">
+                  <small *ngIf="promotion.hasError('notValid')" class="text-danger small-popup">Ngày kết thúc phải lớn hơn ngày bắt đầu!</small>
                 </div>
               </div>
             </div>
