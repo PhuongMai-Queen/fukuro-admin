@@ -8,7 +8,7 @@ export class AuthService {
   constructor( private _router: Router ) {  }
 
   loggedIn() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('tokenAdmin');
     this.isLoggedIn = token ? true : false;
     return this.isLoggedIn;
   }
@@ -16,13 +16,13 @@ export class AuthService {
   logout() {
     this.isLoggedIn = false;
     localStorage.removeItem('id');
-    localStorage.removeItem('token');
-    localStorage.removeItem('timer');
+    localStorage.removeItem('tokenAdmin');
+    localStorage.removeItem('timerAdmin');
     this._router.navigate(['/auth/login']);
   }
 
   getToken() {
-    return localStorage.getItem('token');
+    return localStorage.getItem('tokenAdmin');
   }
 
 }

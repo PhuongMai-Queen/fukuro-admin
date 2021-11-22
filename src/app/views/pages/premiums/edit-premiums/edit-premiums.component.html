@@ -1,0 +1,74 @@
+<h5>Chỉnh Sửa Premium</h5>
+<form [formGroup]="premiums" (ngSubmit)="updatePremium()">
+  <div class="row">
+    <div class="col-sm-9">
+      <nb-card>
+        <nb-card-header>Thông tin cơ bản</nb-card-header>
+        <nb-card-body>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label col-form-label">Tên premium</label>
+                <input type="text" nbInput fullWidth formControlName="name">
+                <div *ngIf="submitted && f.name.errors">
+                  <small *ngIf="f.name.errors.required" class="text-danger small-popup">Tên premium không được bỏ trống!</small>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label col-form-label">Giá tiền</label>
+                <input type="text" nbInput fullWidth formControlName="price">
+                <div *ngIf="submitted && f.price.errors">
+                  <small *ngIf="f.price.errors.required" class="text-danger small-popup">Giá tiền không được bỏ trống!</small>
+                  <small *ngIf="f.price.errors.pattern" class="text-danger small-popup">Giá tiền phải là số!</small>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label class="label col-form-label">Mô tả</label>
+                <textarea rows="5" nbInput fullWidth formControlName="description"></textarea>
+                <div *ngIf="submitted && f.description.errors">
+                  <small *ngIf="f.description.errors.required" class="text-danger small-popup">Mô tả không được bỏ trống!</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-sm-3">
+      <nb-card>
+        <nb-card-header>Loại khuyến mãi</nb-card-header>
+        <nb-card-body>
+          <div class="form-group" >
+            <nb-select selected="1" fullWidth formControlName="promotionId">
+              <nb-option *ngFor='let pro of promotions' [value]="pro.id">{{ pro.name }}</nb-option>
+            </nb-select>
+            <div *ngIf="submitted && f.promotionId.errors">
+              <small *ngIf="f.promotionId.errors.required" class="text-danger small-popup">Chọn loại khuyến mãi!</small>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+      <nb-card>
+        <nb-card-header>Trạng thái</nb-card-header>
+        <nb-card-body>
+          <div class="form-group">
+            <nb-radio-group formControlName="status">
+              <nb-radio value="1">Kích hoạt</nb-radio>
+              <nb-radio value="0">Vô hiệu hoá</nb-radio>
+            </nb-radio-group>
+          </div>
+        </nb-card-body>
+      </nb-card>
+      <button type="submit" nbButton status="success" fullWidth>Lưu</button>
+    </div>
+  </div>
+</form>
+

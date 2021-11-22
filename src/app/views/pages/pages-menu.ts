@@ -36,8 +36,22 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'ORDER',
+    title: 'PREMIUM',
     group: true,
+  },
+  {
+    title: 'Gói Premiums',
+    icon: 'loader-outline',
+    children: [
+      {
+        title: 'Danh sách',
+        link: '/pages/premiums/list',
+      },
+      {
+        title: 'Thêm mới',
+        link: '/pages/premiums/create',
+      },
+    ],
   },
   {
     title: 'Hoá Đơn',

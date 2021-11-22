@@ -50,9 +50,9 @@ export class LoginComponent implements OnInit {
     }
     this.adminsService.login(this.login.value).subscribe(
       (res) => {
-        localStorage.setItem('token', res.token);
+        localStorage.setItem('tokenAdmin', res.token);
         const time_to_login = Date.now() + 604800000;
-        localStorage.setItem('timer', JSON.stringify(time_to_login));
+        localStorage.setItem('timerAdmin', JSON.stringify(time_to_login));
         localStorage.setItem('id', res.data['id']);
         this.auth.loggedIn();
         this._router.navigate(['/pages/dashboard']);

@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.analytics.trackPageViews();
     this.seoService.trackCanonicalChanges();
-    const timer = localStorage.getItem('timer');
+    const timer = localStorage.getItem('timerAdmin');
     if(timer){
       this.auth.loggedIn();
     }

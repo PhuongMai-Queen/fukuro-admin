@@ -1,25 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Admins } from '../models/admins.model';
+import { Premiums } from '../models/premiums.model';
 import { environment } from '../../environments/environment';
 
-const baseUrl = environment.apiURL+'/admins';
-const changePassUrl = environment.apiURL+'/password-resets';
+const baseUrl = environment.apiURL+'/premiums';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AdminsService {
+export class PremiumsService {
   constructor(private http: HttpClient) {}
   login(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/login`, data);
   }
-  getAll(): Observable<Admins[]> {
-    return this.http.get<Admins[]>(baseUrl);
+  getAll(): Observable<Premiums[]> {
+    return this.http.get<Premiums[]>(baseUrl);
   }
 
-  get(id: any): Observable<Admins> {
+  get(id: any): Observable<Premiums> {
     return this.http.get(`${baseUrl}/${id}`);
   }
 
@@ -39,11 +38,7 @@ export class AdminsService {
     return this.http.delete(baseUrl);
   }
 
-  findByTitle(title: any): Observable<Admins[]> {
-    return this.http.get<Admins[]>(`${baseUrl}?title=${title}`);
-  }
-
-  updatePassword(id: any, data: any): Observable<any> {
-    return this.http.put(`${changePassUrl}/${id}`, data);
+  findByTitle(title: any): Observable<Premiums[]> {
+    return this.http.get<Premiums[]>(`${baseUrl}?title=${title}`);
   }
 }

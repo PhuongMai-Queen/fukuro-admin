@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import {PromotionsService} from '../../../../services/promotions.service';
+import {PremiumsService} from '../../../../services/premiums.service';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'ngx-promotion-list',
-  templateUrl: './promotion-list.component.html',
-  styleUrls: ['./promotion-list.component.scss'],
+  selector: 'ngx-premiums-list',
+  templateUrl: './premiums-list.component.html',
+  styleUrls: ['./premiums-list.component.scss'],
 })
-export class PromotionListComponent implements OnInit {
+export class PremiumsListComponent implements OnInit {
 
   settings = {
     actions: {
       custom: [
-        // {
-        //   name: 'info',
-        //   title: '<i class="nb-cloudy text-primary" title="Chi tiết"></i>'
-        // },
+        {
+          name: 'info',
+          title: '<i class="nb-cloudy text-primary" title="Chi tiết"></i>'
+        },
         {
           name: 'edit',
           title: '<i class="nb-edit text-success" title="Sửa"></i>'
@@ -35,43 +35,42 @@ export class PromotionListComponent implements OnInit {
     },
     columns: {
       name: {
-        title: 'Tên khuyến mãi',
+        title: 'Tên premium',
         type: 'number',
       },
-      discount: {
-        title: 'Giảm giá (%)',
+      price: {
+        title: 'Giá tiền',
         type: 'string',
       },
-      startDate: {
-        title: 'Ngày bắt đầu',
+      description: {
+        title: 'Mô tả',
         type: 'string',
       },
-      endDate: {
-        title: 'Ngày kết thúc',
-        type: 'string',
+      status: {
+        title: 'Trạng Thái',
+        type: 'html',
+        valuePrepareFunction: (value) => {
+          return value == 1 ? 'Kích hoạt' : 'Vô hiệu hoá';
+        },
       },
     },
   };
 
   source: LocalDataSource;
 
-  constructor(private promotionsService: PromotionsService,
+  constructor(private premiumsService: PremiumsService,
               private _router: Router,
               private toastrService: ToastrService,
               public datepipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
-    this.retrievePromotions();
+    this.retrievePremiums();
   }
-  retrievePromotions(): void {
-    this.promotionsService.getAll()
+  retrievePremiums(): void {
+    this.premiumsService.getAll()
       .subscribe(
         data => {
-          for (var i = 0; i < data['rows'].length; i++){
-            data['rows'][i].startDate = this.datepipe.transform(data['rows'][i].startDate, 'yyyy-MM-dd');
-            data['rows'][i].endDate = this.datepipe.transform(data['rows'][i].endDate, 'yyyy-MM-dd');
-          }
           this.source = new LocalDataSource(data['rows']);
         },
         error => {
@@ -81,14 +80,14 @@ export class PromotionListComponent implements OnInit {
 
   onCustomAction(event) {
     if(event.action == 'edit'){
-      this._router.navigate(['pages/promotions/edit/'+event.data['id']]);
+      this._router.navigate(['pages/premiums/edit/'+event.data['id']]);
     }
     if(event.action == 'delete'){
       if (window.confirm('Bạn có chắn chắn sẽ xoá không?')) {
-        this.promotionsService.delete(event.data['id'])
+        this.premiumsService.delete(event.data['id'])
           .subscribe(
             response => {
-              this.retrievePromotions();
+              this.retrievePremiums();
               this.toastrService.success(response.message);
             },
             error => {

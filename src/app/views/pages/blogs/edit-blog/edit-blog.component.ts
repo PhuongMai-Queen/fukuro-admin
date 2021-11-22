@@ -4,15 +4,14 @@ import { BlogsService } from '../../../../services/blogs.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import {ToastrService} from 'ngx-toastr';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import {BlogCategories} from '../../../../models/blog-categories.model';
 import {BlogCategoriesService} from '../../../../services/blog-categories.service';
-import {LocalDataSource} from 'ng2-smart-table';
-import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../../environments/environment';
-
+import {Promotions} from '../../../../models/promotions.model';
 import './edit-blog.loader';
 import 'ckeditor';
+
 
 @Component({
   selector: 'ngx-edit-blog',
@@ -25,6 +24,7 @@ export class EditBlogComponent implements OnInit {
   submitted = false;
   blogs: FormGroup;
   error = '';
+  promotions?: Promotions[]
   constructor(private blogsService: BlogsService,
               public fb: FormBuilder,
               private http: HttpClient,

@@ -64,6 +64,11 @@ const routes: Routes = [{
         .then(m => m.PremiumBillsModule),
     },
     {
+      path: 'premiums',
+      loadChildren: () => import('./premiums/premiums.module')
+        .then(m => m.PremiumsModule),
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',
