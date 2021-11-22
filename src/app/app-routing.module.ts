@@ -12,7 +12,7 @@ import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'auth',
     loadChildren: () => import('./views/pages/auth/auth.module')
       .then(m => m.AuthModule)},
   {
@@ -20,7 +20,7 @@ export const routes: Routes = [
     loadChildren: () => import('./views/pages/pages.module')
       .then(m => m.PagesModule),
       canActivate: [AuthGuard]},
-  { path: '', redirectTo: 'pages', pathMatch: 'full' },
+  { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
   { path: '**', redirectTo: 'pages' },
 ];
 
