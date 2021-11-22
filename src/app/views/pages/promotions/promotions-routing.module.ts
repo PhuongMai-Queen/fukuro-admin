@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { PromotionsComponent } from './promotions.component';
 import { CreatePromotionComponent } from './create-promotion/create-promotion.component';
+import { EditPromotionComponent } from './edit-promotion/edit-promotion.component';
 import { PromotionListComponent } from './promotion-list/promotion-list.component';
 
 const routes: Routes = [{
@@ -16,7 +17,12 @@ const routes: Routes = [{
     {
       path: 'create',
       component: CreatePromotionComponent,
-  }],
+    },
+    {
+      path: 'edit/:id',
+      component: EditPromotionComponent,
+    },
+  ],
 }];
 
 @NgModule({
@@ -29,4 +35,5 @@ export const routedComponents = [
   PromotionsComponent,
   PromotionListComponent,
   CreatePromotionComponent,
+  EditPromotionComponent,
 ];

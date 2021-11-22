@@ -4,7 +4,7 @@ import { CKEditorModule } from 'ng2-ckeditor';
 import { ThemeModule } from '../../layouts/theme.module';
 
 import { PromotionsRoutingModule, routedComponents } from './promotions-routing.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   NbActionsModule,
   NbButtonModule,
@@ -22,6 +22,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 @NgModule({
   imports: [
+    ReactiveFormsModule,
     FormsModule,
     TagInputModule,
     ThemeModule,

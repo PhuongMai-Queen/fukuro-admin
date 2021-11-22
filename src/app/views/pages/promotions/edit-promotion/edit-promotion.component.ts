@@ -5,10 +5,10 @@ import {ActivatedRoute} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 
 @Component({
-  selector: 'ngx-create-promotion',
-  templateUrl: './create-promotion.component.html',
+  selector: 'ngx-edit-promotion',
+  templateUrl: './edit-promotion.component.html',
 })
-export class CreatePromotionComponent implements OnInit {
+export class EditPromotionComponent implements OnInit {
   id: '';
   error = '';
   submitted = false;
@@ -27,7 +27,7 @@ export class CreatePromotionComponent implements OnInit {
   get f() {
     return this.promotion.controls;
   }
-  savePromotion(): any {
+  updatePromotion(): any {
     this.submitted = true;
 
     // return validators

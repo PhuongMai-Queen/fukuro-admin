@@ -51,7 +51,7 @@ export class CreateBlogComponent implements OnInit {
     return this.blogs.controls;
   }
   // Create slug
-  modelChangeFn(e) {
+  modelChangeFn(e){
     const text = this.transform(e);
     this.blogs.patchValue({slug: text});
   }

@@ -62,7 +62,7 @@ export class EditBlogComponent implements OnInit {
       .subscribe(
         data => {
           this.blogs = this.fb.group({
-            title: [data.title],
+            title: [data.title, Validators.compose([Validators.required])],
             slug: [data.slug],
             thumbnail: [data.thumbnail],
             summary: [data.summary],

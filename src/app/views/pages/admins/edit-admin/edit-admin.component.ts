@@ -22,31 +22,28 @@ export class EditAdminComponent implements OnInit {
   result = false;
   images = null;
   submitted = false;
-  admins: FormGroup;
   error = '';
+  admins = this.fb.group({
+      avatar: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      username: ['', Validators.compose([Validators.required])],
+      password: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
+      cpassword: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
+      email: ['', Validators.compose([Validators.required, Validators.email])],
+      firstName: ['', Validators.compose([Validators.required])],
+      lastName: ['', Validators.compose([Validators.required])],
+      phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
+      role: ['1', Validators.compose([Validators.required])],
+      status: ['1'],
+    },
+    {
+      validator: MustMatch('password', 'cpassword'),
+    },
+  );
   constructor(private adminsService: AdminsService,
               public fb: FormBuilder,
               private toastrService: ToastrService,
               private http: HttpClient,
-              private activatedRoute: ActivatedRoute) {
-    // Reactive Form
-    this.admins = this.fb.group({
-        avatar: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-        username: ['', Validators.compose([Validators.required])],
-        password: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
-        cpassword: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
-        email: ['', Validators.compose([Validators.required, Validators.email])],
-        firstName: ['', Validators.compose([Validators.required])],
-        lastName: ['', Validators.compose([Validators.required])],
-        phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
-        role: ['1', Validators.compose([Validators.required])],
-        status: ['1'],
-      },
-      {
-        validator: MustMatch('password', 'cpassword'),
-      },
-    );
-  }
+              private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params.id;
@@ -62,15 +59,15 @@ export class EditAdminComponent implements OnInit {
       .subscribe(
         data => {
           this.admins = this.fb.group({
-            avatar: [data.avatar],
-            username: [data.username],
-            password: [data.password],
-            cpassword: [data.password],
-            email: [data.email],
-            firstName: [data.firstName],
-            lastName: [data.lastName],
-            phone: [data.phone],
-            role: [data.role],
+            avatar: [data.avatar, Validators.compose([Validators.required, Validators.minLength(6)])],
+            username: [data.username, Validators.compose([Validators.required])],
+            password: [data.password, Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
+            cpassword: [data.password, Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
+            email: [data.email, Validators.compose([Validators.required, Validators.email])],
+            firstName: [data.firstName, Validators.compose([Validators.required])],
+            lastName: [data.lastName, Validators.compose([Validators.required])],
+            phone: [data.phone, Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
+            role: [data.role, Validators.compose([Validators.required])],
             status: [data.status],
           });
         },
@@ -101,7 +98,7 @@ export class EditAdminComponent implements OnInit {
     reader.readAsDataURL(file);
   }
   //  Update admin
-  updateAdmin(): void {
+  updateAdmin(): any {
     const formData = new FormData();
     formData.append('file', this.images);
     if(this.images == null){

@@ -1,4 +1,4 @@
-<form [formGroup]="admins" (ngSubmit)="saveAdmin()">
+<form [formGroup]="admins" (ngSubmit)="updateAdmin()">
   <div class="row">
     <div class="col-sm-12">
       <nb-card>
@@ -14,8 +14,8 @@
 
               <!-- Select File -->
               <input type="file" nbInput fullWidth accept="image/*" (change)="showPreview($event)" />
-              <div *ngIf="submitted && f.thumbnail.errors">
-                <small *ngIf="f.thumbnail.errors.required" class="text-danger small-popup">Chọn ảnh bài viết!</small>
+              <div *ngIf="submitted && f.avatar.errors">
+                <small *ngIf="f.avatar.errors.required" class="text-danger small-popup">Ảnh đại diện không được bỏ trống!</small>
               </div>
             </div>
           </div>
@@ -24,12 +24,18 @@
               <div class="form-group">
                 <label class="label">Họ</label>
                 <input type="text" nbInput fullWidth formControlName="lastName">
+                <div *ngIf="submitted && f.lastName.errors">
+                  <small *ngIf="f.lastName.errors.required" class="text-danger small-popup">Họ không được bỏ trống!</small>
+                </div>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="label">Tên</label>
                 <input type="text" nbInput fullWidth formControlName="firstName">
+                <div *ngIf="submitted && f.firstName.errors">
+                  <small *ngIf="f.firstName.errors.required" class="text-danger small-popup">Tên không được bỏ trống!</small>
+                </div>
               </div>
             </div>
           </div>
@@ -38,12 +44,20 @@
               <div class="form-group">
                 <label class="label">Tên người dùng</label>
                 <input type="email" nbInput fullWidth formControlName="username">
+                <div *ngIf="submitted && f.username.errors">
+                  <small *ngIf="f.username.errors.required" class="text-danger small-popup">Tên đăng nhập không được bỏ trống!</small>
+                  <small *ngIf="f.username.errors.required" class="text-danger small-popup">Tên đăng nhập phải ít nhất 6 kí tự!!</small>
+                </div>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="label">Email</label>
                 <input type="email" nbInput fullWidth formControlName="email">
+                <div *ngIf="submitted && f.email.errors">
+                  <small *ngIf="f.email.errors.required" class="text-danger small-popup">Email không được bỏ trống!</small>
+                  <small *ngIf="f.email.errors.email" class="text-danger small-popup">Email chưa đúng định dạng!</small>
+                </div>
               </div>
             </div>
           </div>
@@ -52,6 +66,10 @@
               <div class="form-group">
                 <label class="label">Số điện thoại</label>
                 <input type="text" nbInput fullWidth formControlName="phone">
+                <div *ngIf="submitted && f.phone.errors">
+                  <small *ngIf="f.phone.errors.required" class="text-danger small-popup">Số điện thoại không được bỏ trống!</small>
+                  <small *ngIf="f.phone.errors.pattern" class="text-danger small-popup">Số điện thoại chưa đúng!</small>
+                </div>
               </div>
             </div>
             <div class="col-sm-6">

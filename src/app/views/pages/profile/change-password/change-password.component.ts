@@ -1,44 +1,61 @@
 import { Component, OnInit } from '@angular/core';
-import {BlogCategories} from '../../../../models/blog-categories.model';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {BlogCategoriesService} from '../../../../services/blog-categories.service';
+import {FormBuilder, Validators} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
+import {AdminsService} from '../../../../services/admins.service';
+import {HttpClient} from '@angular/common/http';
+import {MustMatch} from '../../../../services/validators/must-match.validator';
 
 @Component({
   selector: 'ngx-change-password',
   templateUrl: './change-password.component.html',
+  styleUrls: ['./change-password.component.scss'],
 })
 export class ChangePasswordComponent implements OnInit {
-  blogCategories: BlogCategories = {
-    name: '',
-    status: '',
-  };
+  result = false;
   submitted = false;
-  constructor(private blogCategoriesService: BlogCategoriesService,
+  error = '';
+  constructor(private adminsService: AdminsService,
               public fb: FormBuilder,
               private toastrService: ToastrService,
-  ) {}
+              private http: HttpClient) {}
+
+  changePass = this.fb.group({
+      old_password: ['', Validators.compose([Validators.required])],
+      new_password: [''],
+      cf_password: [''],
+    },
+    {
+      validator: MustMatch('new_password', 'cf_password'),
+    },
+  );
+
   ngOnInit(): void {}
-  saveBlogCategories(): void {
-    const data = {
-      name: this.blogCategories.name,
-      status: this.blogCategories.status,
-    };
-    // console.log(data);
-    this.blogCategoriesService.create(data).subscribe(
-      (response) => {
-        this.newBlogCategory();
-        this.toastrService.success('Thêm mới thành công!');
-      },
-      (error) => {
-        console.log(error);
-      });
+
+  get f() {
+    return this.changePass.controls;
   }
-  newBlogCategory(): void {
+  resetPassword(): any {
+    if (this.changePass.invalid) {
+      return false;
+    }
+    const data = {password: this.changePass.value['new_password']};
+
+    // this.adminsService.create(data).subscribe(
+    //   (response) => {
+    //     this.newResetPassword();
+    //     this.toastrService.success(response.message);
+    //   },
+    //   (error) => {
+    //     this.toastrService.success(error.message);
+    //   });
+  }
+  newResetPassword(): any {
     this.submitted = false;
-    this.blogCategories = {
-      name: '',
-      status: '',
-    };
+    this.changePass = this.fb.group(
+      {
+        old_password: [''],
+        new_password: [''],
+        cf_password: [''],
+      });
   }
 }
