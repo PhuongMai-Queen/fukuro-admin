@@ -14,8 +14,8 @@ export class ContactsService {
   login(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/login`, data);
   }
-  getAll(): Observable<Contacts[]> {
-    return this.http.get<Contacts[]>(baseUrl);
+  getAll(limit: any): Observable<Contacts[]> {
+    return this.http.get<Contacts[]>(`${baseUrl}?limit=${limit}`);
   }
 
   get(id: any): Observable<Contacts> {

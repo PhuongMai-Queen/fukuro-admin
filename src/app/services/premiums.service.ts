@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Premiums } from '../models/premiums.model';
 import { environment } from '../../environments/environment';
 
-const baseUrl = environment.apiURL+'/premiums';
+const baseUrl = environment.apiURL+'/premium-services';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +14,8 @@ export class PremiumsService {
   login(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/login`, data);
   }
-  getAll(): Observable<Premiums[]> {
-    return this.http.get<Premiums[]>(baseUrl);
+  getAll(limit: any): Observable<Premiums[]> {
+    return this.http.get<Premiums[]>(`${baseUrl}?limit=${limit}`);
   }
 
   get(id: any): Observable<Premiums> {

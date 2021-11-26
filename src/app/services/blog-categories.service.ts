@@ -12,8 +12,8 @@ const baseUrl = environment.apiURL+'/blog-categories';
 export class BlogCategoriesService {
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<BlogCategories[]> {
-    return this.http.get<BlogCategories[]>(baseUrl);
+  getAll(limit: any): Observable<BlogCategories[]> {
+    return this.http.get<BlogCategories[]>(`${baseUrl}?limit=${limit}`);
   }
 
   get(id: any): Observable<BlogCategories> {

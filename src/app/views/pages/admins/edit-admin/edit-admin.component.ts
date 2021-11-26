@@ -19,6 +19,7 @@ import 'ckeditor';
 })
 export class EditAdminComponent implements OnInit {
   id = '';
+  idAdmin = '';
   result = false;
   images = null;
   submitted = false;
@@ -26,19 +27,13 @@ export class EditAdminComponent implements OnInit {
   admins = this.fb.group({
       avatar: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
       username: ['', Validators.compose([Validators.required])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
-      cpassword: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
       email: ['', Validators.compose([Validators.required, Validators.email])],
       firstName: ['', Validators.compose([Validators.required])],
       lastName: ['', Validators.compose([Validators.required])],
       phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
       role: ['1', Validators.compose([Validators.required])],
       status: ['1'],
-    },
-    {
-      validator: MustMatch('password', 'cpassword'),
-    },
-  );
+    });
   constructor(private adminsService: AdminsService,
               public fb: FormBuilder,
               private toastrService: ToastrService,
@@ -47,6 +42,7 @@ export class EditAdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params.id;
+    this.idAdmin = localStorage.getItem('id');
     this.getData(this.id);
   }
 
@@ -61,8 +57,6 @@ export class EditAdminComponent implements OnInit {
           this.admins = this.fb.group({
             avatar: [data.avatar, Validators.compose([Validators.required, Validators.minLength(6)])],
             username: [data.username, Validators.compose([Validators.required])],
-            password: [data.password, Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
-            cpassword: [data.password, Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
             email: [data.email, Validators.compose([Validators.required, Validators.email])],
             firstName: [data.firstName, Validators.compose([Validators.required])],
             lastName: [data.lastName, Validators.compose([Validators.required])],
@@ -101,21 +95,21 @@ export class EditAdminComponent implements OnInit {
   updateAdmin(): any {
     const formData = new FormData();
     formData.append('file', this.images);
+    this.submitted = true;
+
+    // return validators
+    if (this.admins.invalid) {
+      return false;
+    }
     if(this.images == null){
-      const data = {
-        avatar: this.admins.value['avatar'],
-        username: this.admins.value['username'],
-        password: this.admins.value['password'],
-        email: this.admins.value['email'],
-        first_name: this.admins.value['firstName'],
-        last_name: this.admins.value['lastName'],
-        phone: this.admins.value['phone'],
-        role: this.admins.value['role'],
-        status: this.admins.value['status'],
-      };
-      this.adminsService.update(this.id, data).subscribe(
+      this.adminsService.update(this.id, this.admins.value).subscribe(
         (response) => {
           this.submitted = true;
+          if(this.id == this.idAdmin){
+            const name = this.admins.value['firstName']+' '+this.admins.value['lastName'];
+            this.adminsService.profileImageUpdate$.next(this.admins.value['avatar']);
+            this.adminsService.profileName$.next(name);
+          }
           this.toastrService.success(response.message);
         },
         (error) => {
@@ -139,6 +133,11 @@ export class EditAdminComponent implements OnInit {
           this.adminsService.update(this.id, data).subscribe(
             (response) => {
               this.submitted = true;
+              if(this.id == this.idAdmin){
+                const name = this.admins.value['firstName']+' '+this.admins.value['lastName'];
+                this.adminsService.profileImageUpdate$.next(this.admins.value['avatar']);
+                this.adminsService.profileName$.next(name);
+              }
               this.toastrService.success(response.message);
             },
             (error) => {

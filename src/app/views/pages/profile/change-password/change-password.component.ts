@@ -39,7 +39,7 @@ export class ChangePasswordComponent implements OnInit {
       return false;
     }
     const data = {password: this.changePass.value['password']};
-    this.adminsService.update(this.id, data).subscribe(
+    this.adminsService.updatePassword(this.id, data).subscribe(
       (response) => {
         this.newForm();
         this.toastrService.success(response.message);

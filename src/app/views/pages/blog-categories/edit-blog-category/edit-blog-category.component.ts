@@ -17,8 +17,8 @@ export class EditBlogCategoryComponent implements OnInit {
               private toastrService: ToastrService)  {}
   blogCategories = this.fb.group(
     {
-      name: ['', Validators.compose([Validators.required])],
-      slug: ['', Validators.compose([Validators.required])],
+      name: [''],
+      slug: [''],
       status: ['']});
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params.id;
@@ -67,11 +67,10 @@ export class EditBlogCategoryComponent implements OnInit {
     this.blogCategoriesService.get(id)
       .subscribe(
         data => {
-          // this.source = new LocalDataSource(data);
           this.blogCategories = this.fb.group(
             {
-              name: [data.name],
-              slug: [data.slug],
+              name: [data.name, Validators.compose([Validators.required])],
+              slug: [data.slug, Validators.compose([Validators.required])],
               status: [data.status]});
         },
         error => {

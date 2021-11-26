@@ -51,31 +51,6 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
-                <label class="label col-form-label">Mật Khẩu</label>
-                <input type="password" nbInput fullWidth formControlName="password">
-                <div *ngIf="submitted && f.password.errors">
-                  <small *ngIf="f.password.errors.required" class="text-danger small-popup">Mật khẩu không được bỏ trống!</small>
-                  <small *ngIf="f.password.errors.minlength" class="text-danger small-popup">Mật khẩu phải ít nhất 6 kí tự! <br></small>
-                  <small *ngIf="f.password.errors.pattern" class="text-danger small-popup">Mật khẩu không được chứa khoảng trắng!</small>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label class="label col-form-label">Xác nhận mật Khẩu</label>
-                <input type="password" nbInput fullWidth formControlName="cpassword">
-                <div *ngIf="submitted && f.cpassword.errors">
-                  <small *ngIf="f.cpassword.errors.required" class="text-danger small-popup">Xác nhận mật khẩu không được bỏ trống!</small>
-                  <small *ngIf="f.cpassword.errors.minlength" class="text-danger small-popup">Mật khẩu phải ít nhất 6 kí tự! <br></small>
-                  <small *ngIf="f.cpassword.errors.pattern" class="text-danger small-popup">Mật khẩu không được chứa khoảng trắng!</small>
-                  <small *ngIf="f.cpassword.errors.mustMatch" class="text-danger small-popup">Mật khẩu không trùng khớp!</small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
                 <label class="label col-form-label">Số điện thoại</label>
                 <input type="text" nbInput fullWidth formControlName="phone">
                 <div *ngIf="submitted && f.phone.errors">

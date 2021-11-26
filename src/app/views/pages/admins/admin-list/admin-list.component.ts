@@ -11,6 +11,7 @@ import {Admins} from '../../../../models/admins.model';
   styleUrls: ['./admin-list.component.scss'],
 })
 export class AdminListComponent implements OnInit {
+  limit: 6;
   admins?: Admins[];
   settings = {
     actions: {
@@ -74,10 +75,15 @@ export class AdminListComponent implements OnInit {
   }
 
   retrieveAdmins(): void {
-    this.adminsService.getAll()
+    this.adminsService.getAll(this.limit)
       .subscribe(
         data => {
-          this.source = new LocalDataSource(data['rows']);
+          this.limit = data['count'];
+          this.adminsService.getAll(this.limit)
+            .subscribe(
+              res => {
+                this.source = new LocalDataSource(res['rows']);
+              });
         },
         error => {
           console.log(error);

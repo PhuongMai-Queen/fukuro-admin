@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import { Admins } from '../models/admins.model';
 import { environment } from '../../environments/environment';
 
@@ -10,13 +10,17 @@ const changePassUrl = environment.apiURL+'/password-resets';
 @Injectable({
   providedIn: 'root',
 })
+
 export class AdminsService {
+  profileImageUpdate$ = new Subject<string>();
+  profileName$ = new Subject<string>();
   constructor(private http: HttpClient) {}
+
   login(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/login`, data);
   }
-  getAll(): Observable<Admins[]> {
-    return this.http.get<Admins[]>(baseUrl);
+  getAll(limit: any): Observable<Admins[]> {
+    return this.http.get<Admins[]>(`${baseUrl}?limit=${limit}`);
   }
 
   get(id: any): Observable<Admins> {

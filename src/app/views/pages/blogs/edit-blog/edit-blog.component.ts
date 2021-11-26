@@ -22,9 +22,9 @@ export class EditBlogComponent implements OnInit {
   result = false;
   images = null;
   submitted = false;
-  blogs: FormGroup;
   error = '';
-  promotions?: Promotions[]
+  promotions?: Promotions[];
+  limit: 6;
   constructor(private blogsService: BlogsService,
               public fb: FormBuilder,
               private http: HttpClient,
@@ -32,22 +32,19 @@ export class EditBlogComponent implements OnInit {
               private _router: Router,
               private blogCategoriesService: BlogCategoriesService,
               private activatedRoute: ActivatedRoute,
-  ) {
-    // Reactive Form
-    this.blogs = this.fb.group({
-      title: ['', Validators.compose([Validators.required])],
-      slug: ['', Validators.compose([Validators.required])],
-      thumbnail: ['', Validators.compose([Validators.required])],
-      summary: ['', Validators.compose([Validators.required])],
-      description: ['', Validators.compose([Validators.required])],
-      tag: ['', Validators.compose([Validators.required])],
-      status: [''],
-      blogCategoryId: ['', Validators.compose([Validators.required])],
-    });
-  }
+  ) {}
+  blogs = this.fb.group({
+    title: [''],
+    slug: [''],
+    thumbnail: [''],
+    summary: [''],
+    description: [''],
+    tag: [''],
+    status: [''],
+    blogCategoryId: [''],
+  });
   blogCategories?: BlogCategories[];
   id: null;
-
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.params.id;
     this.getBlogs(this.id);
@@ -63,13 +60,13 @@ export class EditBlogComponent implements OnInit {
         data => {
           this.blogs = this.fb.group({
             title: [data.title, Validators.compose([Validators.required])],
-            slug: [data.slug],
-            thumbnail: [data.thumbnail],
-            summary: [data.summary],
-            description: [data.description],
-            tag: [JSON.parse(data.tag)],
+            slug: [data.slug, Validators.compose([Validators.required])],
+            thumbnail: [data.thumbnail, Validators.compose([Validators.required])],
+            summary: [data.summary, Validators.compose([Validators.required])],
+            description: [data.description, Validators.compose([Validators.required])],
+            tag: [JSON.parse(data.tag), Validators.compose([Validators.required])],
             status: [data.status],
-            blogCategoryId: [data.blogCategoryId],
+            blogCategoryId: [data.blogCategoryId, Validators.compose([Validators.required])],
           });
           this.retrieveBlogCategories(data.blogCategoryId);
         },
@@ -136,9 +133,15 @@ export class EditBlogComponent implements OnInit {
   }
 
   // Create blog
-  saveBlog(): void {
+  saveBlog(): any {
     const formData = new FormData();
     formData.append('file', this.images);
+    this.submitted = true;
+
+    // return validators
+    if (this.blogs.invalid) {
+      return false;
+    }
     if(this.images == null){
       const data = {
         title: this.blogs.value['title'],
@@ -189,21 +192,26 @@ export class EditBlogComponent implements OnInit {
   }
 
   retrieveBlogCategories(blog_cate_id): void {
-    this.blogCategoriesService.getAll()
+    this.blogCategoriesService.getAll(this.limit)
       .subscribe(
         data => {
-          const customData = data['rows'];
-          const obj = [];
-          customData.forEach((currentValue, index) => {
-            if(currentValue.id == blog_cate_id){
-              obj.push({ id: currentValue.id, name: currentValue.name });
-              customData.splice(index,1);
-            }
-          });
-          customData.forEach((currentValue, index) => {
-            obj.push({ id: currentValue.id, name: currentValue.name });
-          });
-          this.blogCategories = obj;
+          this.limit = data['count'];
+          this.blogCategoriesService.getAll(this.limit)
+            .subscribe(
+              res => {
+                const customData = res['rows'];
+                const obj = [];
+                customData.forEach((currentValue, index) => {
+                  if(currentValue.id == blog_cate_id){
+                    obj.push({ id: currentValue.id, name: currentValue.name });
+                    customData.splice(index,1);
+                  }
+                });
+                customData.forEach((currentValue, index) => {
+                  obj.push({ id: currentValue.id, name: currentValue.name });
+                });
+                this.blogCategories = obj;
+              });
         },
         error => {
           console.log(error);

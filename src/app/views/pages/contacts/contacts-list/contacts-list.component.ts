@@ -10,7 +10,7 @@ import {ToastrService} from 'ngx-toastr';
   styleUrls: ['./contacts-list.component.scss'],
 })
 export class ContactsListComponent implements OnInit {
-
+  limit: 6;
   settings = {
     actions: {
       custom: [
@@ -59,10 +59,15 @@ export class ContactsListComponent implements OnInit {
     this.retrieveContacts();
   }
   retrieveContacts(): void {
-    this.contactsService.getAll()
+    this.contactsService.getAll(this.limit)
       .subscribe(
         data => {
-          this.source = new LocalDataSource(data['rows']);
+          this.limit = data['count'];
+          this.contactsService.getAll(this.limit)
+            .subscribe(
+              res => {
+                this.source = new LocalDataSource(res['rows']);
+              });
         },
         error => {
           console.log(error);

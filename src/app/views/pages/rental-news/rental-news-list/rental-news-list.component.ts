@@ -10,7 +10,7 @@ import {ToastrService} from 'ngx-toastr';
   styleUrls: ['./rental-news-list.component.scss'],
 })
 export class RentalNewsListComponent implements OnInit {
-
+  limit: 6;
   settings = {
     actions: {
       custom: [
@@ -37,13 +37,16 @@ export class RentalNewsListComponent implements OnInit {
         title: 'Số lượng',
         type: 'string',
       },
-      type: {
-        title: 'Loại hình',
-        type: 'string',
-      },
       address: {
         title: 'Địa chỉ',
         type: 'string',
+      },
+      status: {
+        title: 'Trạng Thái',
+        type: 'html',
+        valuePrepareFunction: (value) => {
+          return value == 1 ? 'Còn phòng' : 'Hết phòng';
+        },
       },
     },
   };
@@ -59,10 +62,15 @@ export class RentalNewsListComponent implements OnInit {
     this.retrieveRentalNews();
   }
   retrieveRentalNews(): void {
-    this.rentalNewsService.getAll()
+    this.rentalNewsService.getAll(this.limit)
       .subscribe(
         data => {
-          this.source = new LocalDataSource(data);
+          this.limit = data['count'];
+          this.rentalNewsService.getAll(this.limit)
+            .subscribe(
+              res => {
+                this.source = new LocalDataSource(res['rows']);
+              });
         },
         error => {
           console.log(error);

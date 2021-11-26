@@ -43,14 +43,6 @@ export class BlogListComponent implements OnInit {
         title: 'Tên bài viết',
         type: 'number',
       },
-      slug: {
-        title: 'Đường dẫn',
-        type: 'string',
-      },
-      summary: {
-        title: 'Tóm tắt bài viết',
-        type: 'string',
-      },
       status: {
         title: 'Trạng Thái',
         type: 'html',
@@ -60,6 +52,7 @@ export class BlogListComponent implements OnInit {
       },
     },
   };
+  limit: 6;
 
   source: LocalDataSource = new LocalDataSource();
 
@@ -69,15 +62,21 @@ export class BlogListComponent implements OnInit {
     this.retrieveBlogs();
   }
   retrieveBlogs(): void {
-    this.blogsService.getAll()
+    this.blogsService.getAll(this.limit)
       .subscribe(
         data => {
-          this.source = new LocalDataSource(data['rows']);
+          this.limit = data['count'];
+          this.blogsService.getAll(this.limit)
+            .subscribe(
+              res => {
+                this.source = new LocalDataSource(res['rows']);
+              });
         },
         error => {
-          // console.log(error);
+          console.log(error);
         });
   }
+
   onDeleteConfirm(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
       event.confirm.resolve();

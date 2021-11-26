@@ -5,7 +5,6 @@ import {ToastrService} from 'ngx-toastr';
 import { AdminsService } from '../../../../services/admins.service';
 import {environment} from '../../../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
-import {MustMatch} from '../../../../services/validators/must-match.validator';
 
 @Component({
   selector: 'ngx-update-profile',
@@ -28,18 +27,14 @@ export class UpdateProfileComponent implements OnInit {
     this.admins = this.fb.group({
       avatar: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
       username: ['', Validators.compose([Validators.required])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
-      cpassword: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
+      password: [''],
       email: ['', Validators.compose([Validators.required, Validators.email])],
       firstName: ['', Validators.compose([Validators.required])],
       lastName: ['', Validators.compose([Validators.required])],
       phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
       role: ['1', Validators.compose([Validators.required])],
       status: ['1'],
-    },
-      {
-        validator: MustMatch('password', 'cpassword'),
-      });
+    });
   }
 
   ngOnInit(): void {
@@ -89,7 +84,7 @@ export class UpdateProfileComponent implements OnInit {
     reader.readAsDataURL(file);
   }
   //  Update profile
-  updateAdmin(): void {
+  updateAdmin(): any {
     const formData = new FormData();
     formData.append('file', this.images);
     if(this.images == null){
@@ -107,8 +102,10 @@ export class UpdateProfileComponent implements OnInit {
       this.adminsService.update(this.id, data).subscribe(
         (response) => {
           this.submitted = true;
+          const name = this.admins.value['firstName']+' '+this.admins.value['lastName'];
+          this.adminsService.profileImageUpdate$.next(this.admins.value['avatar']);
+          this.adminsService.profileName$.next(name);
           this.toastrService.success(response.message);
-          location.reload();
         },
         (error) => {
           this.toastrService.success(error.message);
@@ -131,8 +128,10 @@ export class UpdateProfileComponent implements OnInit {
           this.adminsService.update(this.id, data).subscribe(
             (response) => {
               this.submitted = true;
+              const name = this.admins.value['firstName']+' '+this.admins.value['lastName'];
+              this.adminsService.profileImageUpdate$.next(environment.linkImg+res['filename']);
+              this.adminsService.profileName$.next(name);
               this.toastrService.success(response.message);
-              location.reload();
             },
             (error) => {
               this.toastrService.success(error.message);

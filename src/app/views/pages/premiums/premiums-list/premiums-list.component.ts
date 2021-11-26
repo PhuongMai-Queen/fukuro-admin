@@ -11,7 +11,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./premiums-list.component.scss'],
 })
 export class PremiumsListComponent implements OnInit {
-
+  limit: 6;
   settings = {
     actions: {
       custom: [
@@ -68,10 +68,15 @@ export class PremiumsListComponent implements OnInit {
     this.retrievePremiums();
   }
   retrievePremiums(): void {
-    this.premiumsService.getAll()
+    this.premiumsService.getAll(this.limit)
       .subscribe(
         data => {
-          this.source = new LocalDataSource(data['rows']);
+          this.limit = data['count'];
+          this.premiumsService.getAll(this.limit)
+            .subscribe(
+              res => {
+                this.source = new LocalDataSource(res['rows']);
+              });
         },
         error => {
           console.log(error);

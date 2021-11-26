@@ -11,8 +11,8 @@ const baseUrl = environment.apiURL+'/promotions';
 export class PromotionsService {
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Promotions[]> {
-    return this.http.get<Promotions[]>(baseUrl);
+  getAll(limit: any): Observable<Promotions[]> {
+    return this.http.get<Promotions[]>(`${baseUrl}?limit=${limit}`);
   }
 
   get(id: any): Observable<Promotions> {

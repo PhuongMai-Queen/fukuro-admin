@@ -10,6 +10,7 @@ import {ToastrService} from 'ngx-toastr';
   styleUrls: ['./premium-bill-list.component.scss'],
 })
 export class PremiumBillListComponent implements OnInit {
+  limit: 6;
   settings = {
     actions: {
       custom: [
@@ -58,10 +59,15 @@ export class PremiumBillListComponent implements OnInit {
     this.retrievePremiumBills();
   }
   retrievePremiumBills(): void {
-    this.premiumBillsService.getAll()
+    this.premiumBillsService.getAll(this.limit)
       .subscribe(
         data => {
-          this.source = new LocalDataSource(data);
+          this.limit = data['count'];
+          this.premiumBillsService.getAll(this.limit)
+            .subscribe(
+              res => {
+                this.source = new LocalDataSource(res['rows']);
+              });
         },
         error => {
           console.log(error);

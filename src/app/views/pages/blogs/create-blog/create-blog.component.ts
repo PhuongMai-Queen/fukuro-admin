@@ -24,6 +24,7 @@ export class CreateBlogComponent implements OnInit {
   error = '';
   blogCategories?: BlogCategories[];
   showImg: '';
+  limit: 6;
   constructor(private blogsService: BlogsService,
               public fb: FormBuilder,
               private http: HttpClient,
@@ -161,10 +162,15 @@ export class CreateBlogComponent implements OnInit {
   }
 
   retrieveBlogCategories(): void {
-    this.blogCategoriesService.getAll()
+    this.blogCategoriesService.getAll(this.limit)
       .subscribe(
         data => {
-          this.blogCategories = data['rows'];
+          this.limit = data['count'];
+          this.blogCategoriesService.getAll(this.limit)
+            .subscribe(
+              res => {
+                this.blogCategories = res['rows'];
+              });
         },
         error => {
           console.log(error);

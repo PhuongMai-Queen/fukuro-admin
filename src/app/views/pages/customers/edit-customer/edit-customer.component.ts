@@ -21,30 +21,22 @@ export class EditCustomerComponent implements OnInit {
   result = false;
   images = null;
   submitted = false;
-  customers: FormGroup;
   error = '';
   constructor(private customersService: CustomersService,
               public fb: FormBuilder,
               private toastrService: ToastrService,
               private http: HttpClient,
-              private activatedRoute: ActivatedRoute) {
-    // Reactive Form
-    this.customers = this.fb.group({
-        avatar: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-        username: ['', Validators.compose([Validators.required])],
-        password: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
-        cpassword: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
-        email: ['', Validators.compose([Validators.required, Validators.email])],
-        firstName: ['', Validators.compose([Validators.required])],
-        lastName: ['', Validators.compose([Validators.required])],
-        phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
-        status: ['1'],
-      },
-      {
-        validator: MustMatch('password', 'cpassword'),
-      },
-    );
-  }
+              private activatedRoute: ActivatedRoute) {}
+
+  customers = this.fb.group({
+    avatar: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+    username: ['', Validators.compose([Validators.required])],
+    email: ['', Validators.compose([Validators.required, Validators.email])],
+    firstName: ['', Validators.compose([Validators.required])],
+    lastName: ['', Validators.compose([Validators.required])],
+    phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
+    status: [1],
+    });
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params.id;
@@ -60,14 +52,12 @@ export class EditCustomerComponent implements OnInit {
       .subscribe(
         data => {
           this.customers = this.fb.group({
-            avatar: [data.avatar],
-            username: [data.username],
-            password: [data.password],
-            cpassword: [data.password],
-            email: [data.email],
-            firstName: [data.firstName],
-            lastName: [data.lastName],
-            phone: [data.phone],
+            avatar: [data.avatar, Validators.compose([Validators.required, Validators.minLength(6)])],
+            username: [data.username, Validators.compose([Validators.required])],
+            email: [data.email, Validators.compose([Validators.required, Validators.email])],
+            firstName: [data.firstName, Validators.compose([Validators.required])],
+            lastName: [data.lastName, Validators.compose([Validators.required])],
+            phone: [data.phone, Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
             status: [data.status],
           });
         },
@@ -98,9 +88,13 @@ export class EditCustomerComponent implements OnInit {
     reader.readAsDataURL(file);
   }
   //  Update admin
-  updateCustomer(): void {
+  updateCustomer(): any {
     const formData = new FormData();
     formData.append('file', this.images);
+    this.submitted = true;
+    if (this.customers.invalid) {
+      return false;
+    }
     if(this.images == null){
       const data = {
         avatar: this.customers.value['avatar'],
@@ -112,8 +106,10 @@ export class EditCustomerComponent implements OnInit {
         phone: this.customers.value['phone'],
         status: this.customers.value['status'],
       };
+
       this.customersService.update(this.id, data).subscribe(
         (response) => {
+          console.log(response);
           this.submitted = true;
           this.toastrService.success(response.message);
         },

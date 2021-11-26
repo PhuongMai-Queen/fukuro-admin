@@ -19,10 +19,10 @@ export class EditPromotionComponent implements OnInit {
               public datepipe: DatePipe)  {}
   promotion = this.fb.group(
     {
-      name: ['', Validators.compose([Validators.required])],
-      discount: ['', Validators.compose([Validators.required])],
-      startDate: ['', Validators.compose([Validators.required])],
-      endDate: ['', Validators.compose([Validators.required])],
+      name: [''],
+      discount: [''],
+      startDate: [''],
+      endDate: [''],
       status: ['1'],
     }, {validator: this.checkDates});
   ngOnInit(): void {
@@ -43,10 +43,10 @@ export class EditPromotionComponent implements OnInit {
         data => {
           this.promotion = this.fb.group(
             {
-              name: [data.name],
-              discount: [data.discount],
-              startDate: [this.datepipe.transform(data.startDate, 'yyyy-MM-dd') ],
-              endDate: [this.datepipe.transform(data.endDate, 'yyyy-MM-dd') ],
+              name: [data.name,  Validators.compose([Validators.required])],
+              discount: [data.discount,  Validators.compose([Validators.required])],
+              startDate: [this.datepipe.transform(data.startDate, 'yyyy-MM-dd')],
+              endDate: [this.datepipe.transform(data.endDate, 'yyyy-MM-dd')],
               status: [data.status]});
         },
         error => {

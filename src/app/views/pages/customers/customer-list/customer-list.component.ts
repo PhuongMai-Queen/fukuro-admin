@@ -11,6 +11,7 @@ import {ToastrService} from 'ngx-toastr';
   styleUrls: ['./customer-list.component.scss'],
 })
 export class CustomerListComponent implements OnInit {
+  limit: 6;
   customers?: Customers[];
   settings = {
     actions: {
@@ -71,10 +72,15 @@ export class CustomerListComponent implements OnInit {
   }
 
   retrieveCustomers(): void {
-    this.customersService.getAll()
+    this.customersService.getAll(this.limit)
       .subscribe(
         data => {
-          this.source = new LocalDataSource(data['rows']);
+          this.limit = data['count'];
+          this.customersService.getAll(this.limit)
+            .subscribe(
+              res => {
+                this.source = new LocalDataSource(res['rows']);
+              });
         },
         error => {
           console.log(error);

@@ -12,8 +12,8 @@ const baseUrl = environment.apiURL+'/customers';
 export class CustomersService {
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Customers[]> {
-    return this.http.get<Customers[]>(baseUrl);
+  getAll(limit: any): Observable<Customers[]> {
+    return this.http.get<Customers[]>(`${baseUrl}?limit=${limit}`);
   }
 
   get(id: any): Observable<Customers> {

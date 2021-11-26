@@ -11,7 +11,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./promotion-list.component.scss'],
 })
 export class PromotionListComponent implements OnInit {
-
+  limit: 6;
   settings = {
     actions: {
       custom: [
@@ -65,14 +65,19 @@ export class PromotionListComponent implements OnInit {
     this.retrievePromotions();
   }
   retrievePromotions(): void {
-    this.promotionsService.getAll()
+    this.promotionsService.getAll(this.limit)
       .subscribe(
         data => {
-          for (var i = 0; i < data['rows'].length; i++){
-            data['rows'][i].startDate = this.datepipe.transform(data['rows'][i].startDate, 'yyyy-MM-dd');
-            data['rows'][i].endDate = this.datepipe.transform(data['rows'][i].endDate, 'yyyy-MM-dd');
-          }
-          this.source = new LocalDataSource(data['rows']);
+          this.limit = data['count'];
+          this.promotionsService.getAll(this.limit)
+            .subscribe(
+              res => {
+                for (var i = 0; i < res['rows'].length; i++) {
+                  res['rows'][i].startDate = this.datepipe.transform(res['rows'][i].startDate, 'yyyy-MM-dd');
+                  res['rows'][i].endDate = this.datepipe.transform(res['rows'][i].endDate, 'yyyy-MM-dd');
+                }
+                this.source = new LocalDataSource(res['rows']);
+              });
         },
         error => {
           console.log(error);

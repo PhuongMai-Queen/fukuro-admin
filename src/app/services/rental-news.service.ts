@@ -14,8 +14,8 @@ export class RentalNewsService {
   login(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/login`, data);
   }
-  getAll(): Observable<RentalNews[]> {
-    return this.http.get<RentalNews[]>(baseUrl);
+  getAll(limit: any): Observable<RentalNews[]> {
+    return this.http.get<RentalNews[]>(`${baseUrl}?limit=${limit}`);
   }
 
   get(id: any): Observable<RentalNews> {

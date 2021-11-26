@@ -1,12 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
-
 import { UserData } from '../../@core/data/users';
 import { LayoutService } from '../../@core/utils';
-import { map, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subscription , Subject } from 'rxjs';
 import { AdminsService } from '../../../services/admins.service';
-import {LocalDataSource} from 'ng2-smart-table';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
@@ -15,12 +12,12 @@ import { AuthService } from '../../../services/auth.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-
   private destroy$: Subject<void> = new Subject<void>();
+  public subscription: Subscription;
   userPictureOnly: boolean = false;
-  user: any;
-  avatar: any;
+  profile: any;
   name: any;
+  avatar: any;
   themes = [
     {
       value: 'default',
@@ -66,38 +63,31 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.onContecxtItemSelection(event.item.title);
       });
 
-
     this.currentTheme = this.themeService.currentTheme;
     const id = localStorage.getItem('id');
-    if (id) {
+    if(id){
       this.getById(id);
     }
-
-    // const { xl } = this.breakpointService.getBreakpointsMap();
-    // this.themeService.onMediaQueryChange()
-    //   .pipe(
-    //     map(([, currentBreakpoint]) => currentBreakpoint.width < xl),
-    //     takeUntil(this.destroy$),
-    //   )
-    //   .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
-    //
-    // this.themeService.onThemeChange()
-    //   .pipe(
-    //     map(({ name }) => name),
-    //     takeUntil(this.destroy$),
-    //   )
-    //   .subscribe(themeName => this.currentTheme = themeName);
+    this.adminsService.profileImageUpdate$.subscribe((profileImage) => this.avatar = profileImage);
+    this.adminsService.profileName$.subscribe((profileName) => this.name = profileName);
   }
+  handleSubscriptions(data) {
+    this.profile = data;
+    if(this.profile){
+      this.avatar = data['data'].avatar;
+      this.name = data['data'].firstName+' '+data['data'].firstName;
+    }
 
+  }
   getById(id: string): void {
     this.adminsService.get(id)
       .subscribe(
         data => {
-          this.user = data;
           this.avatar = data['avatar'];
           this.name = data['firstName']+' '+data['lastName'];
         });
   }
+
 
   ngOnDestroy() {
     this.destroy$.next();

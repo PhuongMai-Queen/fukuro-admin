@@ -16,6 +16,7 @@ export class CreatePremiumsComponent implements OnInit {
   submitted = false;
   promotions?: Promotions[];
   premiums: FormGroup;
+  limit: 6;
   constructor(private premiumsService: PremiumsService, public fb: FormBuilder,
               private promotionsService: PromotionsService,
               private activatedRoute: ActivatedRoute,
@@ -37,10 +38,15 @@ export class CreatePremiumsComponent implements OnInit {
     return this.premiums.controls;
   }
   retrievePromotions(): void {
-    this.promotionsService.getAll()
+    this.promotionsService.getAll(this.limit)
       .subscribe(
         data => {
-          this.promotions = data['rows'];
+          this.limit = data['count'];
+          this.promotionsService.getAll(this.limit)
+            .subscribe(
+              res => {
+                this.promotions = res['rows'];
+              });
         },
         error => {
           console.log(error);

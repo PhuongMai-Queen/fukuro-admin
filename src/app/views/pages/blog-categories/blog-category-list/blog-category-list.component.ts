@@ -13,7 +13,7 @@ import {ToastrService} from 'ngx-toastr';
 export class BlogCategoryListComponent implements OnInit {
   blogCategories?: BlogCategories[];
   currentBlogCategories: BlogCategories = {};
-
+  limit: 6;
   settings = {
     actions: {
       custom: [
@@ -60,10 +60,15 @@ export class BlogCategoryListComponent implements OnInit {
     this.retrieveBlogCategories();
   }
   retrieveBlogCategories(): void {
-    this.blogCategoriesService.getAll()
+    this.blogCategoriesService.getAll(this.limit)
       .subscribe(
         data => {
-          this.source = new LocalDataSource(data['rows']);
+          this.limit = data['count'];
+          this.blogCategoriesService.getAll(this.limit)
+            .subscribe(
+              res => {
+                this.source = new LocalDataSource(res['rows']);
+              });
         },
         error => {
           console.log(error);

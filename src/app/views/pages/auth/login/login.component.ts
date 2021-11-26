@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AdminsService } from '../../../../services/admins.service';
 import { AuthService } from '../../../../services/auth.service';
+import {environment} from "../../../../../environments/environment";
 
 @Component({
   selector: 'ngx-login',

@@ -17,16 +17,17 @@ export class EditPremiumsComponent implements OnInit {
   submitted = false;
   promotions?: Promotions[];
   premiums: FormGroup;
+  limit: 6;
   constructor(private premiumsService: PremiumsService, public fb: FormBuilder,
               private promotionsService: PromotionsService,
               private activatedRoute: ActivatedRoute,
               private toastrService: ToastrService)  {
     this.premiums = this.fb.group(
       {
-        name: ['', Validators.compose([Validators.required])],
-        price: ['', Validators.compose([Validators.required, Validators.pattern('^[0-9]*$')])],
-        description: ['', Validators.compose([Validators.required])],
-        promotionId: ['', Validators.compose([Validators.required])],
+        name: [''],
+        price: [''],
+        description: [''],
+        promotionId: [''],
         status: ['1'],
       });
   }
@@ -42,10 +43,10 @@ export class EditPremiumsComponent implements OnInit {
         data => {
           this.premiums = this.fb.group(
             {
-              name: [data.name],
-              price: [data.price],
-              description: [data.description],
-              promotionId: [data.promotionId ],
+              name: [data.name, Validators.compose([Validators.required])],
+              price: [data.price, Validators.compose([Validators.required, Validators.pattern('^[0-9]*$')])],
+              description: [data.description,  Validators.compose([Validators.required])],
+              promotionId: [data.promotionId],
               status: [data.status]});
           this.retrievePromotion(data.promotionId);
         },
@@ -70,21 +71,26 @@ export class EditPremiumsComponent implements OnInit {
   }
 
   retrievePromotion(promotion_id): void {
-    this.promotionsService.getAll()
+    this.promotionsService.getAll(this.limit)
       .subscribe(
         data => {
-          const customData = data['rows'];
-          const obj = [];
-          customData.forEach((currentValue, index) => {
-            if(currentValue.id == promotion_id){
-              obj.push({ id: currentValue.id, name: currentValue.name });
-              customData.splice(index,1);
-            }
-          });
-          customData.forEach((currentValue, index) => {
-            obj.push({ id: currentValue.id, name: currentValue.name });
-          });
-          this.promotions = obj;
+          this.limit = data['count'];
+          this.promotionsService.getAll(this.limit)
+            .subscribe(
+              res => {
+                const customData = res['rows'];
+                const obj = [];
+                customData.forEach((currentValue, index) => {
+                  if (currentValue.id == promotion_id) {
+                    obj.push({id: currentValue.id, name: currentValue.name});
+                    customData.splice(index, 1);
+                  }
+                });
+                customData.forEach((currentValue, index) => {
+                  obj.push({id: currentValue.id, name: currentValue.name});
+                });
+                this.promotions = obj;
+              });
         },
         error => {
           console.log(error);
