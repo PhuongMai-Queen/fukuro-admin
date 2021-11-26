@@ -49,4 +49,12 @@ export class AdminsService {
   changePassword(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/change-password`, data);
   }
+
+  forgotPassword(data: any): Observable<any> {
+    return this.http.post(`${baseUrl}/forgot-password`, data);
+  }
+
+  resetPassword(data: any): Observable<any> {
+    return this.http.post(environment.apiURL+`/password-resets/admin`, data);
+  }
 }
