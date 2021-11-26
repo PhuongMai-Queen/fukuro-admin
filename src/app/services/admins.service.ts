@@ -5,7 +5,6 @@ import { Admins } from '../models/admins.model';
 import { environment } from '../../environments/environment';
 
 const baseUrl = environment.apiURL+'/admins';
-const changePassUrl = environment.apiURL+'/password-resets';
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +46,7 @@ export class AdminsService {
     return this.http.get<Admins[]>(`${baseUrl}?title=${title}`);
   }
 
-  updatePassword(id: any, data: any): Observable<any> {
-    return this.http.put(`${changePassUrl}/${id}`, data);
+  changePassword(data: any): Observable<any> {
+    return this.http.post(`${baseUrl}/change-password`, data);
   }
 }
