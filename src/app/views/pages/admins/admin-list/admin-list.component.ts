@@ -13,6 +13,7 @@ import {Admins} from '../../../../models/admins.model';
 export class AdminListComponent implements OnInit {
   limit: 6;
   admins?: Admins[];
+  role = 'admin';
   settings = {
     actions: {
       custom: [
@@ -63,7 +64,46 @@ export class AdminListComponent implements OnInit {
       },
     },
   };
-
+  settings2 = {
+    actions: {
+      add: false,
+      edit: false,
+      delete: false,
+      position: 'right',
+    },
+    columns: {
+      avatar: {
+        title: 'Hình ảnh',
+        filter: false,
+        type: 'html',
+        valuePrepareFunction: (avatar) => {
+          return `<img class='table-thumbnail-img' src="${avatar}" width="80px"/>`
+        },
+      },
+      username: {
+        title: 'Username',
+        type: 'string',
+      },
+      email: {
+        title: 'Email',
+        type: 'string',
+      },
+      role: {
+        title: 'Vai trò',
+        type: 'html',
+        valuePrepareFunction: (value) => {
+          return value == 1 ? 'Quản trị viên' : 'Nhân viên';
+        },
+      },
+      status: {
+        title: 'Trạng Thái',
+        type: 'html',
+        valuePrepareFunction: (value) => {
+          return value == 1 ? 'Kích hoạt' : 'Vô hiệu hoá';
+        },
+      },
+    },
+  };
   source: LocalDataSource;
 
   constructor(private adminsService: AdminsService,
@@ -72,6 +112,16 @@ export class AdminListComponent implements OnInit {
 
   ngOnInit(): void {
     this.retrieveAdmins();
+    const id = localStorage.getItem('id');
+    if (id) {
+      this.adminsService.get(id)
+        .subscribe(
+          data => {
+            if(data['role'] != "admin"){
+              this.role = 'staff';
+            }
+          });
+    }
   }
 
   retrieveAdmins(): void {

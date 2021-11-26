@@ -13,7 +13,7 @@ export class CustomersService {
   constructor(private http: HttpClient) {}
 
   getAll(limit: any): Observable<Customers[]> {
-    return this.http.get<Customers[]>(`${baseUrl}?limit=${limit}`);
+    return this.http.get<Customers[]>(`${baseUrl}?limit=${limit}&status=both`);
   }
 
   get(id: any): Observable<Customers> {

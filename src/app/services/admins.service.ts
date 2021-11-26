@@ -20,7 +20,7 @@ export class AdminsService {
     return this.http.post(`${baseUrl}/login`, data);
   }
   getAll(limit: any): Observable<Admins[]> {
-    return this.http.get<Admins[]>(`${baseUrl}?limit=${limit}`);
+    return this.http.get<Admins[]>(`${baseUrl}?limit=${limit}&status=both`);
   }
 
   get(id: any): Observable<Admins> {

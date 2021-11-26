@@ -31,7 +31,7 @@ export class EditAdminComponent implements OnInit {
       firstName: ['', Validators.compose([Validators.required])],
       lastName: ['', Validators.compose([Validators.required])],
       phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
-      role: ['1', Validators.compose([Validators.required])],
+      role: ['', Validators.compose([Validators.required])],
       status: ['1'],
     });
   constructor(private adminsService: AdminsService,

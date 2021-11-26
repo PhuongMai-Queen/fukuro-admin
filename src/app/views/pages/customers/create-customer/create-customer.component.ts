@@ -63,7 +63,7 @@ export class CreateCustomerComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  //Save Customer
+  // Save Customer
   saveCustomer(): any {
     const formData = new FormData();
     formData.append('file', this.images);
@@ -84,7 +84,6 @@ export class CreateCustomerComponent implements OnInit {
           first_name: this.customers.value['firstName'],
           last_name: this.customers.value['lastName'],
           phone: this.customers.value['phone'],
-          role: this.customers.value['role'],
           status: this.customers.value['status'],
         };
         this.customersService.create(data).subscribe(
