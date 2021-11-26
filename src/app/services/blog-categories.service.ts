@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { BlogCategories } from '../models/blog-categories.model';
 import { environment } from '../../environments/environment';
 
-const baseUrl = environment.apiURL+'/blog-categories';
+const baseUrl = `${environment.apiURL}/blog-categories`;
 
 @Injectable({
   providedIn: 'root',

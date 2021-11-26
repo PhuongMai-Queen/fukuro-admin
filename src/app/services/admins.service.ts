@@ -4,7 +4,7 @@ import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import { Admins } from '../models/admins.model';
 import { environment } from '../../environments/environment';
 
-const baseUrl = environment.apiURL+'/admins';
+const baseUrl = `${environment.apiURL}/admins`;
 
 @Injectable({
   providedIn: 'root',
@@ -55,7 +55,7 @@ export class AdminsService {
   }
 
   resetPassword(data: any): Observable<any> {
-    return this.http.post(environment.apiURL+`/password-resets/admin`, data);
+    return this.http.post(`${environment.apiURL}/password-resets/admin`, data);
   }
 
   requestContact(data: any): Observable<any> {

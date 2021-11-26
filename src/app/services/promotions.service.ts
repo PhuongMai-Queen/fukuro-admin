@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { Promotions } from '../models/promotions.model';
 import { environment } from '../../environments/environment';
 
-const baseUrl = environment.apiURL+'/promotions';
+const baseUrl = `${environment.apiURL}/promotions`;
+
 @Injectable({
   providedIn: 'root',
 })

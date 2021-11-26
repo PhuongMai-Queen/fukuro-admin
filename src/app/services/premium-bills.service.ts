@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { PremiumBills } from '../models/premium-bills.model';
 import { environment } from '../../environments/environment';
 
-const baseUrl = environment.apiURL+'/premium-bills';
+const baseUrl = `${environment.apiURL}/premium-bills`;
 
 @Injectable({
   providedIn: 'root',
