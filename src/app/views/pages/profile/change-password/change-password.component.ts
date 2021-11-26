@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AdminsService} from '../../../../services/admins.service';
 import { ActivatedRoute } from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
@@ -10,23 +10,25 @@ import {MustMatch} from '../../../../services/validators/must-match.validator';
   templateUrl: './change-password.component.html',
 })
 export class ChangePasswordComponent implements OnInit {
-  id: '';
+  id = '';
   error = '';
+  changePass: FormGroup;
   submitted = false;
   constructor(private adminsService: AdminsService, public fb: FormBuilder,
               private activatedRoute: ActivatedRoute,
-              private toastrService: ToastrService)  {}
-  changePass = this.fb.group(
-    {
-      old_password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-      cf_password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-    },
-    {
-      validator: MustMatch('password', 'cf_password'),
-    });
+              private toastrService: ToastrService)  {
+    this.changePass = this.fb.group(
+      {
+        old_password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+        new_password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+        cf_password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      },
+      {
+        validator: MustMatch('new_password', 'cf_password'),
+      });
+  }
   ngOnInit(): void {
-    this.id = this.activatedRoute.snapshot.params.id;
+    this.id = localStorage.getItem('id');
   }
   get f() {
     return this.changePass.controls;
@@ -34,26 +36,31 @@ export class ChangePasswordComponent implements OnInit {
   updateChangePass(): any {
     this.submitted = true;
 
+
     // return validators
     if (this.changePass.invalid) {
       return false;
     }
-    const data = {password: this.changePass.value['password']};
-    this.adminsService.updatePassword(this.id, data).subscribe(
+    const data = {
+      id: this.id,
+      old_password: this.changePass.value['old_password'],
+      new_password: this.changePass.value['new_password']};
+    this.adminsService.changePassword(data).subscribe(
       (response) => {
         this.newForm();
         this.toastrService.success(response.message);
       },
       (error) => {
-        this.toastrService.error(error);
+        const mess = error.error.text;
+        this.toastrService.error(mess);
       });
   }
-  //Reset form
+  // Reset form
   newForm(): void {
     this.submitted = false;
     this.changePass = this.fb.group({
       old_password: [''],
-      password: [''],
+      new_password: [''],
       cf_password: [''],
     });
   }
