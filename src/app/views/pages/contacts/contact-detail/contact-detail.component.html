@@ -1,0 +1,45 @@
+<h5>Chi Tiết Liên Hệ</h5>
+
+      <nb-card>
+        <nb-card-body>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="label col-form-label">Họ tên khách hàng</label>
+                <input type="text" nbInput fullWidth value="{{contactDetail.firstName}} {{contactDetail.lastName}}" readonly>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+            <label class="label col-form-label">Số điện thoại</label>
+            <input type="text" nbInput fullWidth value="{{ contactDetail.phone }}" readonly>
+          </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+            <label class="label col-form-label">Email</label>
+            <input type="text" nbInput fullWidth value="{{ contactDetail.email }}" readonly>
+          </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+            <label class="label col-form-label">Chủ đề</label>
+            <input type="text" nbInput fullWidth value="{{ contactDetail.subject }}" readonly>
+          </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+            <label class="label col-form-label">Chủ đề</label>
+            <textarea rows="5" nbInput fullWidth value="{{ contactDetail.message }}" readonly></textarea>
+          </div>
+            </div>
+          </div>
+          <a href="/pages/contacts/feedback/{{contactDetail.id}}" nbButton status="success" class="btn btn-success text-decoration-none text-white">
+            Phản hồi <nb-icon icon="navigation-2-outline"></nb-icon></a>
+        </nb-card-body>
+      </nb-card>
+

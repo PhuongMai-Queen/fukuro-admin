@@ -18,9 +18,12 @@ import {
 
 import { TagInputModule } from 'ngx-chips';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     TagInputModule,
     ThemeModule,
     ContactsRoutingModule,
