@@ -61,12 +61,16 @@ export class FeedbackComponent implements OnInit {
     }
     this.adminsService.requestContact(this.feedback.value).subscribe(
       (response) => {
-        this.newFeedback();
-        this.toastrService.success('Gửi phản hồi thành công!');
+        console.log(response);
       },
       (error) => {
-        console.log(error);
-        this.toastrService.error('Gửi phản hồi thất bại!');
+        if(error.error.text == "Success"){
+          this.newFeedback();
+          this.toastrService.success('Gửi phản hồi thành công!!');
+        }
+        else {
+          this.toastrService.error(error.error.text);
+        }
       });
   }
 

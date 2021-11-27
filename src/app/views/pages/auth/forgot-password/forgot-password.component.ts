@@ -43,15 +43,19 @@ export class ForgotPasswordComponent implements OnInit {
     if (this.forgotPassword.invalid) {
       return false;
     }
-
     this.adminsService.forgotPassword(this.forgotPassword.value).subscribe(
       (response) => {
-        this.toastrService.success('Gửi yêu cầu thành công! Vui lòng kiểm tra email!!');
+        console.log(response);
       },
       (error) => {
-        this.done = true;
-        const mess = error.error.text;
-        this.toastrService.error(mess);
+        if(error.error.text == "Success"){
+          this.done = true;
+          this.toastrService.success('Gửi yêu cầu thành công! Vui lòng kiểm tra email!!');
+        }
+        else {
+          this.done = false;
+          this.toastrService.error(error.error.text);
+        }
       });
   }
 }
