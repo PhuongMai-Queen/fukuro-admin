@@ -5,6 +5,7 @@ import { LayoutService } from '../../@core/utils';
 import { Subscription , Subject } from 'rxjs';
 import { AdminsService } from '../../../services/admins.service';
 import { AuthService } from '../../../services/auth.service';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'ngx-header',
@@ -71,19 +72,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.adminsService.profileImageUpdate$.subscribe((profileImage) => this.avatar = profileImage);
     this.adminsService.profileName$.subscribe((profileName) => this.name = profileName);
   }
-  handleSubscriptions(data) {
-    this.profile = data;
-    if(this.profile){
-      this.avatar = data['data'].avatar;
-      this.name = data['data'].firstName+' '+data['data'].firstName;
-    }
 
-  }
   getById(id: string): void {
     this.adminsService.get(id)
       .subscribe(
         data => {
-          this.avatar = data['avatar'];
+          this.avatar = environment.linkImg+data['avatar'];
           this.name = data['firstName']+' '+data['lastName'];
         });
   }

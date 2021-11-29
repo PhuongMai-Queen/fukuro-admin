@@ -13,4 +13,5 @@ export const environment = {
   apiURL: 'http://localhost:8000/api',
   apiPostImg: 'http://localhost:3000/file',
   linkImg: 'http://localhost:3000/img/',
+  apiDeleteImg: 'http://localhost:3000/file/delete',
 };

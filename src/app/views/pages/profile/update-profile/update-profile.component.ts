@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import { AdminsService } from '../../../../services/admins.service';
 import {environment} from '../../../../../environments/environment';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'ngx-update-profile',
@@ -34,6 +34,7 @@ export class UpdateProfileComponent implements OnInit {
       phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
       role: ['1', Validators.compose([Validators.required])],
       status: ['1'],
+      avatarCus: [''],
     });
   }
 
@@ -41,27 +42,31 @@ export class UpdateProfileComponent implements OnInit {
     this.id = this.activatedRoute.snapshot.params.id;
     const id = localStorage.getItem('id');
     if (id) {
-      this.adminsService.get(id)
-        .subscribe(
-          data => {
-            this.admins = this.fb.group({
-              avatar: [data.avatar],
-              username: [data.username],
-              password: [data.password],
-              email: [data.email],
-              firstName: [data.firstName],
-              lastName: [data.lastName],
-              phone: [data.phone],
-              role: [data.role],
-              status: [data.status],
-            });
-          });
+     this.getData(id);
     }
   }
   get f() {
     return this.admins.controls;
   }
 
+  getData(id: any){
+    this.adminsService.get(id)
+      .subscribe(
+        data => {
+          this.admins = this.fb.group({
+            avatar: [environment.linkImg+data.avatar],
+            username: [data.username],
+            password: [data.password],
+            email: [data.email],
+            firstName: [data.firstName],
+            lastName: [data.lastName],
+            phone: [data.phone],
+            role: [data.role],
+            status: [data.status],
+            avatarCus: [data.avatar],
+          });
+        });
+  }
   // Image Preview
   showPreview(event) {
     if (event.target.files.length > 0) {
@@ -89,7 +94,7 @@ export class UpdateProfileComponent implements OnInit {
     formData.append('file', this.images);
     if(this.images == null){
       const data = {
-        avatar: this.admins.value['avatar'],
+        avatar: this.admins.value['avatarCus'],
         username: this.admins.value['username'],
         password: this.admins.value['password'],
         email: this.admins.value['email'],
@@ -111,11 +116,23 @@ export class UpdateProfileComponent implements OnInit {
           this.toastrService.success(error.message);
         });
     }else{
+      this.adminsService.get(this.id).toPromise().then(
+          data => {
+            const options = {
+              headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+              }),
+              body: {
+                file_name: data.avatar,
+              },
+            };
+            this.http.delete(environment.apiDeleteImg, options).subscribe();
+          });
       this.http.post(environment.apiPostImg, formData).toPromise().then(res => {
         this.result = true;
         if(this.result == true){
           const data = {
-            avatar: environment.linkImg+res['filename'],
+            avatar: res['filename'],
             username: this.admins.value['username'],
             password: this.admins.value['password'],
             email: this.admins.value['email'],
