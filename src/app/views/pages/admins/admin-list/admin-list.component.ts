@@ -4,6 +4,7 @@ import {ToastrService} from 'ngx-toastr';
 import {AdminsService} from '../../../../services/admins.service';
 import {Router} from '@angular/router';
 import {Admins} from '../../../../models/admins.model';
+import {environment} from "../../../../../environments/environment";
 
 @Component({
   selector: 'ngx-admin-list',
@@ -132,6 +133,9 @@ export class AdminListComponent implements OnInit {
           this.adminsService.getAll(this.limit)
             .subscribe(
               res => {
+                for (var i = 0; i < res['rows'].length; i++) {
+                  res['rows'][i].avatar = environment.linkImg+res['rows'][i].avatar;
+                }
                 this.source = new LocalDataSource(res['rows']);
               });
         },

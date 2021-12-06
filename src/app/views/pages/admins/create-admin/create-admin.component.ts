@@ -82,7 +82,7 @@ export class CreateAdminComponent implements OnInit {
         this.result = true;
         if(this.result == true){
           const data = {
-            avatar: environment.linkImg+res['filename'],
+            avatar: res['filename'],
             username: this.admins.value['username'],
             password: this.admins.value['password'],
             email: this.admins.value['email'],

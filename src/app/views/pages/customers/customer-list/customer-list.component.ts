@@ -4,6 +4,7 @@ import {CustomersService} from '../../../../services/customers.service';
 import {Router} from '@angular/router';
 import {Customers} from '../../../../models/customers.model';
 import {ToastrService} from 'ngx-toastr';
+import {environment} from "../../../../../environments/environment";
 
 @Component({
   selector: 'ngx-customer-list',
@@ -79,6 +80,9 @@ export class CustomerListComponent implements OnInit {
           this.customersService.getAll(this.limit)
             .subscribe(
               res => {
+                for (var i = 0; i < res['rows'].length; i++) {
+                  res['rows'][i].avatar = environment.linkImg+res['rows'][i].avatar;
+                }
                 this.source = new LocalDataSource(res['rows']);
               });
         },

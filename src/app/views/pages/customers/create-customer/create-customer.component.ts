@@ -77,7 +77,7 @@ export class CreateCustomerComponent implements OnInit {
       this.result = true;
       if(this.result == true){
         const data = {
-          avatar: environment.linkImg+res['filename'],
+          avatar: res['filename'],
           username: this.customers.value['username'],
           password: this.customers.value['password'],
           email: this.customers.value['email'],

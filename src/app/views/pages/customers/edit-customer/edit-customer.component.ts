@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {Admins} from '../../../../models/admins.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomersService} from '../../../../services/customers.service';
 import {ToastrService} from 'ngx-toastr';
 import { environment } from '../../../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
-import {MustMatch} from '../../../../services/validators/must-match.validator';
 
 import './edit-customer.loader';
 import 'ckeditor';
@@ -36,6 +34,7 @@ export class EditCustomerComponent implements OnInit {
     lastName: ['', Validators.compose([Validators.required])],
     phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
     status: [1],
+    avatarCus: [''],
     });
 
   ngOnInit(): void {
@@ -52,13 +51,14 @@ export class EditCustomerComponent implements OnInit {
       .subscribe(
         data => {
           this.customers = this.fb.group({
-            avatar: [data.avatar, Validators.compose([Validators.required, Validators.minLength(6)])],
+            avatar: [environment.linkImg+data.avatar, Validators.compose([Validators.required, Validators.minLength(6)])],
             username: [data.username, Validators.compose([Validators.required])],
             email: [data.email, Validators.compose([Validators.required, Validators.email])],
             firstName: [data.firstName, Validators.compose([Validators.required])],
             lastName: [data.lastName, Validators.compose([Validators.required])],
             phone: [data.phone, Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
             status: [data.status],
+            avatarCus: [data.avatar],
           });
         },
         error => {
@@ -97,7 +97,7 @@ export class EditCustomerComponent implements OnInit {
     }
     if(this.images == null){
       const data = {
-        avatar: this.customers.value['avatar'],
+        avatar: this.customers.value['avatarCus'],
         username: this.customers.value['username'],
         password: this.customers.value['password'],
         email: this.customers.value['email'],
@@ -109,7 +109,6 @@ export class EditCustomerComponent implements OnInit {
 
       this.customersService.update(this.id, data).subscribe(
         (response) => {
-          console.log(response);
           this.submitted = true;
           this.toastrService.success(response.message);
         },
@@ -117,11 +116,23 @@ export class EditCustomerComponent implements OnInit {
           this.toastrService.success(error.message);
         });
     }else{
+      this.customersService.get(this.id).toPromise().then(
+        data => {
+          const options = {
+            headers: new HttpHeaders({
+              'Content-Type': 'application/json',
+            }),
+            body: {
+              file_name: data.avatar,
+            },
+          };
+          this.http.delete(environment.apiDeleteImg, options).subscribe();
+        });
       this.http.post(environment.apiPostImg, formData).toPromise().then(res => {
         this.result = true;
         if(this.result == true){
           const data = {
-            avatar: environment.linkImg+res['filename'],
+            avatar: res['filename'],
             username: this.customers.value['username'],
             password: this.customers.value['password'],
             email: this.customers.value['email'],

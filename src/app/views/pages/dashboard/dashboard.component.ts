@@ -83,12 +83,14 @@ export class DashboardComponent implements OnDestroy {
     this.themeService.getJsTheme()
       .pipe(takeWhile(() => this.alive))
       .subscribe(theme => {
+        console.log(theme);
         this.statusCards = this.statusCardsByThemes[theme.name];
     });
 
     this.solarService.getSolarData()
       .pipe(takeWhile(() => this.alive))
       .subscribe((data) => {
+        console.log(data);
         this.solarValue = data;
       });
   }

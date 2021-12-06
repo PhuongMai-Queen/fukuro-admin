@@ -5,6 +5,7 @@ import {Blogs} from '../../../../models/blogs.model';
 import {BlogsService} from '../../../../services/blogs.service';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
+import {environment} from "../../../../../environments/environment";
 
 @Component({
   selector: 'ngx-blog-list',
@@ -69,6 +70,9 @@ export class BlogListComponent implements OnInit {
           this.blogsService.getAll(this.limit)
             .subscribe(
               res => {
+                for (var i = 0; i < res['rows'].length; i++) {
+                  res['rows'][i].thumbnail = environment.linkImg+res['rows'][i].thumbnail;
+                }
                 this.source = new LocalDataSource(res['rows']);
               });
         },

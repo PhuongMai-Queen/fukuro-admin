@@ -125,7 +125,7 @@ export class CreateBlogComponent implements OnInit {
           const data = {
             title: this.blogs.value['title'],
             slug: this.blogs.value['slug'],
-            thumbnail: environment.linkImg+res['filename'],
+            thumbnail: res['filename'],
             summary: this.blogs.value['summary'],
             description: this.blogs.value['description'],
             tag: JSON.stringify(this.blogs.value['tag']),

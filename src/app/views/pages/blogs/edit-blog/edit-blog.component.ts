@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Blogs } from '../../../../models/blogs.model';
 import { BlogsService } from '../../../../services/blogs.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ToastrService} from 'ngx-toastr';
 import {Router, ActivatedRoute} from '@angular/router';
 import {BlogCategories} from '../../../../models/blog-categories.model';
@@ -42,6 +42,7 @@ export class EditBlogComponent implements OnInit {
     tag: [''],
     status: [''],
     blogCategoryId: [''],
+    thumbnailCus: [''],
   });
   blogCategories?: BlogCategories[];
   id: null;
@@ -61,12 +62,13 @@ export class EditBlogComponent implements OnInit {
           this.blogs = this.fb.group({
             title: [data.title, Validators.compose([Validators.required])],
             slug: [data.slug, Validators.compose([Validators.required])],
-            thumbnail: [data.thumbnail, Validators.compose([Validators.required])],
+            thumbnail: [environment.linkImg+data.thumbnail, Validators.compose([Validators.required])],
             summary: [data.summary, Validators.compose([Validators.required])],
             description: [data.description, Validators.compose([Validators.required])],
             tag: [JSON.parse(data.tag), Validators.compose([Validators.required])],
             status: [data.status],
             blogCategoryId: [data.blogCategoryId, Validators.compose([Validators.required])],
+            thumbnailCus: [data.thumbnail],
           });
           this.retrieveBlogCategories(data.blogCategoryId);
         },
@@ -146,7 +148,7 @@ export class EditBlogComponent implements OnInit {
       const data = {
         title: this.blogs.value['title'],
         slug: this.blogs.value['slug'],
-        thumbnail: this.blogs.value['thumbnail'],
+        thumbnail: this.blogs.value['thumbnailCus'],
         summary: this.blogs.value['summary'],
         description: this.blogs.value['description'],
         tag: JSON.stringify(this.blogs.value['tag']),
@@ -164,13 +166,25 @@ export class EditBlogComponent implements OnInit {
         });
     }
     else{
+      this.blogsService.get(this.id).toPromise().then(
+        data => {
+          const options = {
+            headers: new HttpHeaders({
+              'Content-Type': 'application/json',
+            }),
+            body: {
+              file_name: data.thumbnail,
+            },
+          };
+          this.http.delete(environment.apiDeleteImg, options).subscribe();
+        });
       this.http.post(environment.apiPostImg, formData).toPromise().then(res => {
         this.result = true;
         if(this.result == true){
           const data = {
             title: this.blogs.value['title'],
             slug: this.blogs.value['slug'],
-            thumbnail: environment.linkImg+res['filename'],
+            thumbnail: res['filename'],
             summary: this.blogs.value['summary'],
             description: this.blogs.value['description'],
             tag: JSON.stringify(this.blogs.value['tag']),

@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {Admins} from '../../../../models/admins.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AdminsService} from '../../../../services/admins.service';
 import {ToastrService} from 'ngx-toastr';
 import { environment } from '../../../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
-import {MustMatch} from '../../../../services/validators/must-match.validator';
 import './edit-admin.loader';
 import 'ckeditor';
 
@@ -33,6 +31,7 @@ export class EditAdminComponent implements OnInit {
       phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
       role: ['', Validators.compose([Validators.required])],
       status: ['1'],
+      avatarCus: [''],
     });
   constructor(private adminsService: AdminsService,
               public fb: FormBuilder,
@@ -55,7 +54,7 @@ export class EditAdminComponent implements OnInit {
       .subscribe(
         data => {
           this.admins = this.fb.group({
-            avatar: [data.avatar, Validators.compose([Validators.required, Validators.minLength(6)])],
+            avatar: [environment.linkImg+data.avatar, Validators.compose([Validators.required, Validators.minLength(6)])],
             username: [data.username, Validators.compose([Validators.required])],
             email: [data.email, Validators.compose([Validators.required, Validators.email])],
             firstName: [data.firstName, Validators.compose([Validators.required])],
@@ -63,6 +62,7 @@ export class EditAdminComponent implements OnInit {
             phone: [data.phone, Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
             role: [data.role, Validators.compose([Validators.required])],
             status: [data.status],
+            avatarCus: [data.avatar],
           });
         },
         error => {
@@ -102,7 +102,18 @@ export class EditAdminComponent implements OnInit {
       return false;
     }
     if(this.images == null){
-      this.adminsService.update(this.id, this.admins.value).subscribe(
+      const data = {
+        avatar: this.admins.value['avatarCus'],
+        username: this.admins.value['username'],
+        password: this.admins.value['password'],
+        email: this.admins.value['email'],
+        first_name: this.admins.value['firstName'],
+        last_name: this.admins.value['lastName'],
+        phone: this.admins.value['phone'],
+        role: this.admins.value['role'],
+        status: this.admins.value['status'],
+      };
+      this.adminsService.update(this.id, data).subscribe(
         (response) => {
           this.submitted = true;
           if(this.id == this.idAdmin){
@@ -116,11 +127,23 @@ export class EditAdminComponent implements OnInit {
           this.toastrService.success(error.message);
         });
     }else{
+      this.adminsService.get(this.id).toPromise().then(
+        data => {
+          const options = {
+            headers: new HttpHeaders({
+              'Content-Type': 'application/json',
+            }),
+            body: {
+              file_name: data.avatar,
+            },
+          };
+          this.http.delete(environment.apiDeleteImg, options).subscribe();
+        });
       this.http.post(environment.apiPostImg, formData).toPromise().then(res => {
         this.result = true;
         if(this.result == true){
           const data = {
-            avatar: environment.linkImg+res['filename'],
+            avatar: res['filename'],
             username: this.admins.value['username'],
             password: this.admins.value['password'],
             email: this.admins.value['email'],

@@ -1,38 +1,47 @@
-<div class="row">
-  <div class="col-xxl-5">
-    <div class="row">
-      <div class="col-md-6">
-        <ngx-profit-card></ngx-profit-card>
-      </div>
-      <div class="col-md-6">
-        <ngx-earning-card></ngx-earning-card>
-      </div>
-    </div>
-
-    <ngx-traffic-reveal-card></ngx-traffic-reveal-card>
+<div class="row mb-3">
+  <div class="col-lg-6">
+    <h3>THỐNG KÊ</h3>
   </div>
-
-  <div class="col-xxl-7">
-    <ngx-ecommerce-charts></ngx-ecommerce-charts>
+  <div class="col-lg-6">
+    <nb-select selected="all" class="w-25 float-right" (selectedChange)="change($event)">
+      <nb-option value="all">All</nb-option>
+      <nb-option value="month">Month</nb-option>
+      <nb-option value="week">Week</nb-option>
+      <nb-option value="day">Day</nb-option>
+    </nb-select>
   </div>
 </div>
-
 <div class="row">
-  <div class="col-xxl-9">
-    <ngx-country-orders></ngx-country-orders>
-  </div>
+  <div class="col-xxxl-3 col-md-3 card-count" *ngFor="let statusCard of statusCards">
+    <nb-card>
+      <div class="icon-container">
+        <div class="icon status-{{ statusCard.type }}">
+          <i [ngClass]="statusCard.iconClass"></i>
+        </div>
+      </div>
 
-  <div class="col-xxl-3">
-    <ngx-progress-section></ngx-progress-section>
+      <div class="details">
+        <div class="title h5">{{ statusCard.amount }}</div>
+        <div class="status paragraph-2">{{ statusCard.title }}</div>
+      </div>
+    </nb-card>
   </div>
 </div>
-
 <div class="row">
-  <div class="col-xxl-9">
-    <ngx-ecommerce-visitors-analytics></ngx-ecommerce-visitors-analytics>
+  <div class="col-lg-6">
+    <nb-card>
+      <nb-card-header>Thống kê hỏi đáp</nb-card-header>
+      <nb-card-body>
+        <div echarts [options]="optionsCircle" class="echart"></div>
+      </nb-card-body>
+    </nb-card>
   </div>
-
-  <div class="col-xxl-3">
-    <ngx-user-activity></ngx-user-activity>
+  <div class="col-lg-6">
+    <nb-card>
+      <nb-card-header>Thống kê doanh thu trong tuần</nb-card-header>
+      <nb-card-body>
+        <div echarts [options]="options" class="echart"></div>
+      </nb-card-body>
+    </nb-card>
   </div>
 </div>

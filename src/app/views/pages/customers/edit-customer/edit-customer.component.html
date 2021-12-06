@@ -29,7 +29,7 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="label col-form-label">Tên đăng nhập</label>
-                <input type="text" nbInput fullWidth formControlName="username">
+                <input type="text" nbInput fullWidth formControlName="username" readonly>
                 <div *ngIf="submitted && f.username.errors">
                   <small *ngIf="f.username.errors.required" class="text-danger small-popup">Tên đăng nhập không được bỏ trống!</small>
                   <small *ngIf="f.username.errors.required" class="text-danger small-popup">Tên đăng nhập phải ít nhất 6 kí tự!!</small>

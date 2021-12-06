@@ -34,7 +34,7 @@ export class PremiumBillListComponent implements OnInit {
         type: 'string',
       },
       expire: {
-        title: 'Thời hạn',
+        title: 'Thời hạn (tháng)',
         type: 'string',
       },
       totalPrice: {
@@ -43,7 +43,10 @@ export class PremiumBillListComponent implements OnInit {
       },
       paymentStatus: {
         title: 'Trạng thái hoá đơn',
-        type: 'string',
+        type: 'html',
+        valuePrepareFunction: (value) => {
+          return value == 1 ? 'Đã thanh toán' : 'Chưa thanh toán';
+        },
       },
     },
   };
