@@ -33,9 +33,11 @@ export class FeedbackComponent implements OnInit {
       subject: ['', Validators.compose([Validators.required])],
       message: ['', Validators.compose([Validators.required])],
       email: ['', Validators.compose([Validators.required])],
+      admin_id: [''],
     });
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.params.id;
+    this.feedback.patchValue({admin_id: this.id});
     this.getContactDetail(this.id);
   }
   get f() {
@@ -55,13 +57,13 @@ export class FeedbackComponent implements OnInit {
   // Create blog
   sendFeedback(): any {
     this.submitted = true;
-    // return validators
     if (this.feedback.invalid) {
       return false;
     }
-    this.adminsService.requestContact(this.feedback.value).subscribe(
+    this.adminsService.requestContact(this.id, this.feedback.value).subscribe(
       (response) => {
-        console.log(response);
+        this.newFeedback();
+        this.toastrService.success('Gửi phản hồi thành công!!');
       },
       (error) => {
         if(error.error.text == "Success"){

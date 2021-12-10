@@ -1,27 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalDataSource } from 'ng2-smart-table';
-import {PremiumsService} from '../../../../services/premiums.service';
+import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
+import {QuestionCategoriesService} from '../../../../services/question-categories.service';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'ngx-premiums-list',
-  templateUrl: './premiums-list.component.html',
-  styleUrls: ['./premiums-list.component.scss'],
+  selector: 'ngx-question-category-list',
+  templateUrl: './question-category-list.component.html',
+  styleUrls: ['./question-category-list.component.scss'],
 })
-export class PremiumsListComponent implements OnInit {
+export class QuestionCategoryListComponent implements OnInit {
   limit: 6;
   settings = {
     actions: {
       custom: [
         {
           name: 'edit',
-          title: '<i class="nb-edit text-success" title="Sửa"></i>'
+          title: '<i class="nb-edit text-success" title="Edit"></i>'
         },
         {
           name: 'delete',
-          title: '<i class="nb-trash text-danger" title="Xoá"></i>'
+          title: '<i class="nb-trash text-danger" title="delete"></i>'
         },
       ],
       add: false,
@@ -31,15 +30,11 @@ export class PremiumsListComponent implements OnInit {
     },
     columns: {
       name: {
-        title: 'Tên premium',
-        type: 'number',
-      },
-      price: {
-        title: 'Giá tiền',
+        title: 'Tên chuyên mục hỏi đáp',
         type: 'string',
       },
-      description: {
-        title: 'Mô tả',
+      slug: {
+        title: 'Link',
         type: 'string',
       },
       status: {
@@ -54,21 +49,19 @@ export class PremiumsListComponent implements OnInit {
 
   source: LocalDataSource;
 
-  constructor(private premiumsService: PremiumsService,
+  constructor(private questionCategoriesService: QuestionCategoriesService,
               private _router: Router,
               private toastrService: ToastrService,
-              public datepipe: DatePipe,
   ) {}
-
   ngOnInit(): void {
-    this.retrievePremiums();
+    this.retrieveBlogCategories();
   }
-  retrievePremiums(): void {
-    this.premiumsService.getAll(this.limit)
+  retrieveBlogCategories(): void {
+    this.questionCategoriesService.getAll(this.limit)
       .subscribe(
         data => {
           this.limit = data['count'];
-          this.premiumsService.getAll(this.limit)
+          this.questionCategoriesService.getAll(this.limit)
             .subscribe(
               res => {
                 this.source = new LocalDataSource(res['rows']);
@@ -81,14 +74,14 @@ export class PremiumsListComponent implements OnInit {
 
   onCustomAction(event) {
     if(event.action == 'edit'){
-      this._router.navigate(['pages/premiums/edit/'+event.data['id']]);
+      this._router.navigate(['pages/question-categories/edit/'+event.data['id']]);
     }
     if(event.action == 'delete'){
       if (window.confirm('Bạn có chắn chắn sẽ xoá không?')) {
-        this.premiumsService.delete(event.data['id'])
+        this.questionCategoriesService.delete(event.data['id'])
           .subscribe(
             response => {
-              this.retrievePremiums();
+              this.retrieveBlogCategories();
               this.toastrService.success(response.message);
             },
             error => {

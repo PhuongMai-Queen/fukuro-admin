@@ -58,7 +58,7 @@ export class AdminsService {
     return this.http.post(`${environment.apiURL}/password-resets/admin`, data);
   }
 
-  requestContact(data: any): Observable<any> {
-    return this.http.post(`${baseUrl}/request-contact`, data);
+  requestContact(id: any, data: any): Observable<any> {
+    return this.http.post(`${environment.apiURL}/admin-contacts/request-contact/${id}`, data);
   }
 }

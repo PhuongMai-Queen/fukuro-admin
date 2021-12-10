@@ -22,6 +22,24 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
+    title: 'Chuyên Mục',
+    icon: 'keypad-outline',
+    children: [
+      {
+        title: 'Danh sách',
+        link: '/pages/question-categories/list',
+      },
+      {
+        title: 'Thêm mới',
+        link: '/pages/question-categories/create',
+      },
+    ],
+  },
+  {
+    title: 'PREMIUM',
+    group: true,
+  },
+  {
     title: 'Khuyến Mãi',
     icon: 'gift-outline',
     children: [
@@ -34,10 +52,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/promotions/create',
       },
     ],
-  },
-  {
-    title: 'PREMIUM',
-    group: true,
   },
   {
     title: 'Gói Premiums',

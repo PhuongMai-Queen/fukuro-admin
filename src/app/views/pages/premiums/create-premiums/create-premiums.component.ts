@@ -6,6 +6,9 @@ import {ActivatedRoute} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {Promotions} from '../../../../models/promotions.model';
 
+import './create-premiums.loader';
+import 'ckeditor';
+
 @Component({
   selector: 'ngx-create-premiums',
   templateUrl: './create-premiums.component.html',

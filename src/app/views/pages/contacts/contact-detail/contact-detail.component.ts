@@ -11,20 +11,42 @@ import {ToastrService} from 'ngx-toastr';
 export class ContactDetailComponent implements OnInit {
   id: '';
   error = '';
-  contactDetail: any;
   constructor(private contactsService: ContactsService, public fb: FormBuilder,
               private activatedRoute: ActivatedRoute,
               private toastrService: ToastrService)  {}
+
+  contactDetail = this.fb.group(
+    {
+      id: [''],
+      firstName: [''],
+      lastName: [''],
+      email: [''],
+      phone: [''],
+      subject: [''],
+      message: [''],
+      status: [''],
+      adminId: [''],
+    });
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params.id;
     this.getContactDetail(this.id);
   }
-
   getContactDetail(id): void {
     this.contactsService.get(id)
       .subscribe(
         data => {
-          this.contactDetail = data;
+          this.contactDetail = this.fb.group(
+            {
+              id: [data.id],
+              firstName: [data.firstName],
+              lastName: [data.lastName],
+              email: [data.email],
+              phone: [data.phone],
+              subject: [data.subject],
+              message: [data.message],
+              status: [data.status],
+              adminId: [data.adminId],
+            });
         },
         error => {
           console.log(error);

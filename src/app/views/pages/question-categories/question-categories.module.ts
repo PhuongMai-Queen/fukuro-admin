@@ -3,7 +3,8 @@ import { CKEditorModule } from 'ng2-ckeditor';
 
 import { ThemeModule } from '../../layouts/theme.module';
 
-import { PremiumBillsRoutingModule, routedComponents } from './premium-bills-routing.module';
+import { QuestionCategoriesRoutingModule, routedComponents } from './question-categories-routing.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   NbActionsModule,
   NbButtonModule,
@@ -18,15 +19,14 @@ import {
 
 import { TagInputModule } from 'ngx-chips';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
-    FormsModule,
     ReactiveFormsModule,
+    FormsModule,
     TagInputModule,
     ThemeModule,
-    PremiumBillsRoutingModule,
+    QuestionCategoriesRoutingModule,
     CKEditorModule,
     NbActionsModule,
     NbButtonModule,
@@ -43,4 +43,4 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ...routedComponents,
   ],
 })
-export class PremiumBillsModule { }
+export class QuestionCategoriesModule { }

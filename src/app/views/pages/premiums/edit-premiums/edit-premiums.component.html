@@ -32,7 +32,7 @@
             <div class="col-sm-12">
               <div class="form-group">
                 <label class="label col-form-label">Mô tả</label>
-                <textarea rows="5" nbInput fullWidth formControlName="description"></textarea>
+                <ckeditor [config]="{ extraPlugins: 'divarea', height: '320' }" formControlName="description"></ckeditor>
                 <div *ngIf="submitted && f.description.errors">
                   <small *ngIf="f.description.errors.required" class="text-danger small-popup">Mô tả không được bỏ trống!</small>
                 </div>

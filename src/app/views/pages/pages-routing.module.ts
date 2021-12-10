@@ -24,6 +24,11 @@ const routes: Routes = [{
         .then(m => m.BlogCategoriesModule),
     },
     {
+      path: 'question-categories',
+      loadChildren: () => import('./question-categories/question-categories.module')
+        .then(m => m.QuestionCategoriesModule),
+    },
+    {
       path: 'blogs',
       loadChildren: () => import('./blogs/blogs.module')
         .then(m => m.BlogsModule),
