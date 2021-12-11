@@ -1,0 +1,59 @@
+<h5>Cập Nhật Trạng Thái Hoá Đơn</h5>
+<nb-card>
+  <nb-card-body>
+    <form [formGroup]="bill" (ngSubmit)="update()">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label class="label col-form-label">Họ</label>
+            <input type="text" nbInput fullWidth value="{{ this.customer.value['lastName'] }}" readonly>
+          </div>
+          <div class="form-group">
+            <label class="label col-form-label">Email</label>
+            <input type="text" nbInput fullWidth value="{{ this.customer.value['email'] }}" readonly>
+          </div>
+          <div class="form-group">
+            <label class="label col-form-label">Trạng thái thanh toán</label>
+            <input type="text" nbInput fullWidth readonly value="{{ this.billCus.value['paymentStatus'] ? 'Đã thanh toán' : 'Chưa thanh toán' }}">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label class="label col-form-label">Tên</label>
+            <input type="text" nbInput fullWidth value="{{ this.customer.value['lastName'] }}" readonly>
+          </div>
+          <div class="form-group">
+            <label class="label col-form-label">Số điện thoại</label>
+            <input type="text" nbInput fullWidth value="{{ this.customer.value['phone'] }}" readonly>
+          </div>
+          <div class="form-group">
+            <label class="label col-form-label">Trạng thái hoá đơn</label>
+            <nb-select selected="1" fullWidth formControlName="status">
+              <nb-option value="0">Đang xử lý</nb-option>
+              <nb-option value="1">Hoàn thành</nb-option>
+            </nb-select>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive mt-3">
+        <h6>{{ this.billCus.value['name'] }}</h6>
+        <table class="table">
+          <tr>
+            <th>Tên gói dịch vụ</th>
+            <th>Đơn giá</th>
+            <th>Thời hạn</th>
+            <th>Tổng</th>
+          </tr>
+          <tr>
+            <td>{{ namePremium }}</td>
+            <td>{{ this.billCus.value['price'] | currency: "VND"}}</td>
+            <td>{{ this.billCus.value['expire']  }}</td>
+            <td>{{ this.billCus.value['price'] * this.billCus.value['expire'] | currency: "VND"}}</td>
+          </tr>
+        </table>
+      </div>
+      <button type="submit" nbButton status="success" class="float-right">Cập nhật</button>
+    </form>
+  </nb-card-body>
+</nb-card>
+

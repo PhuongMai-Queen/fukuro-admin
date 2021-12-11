@@ -6,13 +6,13 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="label col-form-label">Họ tên khách hàng</label>
-                <input type="text" nbInput fullWidth value="{{contactDetail.firstName}} {{contactDetail.lastName}}" readonly>
+                <input type="text" nbInput fullWidth value="{{this.contactDetail.value['firstName']}} {{this.contactDetail.value['lastName']}}" readonly>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
             <label class="label col-form-label">Số điện thoại</label>
-            <input type="text" nbInput fullWidth value="{{ contactDetail.phone }}" readonly>
+            <input type="text" nbInput fullWidth value="{{ this.contactDetail.value['phone'] }}" readonly>
           </div>
             </div>
           </div>
@@ -20,13 +20,13 @@
             <div class="col-sm-6">
               <div class="form-group">
             <label class="label col-form-label">Email</label>
-            <input type="text" nbInput fullWidth value="{{ contactDetail.email }}" readonly>
+            <input type="text" nbInput fullWidth value="{{ this.contactDetail.value['email'] }}" readonly>
           </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
             <label class="label col-form-label">Chủ đề</label>
-            <input type="text" nbInput fullWidth value="{{ contactDetail.subject }}" readonly>
+            <input type="text" nbInput fullWidth value="{{ this.contactDetail.value['subject'] }}" readonly>
           </div>
             </div>
           </div>
@@ -34,11 +34,11 @@
             <div class="col-sm-12">
               <div class="form-group">
             <label class="label col-form-label">Chủ đề</label>
-            <textarea rows="5" nbInput fullWidth value="{{ contactDetail.message }}" readonly></textarea>
+            <textarea rows="5" nbInput fullWidth value="{{ this.contactDetail.value['message'] }}" readonly></textarea>
           </div>
             </div>
           </div>
-          <a href="/pages/contacts/feedback/{{contactDetail.id}}" nbButton status="success" class="btn btn-success text-decoration-none text-white">
+          <a href="/pages/contacts/feedback/{{this.contactDetail.value['id']}}" nbButton status="success" class="btn btn-success text-decoration-none text-white">
             Phản hồi <nb-icon icon="navigation-2-outline"></nb-icon></a>
         </nb-card-body>
       </nb-card>

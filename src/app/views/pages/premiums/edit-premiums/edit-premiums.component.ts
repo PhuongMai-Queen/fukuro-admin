@@ -3,9 +3,11 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PromotionsService} from '../../../../services/promotions.service';
 import {ActivatedRoute} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import { DatePipe } from '@angular/common';
-import {Promotions} from "../../../../models/promotions.model";
-import {PremiumsService} from "../../../../services/premiums.service";
+import {Promotions} from '../../../../models/promotions.model';
+import {PremiumsService} from '../../../../services/premiums.service';
+
+import './edit-premiums.loader';
+import 'ckeditor';
 
 @Component({
   selector: 'ngx-edit-premiums',

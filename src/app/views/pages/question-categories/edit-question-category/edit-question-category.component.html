@@ -1,0 +1,39 @@
+<h5>Cập Nhật Chuyên Mục Hỏi Đáp</h5>
+<form [formGroup]="questionCategories" (ngSubmit)="updateQuestionCategories()">
+  <div class="row">
+    <div class="col-sm-9">
+      <nb-card>
+        <nb-card-body>
+          <div class="form-group">
+            <label class="label col-form-label">Tên Chuyên Mục Hỏi Đáp</label>
+            <input type="text" nbInput fullWidth formControlName="name" (ngModelChange)="modelChangeFn($event)">
+            <div *ngIf="submitted && f.name.errors">
+              <small *ngIf="f.name.errors.required" class="text-danger small-popup">Tên chuyên mục câu hỏi không được bỏ trống!</small>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="label col-form-label">Link Chuyên Mục Hỏi Đáp</label>
+            <input type="text" nbInput fullWidth formControlName="slug">
+            <div *ngIf="submitted && f.slug.errors">
+              <small *ngIf="f.slug.errors.required" class="text-danger small-popup">Link chuyên mục câu hỏi không được bỏ trống!</small>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-sm-3">
+      <nb-card>
+        <nb-card-header>Trạng thái</nb-card-header>
+        <nb-card-body>
+          <div class="form-group">
+            <nb-radio-group formControlName="status">
+              <nb-radio value="1">Kích hoạt</nb-radio>
+              <nb-radio value="0">Vô hiệu hoá</nb-radio>
+            </nb-radio-group>
+          </div>
+        </nb-card-body>
+      </nb-card>
+      <button type="submit" nbButton status="success" fullWidth>Lưu</button>
+    </div>
+  </div>
+</form>

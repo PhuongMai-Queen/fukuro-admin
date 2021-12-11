@@ -15,6 +15,10 @@ export class PremiumBillListComponent implements OnInit {
     actions: {
       custom: [
         {
+          name: 'edit',
+          title: '<i class="nb-edit text-success" title="Edit"></i>'
+        },
+        {
           name: 'delete',
           title: '<i class="nb-trash text-danger" title="Xoá"></i>'
         },
@@ -25,10 +29,14 @@ export class PremiumBillListComponent implements OnInit {
       position: 'right',
     },
     columns: {
-      name: {
-        title: 'Tên hóa đơn',
-        type: 'string',
+      id: {
+        title: 'ID',
+        type: 'number',
       },
+      // name: {
+      //   title: 'Tên hóa đơn',
+      //   type: 'string',
+      // },
       price: {
         title: 'Giá tiền',
         type: 'string',
@@ -46,6 +54,13 @@ export class PremiumBillListComponent implements OnInit {
         type: 'html',
         valuePrepareFunction: (value) => {
           return value == 1 ? 'Đã thanh toán' : 'Chưa thanh toán';
+        },
+      },
+      status: {
+        title: 'Trạng thái hoá đơn',
+        type: 'html',
+        valuePrepareFunction: (value) => {
+          return value == 1 ? 'Hoàn thành' : 'Đang xử lý';
         },
       },
     },
@@ -78,6 +93,9 @@ export class PremiumBillListComponent implements OnInit {
   }
 
   onCustomAction(event) {
+    if(event.action == 'edit'){
+      this._router.navigate(['pages/premium-bills/edit/'+event.data['id']]);
+    }
     if(event.action == 'delete'){
       if (window.confirm('Bạn có chắn chắn sẽ xoá không?')) {
         this.premiumBillsService.delete(event.data['id'])
