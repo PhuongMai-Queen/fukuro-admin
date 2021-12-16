@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { SmartTableData } from '../../../@core/data/smart-table';
 import {Blogs} from '../../../../models/blogs.model';
 import {BlogsService} from '../../../../services/blogs.service';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import {environment} from "../../../../../environments/environment";
+import {environment} from '../../../../../environments/environment';
 
 @Component({
   selector: 'ngx-blog-list',

@@ -1,9 +1,13 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import { ProgressInfo } from '../../@core/data/stats-progress-bar';
+import {NbCalendarRange, NbDateService, NbThemeService, NbWindowService} from '@nebular/theme';
+import {SolarData} from '../../@core/data/solar';
+import { DayCellComponent } from '../extra-components/calendar/day-cell/day-cell.component';
+import { DatePipe } from '@angular/common';
 import { takeWhile } from 'rxjs/operators';
 import { ContactsService } from '../../../services/statistic.service';
-import {NbThemeService} from '@nebular/theme';
-import {SolarData} from '../../@core/data/solar';
+import { QuestionCategoriesService } from '../../../services/question-categories.service';
+import {LocalDataSource} from "ng2-smart-table";
+import {environment} from "../../../../environments/environment";
 
 interface CardSettings {
   title: string;
@@ -18,8 +22,18 @@ interface CardSettings {
   styleUrls: ['./e-commerce.component.scss'],
 })
 export class ECommerceComponent implements OnInit, OnDestroy {
+  date: any;
+  date2: any;
+  range: NbCalendarRange<Date>;
+  dayCellComponent = DayCellComponent;
   @Input() on = true;
   alive = true;
+  limit: 6;
+  questionCategories: any;
+  dataEcharts: any;
+  dataEchartsOption: any;
+  dataBar: any;
+  dataBarOption: any;
 
   lightCard: CardSettings = {
     title: 'TIN CHO THUÊ',
@@ -92,45 +106,105 @@ export class ECommerceComponent implements OnInit, OnDestroy {
 
   constructor(private contactsService: ContactsService,
               private themeService: NbThemeService,
-              private solarService: SolarData) {
-
-
+              private solarService: SolarData,
+              protected dateService: NbDateService<Date>,
+              private windowService: NbWindowService,
+              public datepipe: DatePipe,
+              private questionCategoriesService: QuestionCategoriesService) {
+    this.range = {
+      start: this.dateService.addDay(this.monthStart, 3),
+      end: this.dateService.addDay(this.monthEnd, -3),
+    };
   }
+  get monthStart(): Date {
+    return this.dateService.getMonthStart(new Date());
+  }
+  get monthEnd(): Date {
+    return this.dateService.getMonthEnd(new Date());
+  }
+
+  openWindow(contentTemplate) {
+    this.windowService.open(
+      contentTemplate,
+      {
+        title: 'Tuỳ chọn khoảng thời gian',
+      },
+    );
+  }
+
+  getRangeDate(event) {
+    if (event.start && event.end) {
+      this.date = this.datepipe.transform(event.start, 'yyyy-MM-dd');
+      this.date2 = this.datepipe.transform(event.end, 'yyyy-MM-dd');
+      this.range = {
+        start: this.dateService.addDay(this.monthStart, 3),
+        end: this.dateService.addDay(this.monthEnd, -3),
+      };
+      this.getData();
+    }
+  }
+
   ngOnInit() {
+    this.date = '';
+    this.date2 = '';
+    this.dataEcharts = [];
+    this.dataEchartsOption = [];
+    this.dataBar = [];
+    this.dataBarOption = [];
+    this.questionCategories = [];
     this.themeService.getJsTheme()
       .pipe(takeWhile(() => this.alive))
       .subscribe(theme => {
         this.statusCards = this.statusCardsByThemes[theme.name];
       });
-    this.getData(this.time);
+    this.getData();
   }
-  getData(time){
-    this.contactsService.countRentalNews(time).toPromise()
+  getData() {
+    this.contactsService.countRentalNews(this.date, this.date2).toPromise()
       .then((data) => {
         this.lightCard.amount = data['count'];
       });
-    this.contactsService.countPremiumBill(time).toPromise()
+    this.contactsService.countPremiumBill(this.date, this.date2).toPromise()
       .then((data) => {
         this.rollerShadesCard.amount = data['count'];
       });
-    this.contactsService.countComment(time).toPromise()
+    this.contactsService.countComment(this.date, this.date2).toPromise()
       .then((data) => {
         this.wirelessAudioCard.amount = data['count'];
       });
-    this.contactsService.countCustomer(time).toPromise()
+    this.contactsService.countCustomer(this.date, this.date2).toPromise()
       .then((data) => {
         this.coffeeMakerCard.amount = data['count'];
       });
+    this.contactsService.countQuestionByCategories(this.date, this.date2).toPromise()
+      .then((data: any) => {
+        this.dataEcharts = [];
+        this.dataEchartsOption = [];
+        if(data.length > 0) {
+          for (let item of data) {
+            this.dataEcharts.push(item.name);
+          }
+          this.dataEchartsOption = data;
+          this.echart();
+        }
+      });
+    this.contactsService.countIncomeByDate(this.date, this.date2).toPromise()
+      .then((data: any) => {
+        this.dataBar = [];
+        this.dataBarOption = [];
+        if(data.length > 0){
+          for (let item of data) {
+            this.dataBar.push(this.datepipe.transform(item.date, 'yyyy-MM-dd'));
+            this.dataBarOption.push(item.value);
+          }
+          this.bar();
+        }
+      });
   }
-  change(event){
-    this.getData(event);
-  }
-  ngAfterViewInit() {
+  echart() {
     this.themeSubscription = this.themeService.getJsTheme().subscribe(config => {
-
       const colors = config.variables;
       const echarts: any = config.variables.echarts;
-      const bar = ['Thu 2', 'Thu 3', 'Thu 4', 'Thu 5', 'Thu 6', 'Thu 7', 'CN'];
       this.optionsCircle = {
         backgroundColor: echarts.bg,
         color: [colors.warningLight, colors.infoLight, colors.dangerLight, colors.successLight, colors.primaryLight],
@@ -141,7 +215,7 @@ export class ECommerceComponent implements OnInit, OnDestroy {
         legend: {
           orient: 'vertical',
           left: 'left',
-          data: ['Kinh nghiệm thuê nhà', 'Tiện ích - Dịch vụ', 'Luật', 'Đầu tư', 'Review'],
+          data: this.dataEcharts,
           textStyle: {
             color: echarts.textColor,
           },
@@ -152,13 +226,7 @@ export class ECommerceComponent implements OnInit, OnDestroy {
             type: 'pie',
             radius: '80%',
             center: ['50%', '50%'],
-            data: [
-              { value: 335, name: 'Đầu tư' },
-              { value: 310, name: 'Review' },
-              { value: 234, name: 'Tiện ích - Dịch vụ' },
-              { value: 135, name: 'Kinh nghiệm thuê nhà' },
-              { value: 1548, name: 'Luật' },
-            ],
+            data: this.dataEchartsOption,
             itemStyle: {
               emphasis: {
                 shadowBlur: 10,
@@ -183,72 +251,196 @@ export class ECommerceComponent implements OnInit, OnDestroy {
           },
         ],
       };
-      this.options = {
-        backgroundColor: echarts.bg,
-        color: [colors.primaryLight],
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow',
-          },
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true,
-        },
-        xAxis: [
-          {
-            type: 'category',
-            data: bar,
-            axisTick: {
-              alignWithLabel: true,
-            },
-            axisLine: {
-              lineStyle: {
-                color: echarts.axisLineColor,
-              },
-            },
-            axisLabel: {
-              textStyle: {
-                color: echarts.textColor,
-              },
-            },
-          },
-        ],
-        yAxis: [
-          {
-            type: 'value',
-            axisLine: {
-              lineStyle: {
-                color: echarts.axisLineColor,
-              },
-            },
-            splitLine: {
-              lineStyle: {
-                color: echarts.splitLineColor,
-              },
-            },
-            axisLabel: {
-              textStyle: {
-                color: echarts.textColor,
-              },
-            },
-          },
-        ],
-        series: [
-          {
-            name: 'Score',
-            type: 'bar',
-            barWidth: '60%',
-            data: [10, 52, 200, 334, 390, 330, 220],
-          },
-        ],
-      };
     });
   }
+
+  bar() {
+    this.themeSubscription = this.themeService.getJsTheme().subscribe(config => {
+      const colors = config.variables;
+      const echarts: any = config.variables.echarts;
+      this.options = {
+                backgroundColor: echarts.bg,
+                color: [colors.primaryLight],
+                tooltip: {
+                  trigger: 'axis',
+                  axisPointer: {
+                    type: 'shadow',
+                  },
+                },
+                grid: {
+                  left: '3%',
+                  right: '4%',
+                  bottom: '3%',
+                  containLabel: true,
+                },
+                xAxis: [
+                  {
+                    type: 'category',
+                    data: this.dataBar,
+                    axisTick: {
+                      alignWithLabel: true,
+                    },
+                    axisLine: {
+                      lineStyle: {
+                        color: echarts.axisLineColor,
+                      },
+                    },
+                    axisLabel: {
+                      textStyle: {
+                        color: echarts.textColor,
+                      },
+                    },
+                  },
+                ],
+                yAxis: [
+                  {
+                    type: 'value',
+                    axisLine: {
+                      lineStyle: {
+                        color: echarts.axisLineColor,
+                      },
+                    },
+                    splitLine: {
+                      lineStyle: {
+                        color: echarts.splitLineColor,
+                      },
+                    },
+                    axisLabel: {
+                      textStyle: {
+                        color: echarts.textColor,
+                      },
+                    },
+                  },
+                ],
+                series: [
+                  {
+                    name: 'Score',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: this.dataBarOption,
+                  },
+                ],
+              };
+    });
+  }
+
+  // ngAfterViewInit() {
+  //   this.themeSubscription = this.themeService.getJsTheme().subscribe(config => {
+  //       const colors = config.variables;
+  //       const echarts: any = config.variables.echarts;
+  //       const bar = ['08/12/2021', '09/12/2021', '10/12/2021', '11/12/2021', '12/12/2021', '13/12/2021', '14/12/2021'];
+  //       this.optionsCircle = {
+  //         backgroundColor: echarts.bg,
+  //         color: [colors.warningLight, colors.infoLight, colors.dangerLight, colors.successLight, colors.primaryLight],
+  //         tooltip: {
+  //           trigger: 'item',
+  //           formatter: '{a} <br/>{b} : {c} ({d}%)',
+  //         },
+  //         legend: {
+  //           orient: 'vertical',
+  //           left: 'left',
+  //           data: this.dataEcharts,
+  //           textStyle: {
+  //             color: echarts.textColor,
+  //           },
+  //         },
+  //         series: [
+  //           {
+  //             name: 'Thống kê hỏi đáp',
+  //             type: 'pie',
+  //             radius: '80%',
+  //             center: ['50%', '50%'],
+  //             data: this.dataEchartsOption,
+  //             itemStyle: {
+  //               emphasis: {
+  //                 shadowBlur: 10,
+  //                 shadowOffsetX: 0,
+  //                 shadowColor: echarts.itemHoverShadowColor,
+  //               },
+  //             },
+  //             label: {
+  //               normal: {
+  //                 textStyle: {
+  //                   color: echarts.textColor,
+  //                 },
+  //               },
+  //             },
+  //             labelLine: {
+  //               normal: {
+  //                 lineStyle: {
+  //                   color: echarts.axisLineColor,
+  //                 },
+  //               },
+  //             },
+  //           },
+  //         ],
+  //       };
+  //       this.options = {
+  //         backgroundColor: echarts.bg,
+  //         color: [colors.primaryLight],
+  //         tooltip: {
+  //           trigger: 'axis',
+  //           axisPointer: {
+  //             type: 'shadow',
+  //           },
+  //         },
+  //         grid: {
+  //           left: '3%',
+  //           right: '4%',
+  //           bottom: '3%',
+  //           containLabel: true,
+  //         },
+  //         xAxis: [
+  //           {
+  //             type: 'category',
+  //             data: bar,
+  //             axisTick: {
+  //               alignWithLabel: true,
+  //             },
+  //             axisLine: {
+  //               lineStyle: {
+  //                 color: echarts.axisLineColor,
+  //               },
+  //             },
+  //             axisLabel: {
+  //               textStyle: {
+  //                 color: echarts.textColor,
+  //               },
+  //             },
+  //           },
+  //         ],
+  //         yAxis: [
+  //           {
+  //             type: 'value',
+  //             axisLine: {
+  //               lineStyle: {
+  //                 color: echarts.axisLineColor,
+  //               },
+  //             },
+  //             splitLine: {
+  //               lineStyle: {
+  //                 color: echarts.splitLineColor,
+  //               },
+  //             },
+  //             axisLabel: {
+  //               textStyle: {
+  //                 color: echarts.textColor,
+  //               },
+  //             },
+  //           },
+  //         ],
+  //         series: [
+  //           {
+  //             name: 'Score',
+  //             type: 'bar',
+  //             barWidth: '60%',
+  //             data: [10, 52, 200, 334, 390, 330, 220],
+  //           },
+  //         ],
+  //       };
+  //     });
+  // }
   ngOnDestroy(): void {
-    this.themeSubscription.unsubscribe();
+    // this.themeSubscription.unsubscribe();
   }
 }

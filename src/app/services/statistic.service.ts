@@ -16,21 +16,33 @@ const baseUrlComments = `${environment.apiURL}/statistics/comments`;
 // count customer
 const baseUrlCustomer = `${environment.apiURL}/statistics/customers`;
 
+// count question by categories
+const baseUrlQuestion = `${environment.apiURL}/statistics/question-categories`;
+
+// count question by categories
+const baseIncome = `${environment.apiURL}/statistics/income`;
+
 @Injectable({
   providedIn: 'root',
 })
 export class ContactsService {
   constructor(private http: HttpClient) {}
-  countRentalNews(time: any): Observable<Contacts> {
-    return this.http.get(`${baseUrlRentalNews}/${time}`);
+  countRentalNews(start: any, end: any): Observable<Contacts> {
+    return this.http.get(`${baseUrlRentalNews}?start=${start}&end=${end}`);
   }
-  countPremiumBill(time: any): Observable<Contacts> {
-    return this.http.get(`${baseUrlPremiumBills}/${time}`);
+  countPremiumBill(start: any, end: any): Observable<Contacts> {
+    return this.http.get(`${baseUrlPremiumBills}?start=${start}&end=${end}`);
   }
-  countComment(time: any): Observable<Contacts> {
-    return this.http.get(`${baseUrlComments}/${time}`);
+  countComment(start: any, end: any): Observable<Contacts> {
+    return this.http.get(`${baseUrlComments}?start=${start}&end=${end}`);
   }
-  countCustomer(time: any): Observable<Contacts> {
-    return this.http.get(`${baseUrlCustomer}/${time}`);
+  countCustomer(start: any, end: any): Observable<Contacts> {
+    return this.http.get(`${baseUrlCustomer}?start=${start}&end=${end}`);
+  }
+  countQuestionByCategories(start: any, end: any): Observable<Contacts> {
+    return this.http.get(`${baseUrlQuestion}?start=${start}&end=${end}`);
+  }
+  countIncomeByDate(start: any, end: any): Observable<Contacts> {
+    return this.http.get(`${baseIncome}?start=${start}&end=${end}`);
   }
 }

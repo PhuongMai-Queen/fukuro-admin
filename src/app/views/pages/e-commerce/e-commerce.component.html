@@ -3,14 +3,26 @@
     <h3>THỐNG KÊ</h3>
   </div>
   <div class="col-lg-6">
-    <nb-select selected="all" class="w-25 float-right" (selectedChange)="change($event)">
-      <nb-option value="all">All</nb-option>
-      <nb-option value="month">Month</nb-option>
-      <nb-option value="week">Week</nb-option>
-      <nb-option value="day">Day</nb-option>
-    </nb-select>
+    <div class="float-right">
+      <button (click)="openWindow(contentTemplate)" nbButton status="primary">
+        <span *ngIf="date == '' && date2 == ''">Lọc</span>
+        <span *ngIf="date != '' && date2 != ''">
+          Lọc:  {{ date | date: 'dd/MM/yyyy' }} - {{ date2 | date: 'dd/MM/yyyy' }}
+        </span>
+
+      </button>
+    </div>
   </div>
+  <ng-template #contentTemplate>
+    <div class="calendars" >
+      <div class="calendar-container">
+        <nb-calendar-range [range]="range" (rangeChange)="getRangeDate($event)"></nb-calendar-range>
+      </div>
+    </div>
+  </ng-template>
 </div>
+
+
 <div class="row">
   <div class="col-xxxl-3 col-md-3 card-count" *ngFor="let statusCard of statusCards">
     <nb-card>
@@ -31,17 +43,21 @@
   <div class="col-lg-6">
     <nb-card>
       <nb-card-header>Thống kê hỏi đáp</nb-card-header>
-      <nb-card-body>
-        <div echarts [options]="optionsCircle" class="echart"></div>
-      </nb-card-body>
+      <div *ngIf="dataEchartsOption.length > 0">
+        <nb-card-body>
+          <div echarts [options]="optionsCircle" class="echart"></div>
+        </nb-card-body>
+      </div>
     </nb-card>
   </div>
   <div class="col-lg-6">
     <nb-card>
       <nb-card-header>Thống kê doanh thu</nb-card-header>
-      <nb-card-body>
-        <div echarts [options]="options" class="echart"></div>
-      </nb-card-body>
+      <div *ngIf="dataBarOption.length > 0">
+        <nb-card-body>
+          <div echarts [options]="options" class="echart"></div>
+        </nb-card-body>
+      </div>
     </nb-card>
   </div>
 </div>
