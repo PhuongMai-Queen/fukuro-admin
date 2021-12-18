@@ -1,0 +1,26 @@
+<div class="lists row">
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+    <nb-card class="list-card">
+      <nb-card-header>TẤT CẢ THÔNG BÁO
+        <button nbButton outline status="danger" class="float-right" (click)="deleteAll()">Xoá tất cả</button>
+      </nb-card-header>
+      <nb-card-body>
+        <div *ngIf="notifications.length > 0">
+          <nb-list>
+            <nb-list-item *ngFor="let noti of notifications" style="position: relative;">
+              <button nbButton outline status="danger" (click)="delete(noti.id)" class="p-1 m-2"><i class="nb-trash text-danger font-weight-bold" title="Xoá" style="font-size: 20px"></i></button>
+              <nb-badge *ngIf="noti.status == 0" text="{{ noti.statusCus }}" status="warning" position="right center" class="mr-3"></nb-badge>
+              <nb-badge *ngIf="noti.status == 1" text="{{ noti.statusCus }}" status="success" position="right center" class="mr-3"></nb-badge>
+              <a (click)="adminNotifications(noti)" class="ion ion-ios-bell text-decoration-none text-primary" style="cursor: pointer"> {{ noti.message }}</a>
+            </nb-list-item>
+          </nb-list>
+        </div>
+        <div *ngIf="notifications.length == 0">
+          <nb-list>
+            <nb-list-item><p class="text-danger font-weight-bold">Chưa có thông báo!</p></nb-list-item>
+          </nb-list>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

@@ -12,6 +12,7 @@ import {
   NbSelectModule,
   NbIconModule,
   NbThemeModule,
+  NbAlertModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NbSecurityModule } from '@nebular/security';
@@ -40,6 +41,7 @@ import { CORPORATE_THEME } from '../../../assets/styles/theme.corporate';
 import { DARK_THEME } from '../../../assets/styles/theme.dark';
 
 const NB_MODULES = [
+  NbAlertModule,
   NbLayoutModule,
   NbMenuModule,
   NbUserModule,

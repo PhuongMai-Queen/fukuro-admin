@@ -6,8 +6,6 @@ import { DatePipe } from '@angular/common';
 import { takeWhile } from 'rxjs/operators';
 import { ContactsService } from '../../../services/statistic.service';
 import { QuestionCategoriesService } from '../../../services/question-categories.service';
-import {LocalDataSource} from "ng2-smart-table";
-import {environment} from "../../../../environments/environment";
 
 interface CardSettings {
   title: string;
@@ -21,7 +19,7 @@ interface CardSettings {
   templateUrl: './e-commerce.component.html',
   styleUrls: ['./e-commerce.component.scss'],
 })
-export class ECommerceComponent implements OnInit, OnDestroy {
+export class ECommerceComponent implements OnInit {
   date: any;
   date2: any;
   range: NbCalendarRange<Date>;
@@ -116,9 +114,11 @@ export class ECommerceComponent implements OnInit, OnDestroy {
       end: this.dateService.addDay(this.monthEnd, -3),
     };
   }
+
   get monthStart(): Date {
     return this.dateService.getMonthStart(new Date());
   }
+
   get monthEnd(): Date {
     return this.dateService.getMonthEnd(new Date());
   }
@@ -159,6 +159,7 @@ export class ECommerceComponent implements OnInit, OnDestroy {
       });
     this.getData();
   }
+
   getData() {
     this.contactsService.countRentalNews(this.date, this.date2).toPromise()
       .then((data) => {
@@ -176,271 +177,154 @@ export class ECommerceComponent implements OnInit, OnDestroy {
       .then((data) => {
         this.coffeeMakerCard.amount = data['count'];
       });
-    this.contactsService.countQuestionByCategories(this.date, this.date2).toPromise()
-      .then((data: any) => {
-        this.dataEcharts = [];
-        this.dataEchartsOption = [];
-        if(data.length > 0) {
-          for (let item of data) {
-            this.dataEcharts.push(item.name);
-          }
-          this.dataEchartsOption = data;
-          this.echart();
-        }
-      });
-    this.contactsService.countIncomeByDate(this.date, this.date2).toPromise()
-      .then((data: any) => {
-        this.dataBar = [];
-        this.dataBarOption = [];
-        if(data.length > 0){
-          for (let item of data) {
-            this.dataBar.push(this.datepipe.transform(item.date, 'yyyy-MM-dd'));
-            this.dataBarOption.push(item.value);
-          }
-          this.bar();
-        }
-      });
-  }
-  echart() {
-    this.themeSubscription = this.themeService.getJsTheme().subscribe(config => {
-      const colors = config.variables;
-      const echarts: any = config.variables.echarts;
-      this.optionsCircle = {
-        backgroundColor: echarts.bg,
-        color: [colors.warningLight, colors.infoLight, colors.dangerLight, colors.successLight, colors.primaryLight],
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)',
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'left',
-          data: this.dataEcharts,
-          textStyle: {
-            color: echarts.textColor,
-          },
-        },
-        series: [
-          {
-            name: 'Thống kê hỏi đáp',
-            type: 'pie',
-            radius: '80%',
-            center: ['50%', '50%'],
-            data: this.dataEchartsOption,
-            itemStyle: {
-              emphasis: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: echarts.itemHoverShadowColor,
-              },
-            },
-            label: {
-              normal: {
-                textStyle: {
-                  color: echarts.textColor,
-                },
-              },
-            },
-            labelLine: {
-              normal: {
-                lineStyle: {
-                  color: echarts.axisLineColor,
-                },
-              },
-            },
-          },
-        ],
-      };
-    });
+    // this.contactsService.countQuestionByCategories(this.date, this.date2).toPromise()
+    //   .then((data: any) => {
+    //     this.dataEcharts = [];
+    //     this.dataEchartsOption = [];
+    //     if(data.length > 0) {
+    //       for (let item of data) {
+    //         this.dataEcharts.push(item.name);
+    //       }
+    //       this.dataEchartsOption = data;
+    //       this.echart();
+    //     }
+    //   });
+    // this.contactsService.countIncomeByDate(this.date, this.date2).toPromise()
+    //   .then((data: any) => {
+    //     console.log(data);
+    //     this.dataBar = [];
+    //     this.dataBarOption = [];
+    //     if(data.length > 0){
+    //       for (let item of data) {
+    //         this.dataBar.push(this.datepipe.transform(item.date, 'yyyy-MM-dd'));
+    //         this.dataBarOption.push(item.value);
+    //       }
+    //       this.bar();
+    //     }
+    //   });
   }
 
-  bar() {
-    this.themeSubscription = this.themeService.getJsTheme().subscribe(config => {
-      const colors = config.variables;
-      const echarts: any = config.variables.echarts;
-      this.options = {
-                backgroundColor: echarts.bg,
-                color: [colors.primaryLight],
-                tooltip: {
-                  trigger: 'axis',
-                  axisPointer: {
-                    type: 'shadow',
-                  },
-                },
-                grid: {
-                  left: '3%',
-                  right: '4%',
-                  bottom: '3%',
-                  containLabel: true,
-                },
-                xAxis: [
-                  {
-                    type: 'category',
-                    data: this.dataBar,
-                    axisTick: {
-                      alignWithLabel: true,
-                    },
-                    axisLine: {
-                      lineStyle: {
-                        color: echarts.axisLineColor,
-                      },
-                    },
-                    axisLabel: {
-                      textStyle: {
-                        color: echarts.textColor,
-                      },
-                    },
-                  },
-                ],
-                yAxis: [
-                  {
-                    type: 'value',
-                    axisLine: {
-                      lineStyle: {
-                        color: echarts.axisLineColor,
-                      },
-                    },
-                    splitLine: {
-                      lineStyle: {
-                        color: echarts.splitLineColor,
-                      },
-                    },
-                    axisLabel: {
-                      textStyle: {
-                        color: echarts.textColor,
-                      },
-                    },
-                  },
-                ],
-                series: [
-                  {
-                    name: 'Score',
-                    type: 'bar',
-                    barWidth: '60%',
-                    data: this.dataBarOption,
-                  },
-                ],
-              };
-    });
-  }
-
-  // ngAfterViewInit() {
+  // echart() {
   //   this.themeSubscription = this.themeService.getJsTheme().subscribe(config => {
-  //       const colors = config.variables;
-  //       const echarts: any = config.variables.echarts;
-  //       const bar = ['08/12/2021', '09/12/2021', '10/12/2021', '11/12/2021', '12/12/2021', '13/12/2021', '14/12/2021'];
-  //       this.optionsCircle = {
-  //         backgroundColor: echarts.bg,
-  //         color: [colors.warningLight, colors.infoLight, colors.dangerLight, colors.successLight, colors.primaryLight],
-  //         tooltip: {
-  //           trigger: 'item',
-  //           formatter: '{a} <br/>{b} : {c} ({d}%)',
+  //     const colors = config.variables;
+  //     const echarts: any = config.variables.echarts;
+  //     this.optionsCircle = {
+  //       backgroundColor: echarts.bg,
+  //       color: [colors.warningLight, colors.infoLight, colors.dangerLight, colors.successLight, colors.primaryLight],
+  //       tooltip: {
+  //         trigger: 'item',
+  //         formatter: '{a} <br/>{b} : {c} ({d}%)',
+  //       },
+  //       legend: {
+  //         orient: 'vertical',
+  //         left: 'left',
+  //         data: this.dataEcharts,
+  //         textStyle: {
+  //           color: echarts.textColor,
   //         },
-  //         legend: {
-  //           orient: 'vertical',
-  //           left: 'left',
-  //           data: this.dataEcharts,
-  //           textStyle: {
-  //             color: echarts.textColor,
-  //           },
-  //         },
-  //         series: [
-  //           {
-  //             name: 'Thống kê hỏi đáp',
-  //             type: 'pie',
-  //             radius: '80%',
-  //             center: ['50%', '50%'],
-  //             data: this.dataEchartsOption,
-  //             itemStyle: {
-  //               emphasis: {
-  //                 shadowBlur: 10,
-  //                 shadowOffsetX: 0,
-  //                 shadowColor: echarts.itemHoverShadowColor,
-  //               },
-  //             },
-  //             label: {
-  //               normal: {
-  //                 textStyle: {
-  //                   color: echarts.textColor,
-  //                 },
-  //               },
-  //             },
-  //             labelLine: {
-  //               normal: {
-  //                 lineStyle: {
-  //                   color: echarts.axisLineColor,
-  //                 },
-  //               },
+  //       },
+  //       series: [
+  //         {
+  //           name: 'Thống kê hỏi đáp',
+  //           type: 'pie',
+  //           radius: '80%',
+  //           center: ['50%', '50%'],
+  //           data: this.dataEchartsOption,
+  //           itemStyle: {
+  //             emphasis: {
+  //               shadowBlur: 10,
+  //               shadowOffsetX: 0,
+  //               shadowColor: echarts.itemHoverShadowColor,
   //             },
   //           },
-  //         ],
-  //       };
-  //       this.options = {
-  //         backgroundColor: echarts.bg,
-  //         color: [colors.primaryLight],
-  //         tooltip: {
-  //           trigger: 'axis',
-  //           axisPointer: {
-  //             type: 'shadow',
-  //           },
-  //         },
-  //         grid: {
-  //           left: '3%',
-  //           right: '4%',
-  //           bottom: '3%',
-  //           containLabel: true,
-  //         },
-  //         xAxis: [
-  //           {
-  //             type: 'category',
-  //             data: bar,
-  //             axisTick: {
-  //               alignWithLabel: true,
-  //             },
-  //             axisLine: {
-  //               lineStyle: {
-  //                 color: echarts.axisLineColor,
-  //               },
-  //             },
-  //             axisLabel: {
+  //           label: {
+  //             normal: {
   //               textStyle: {
   //                 color: echarts.textColor,
   //               },
   //             },
   //           },
-  //         ],
-  //         yAxis: [
-  //           {
-  //             type: 'value',
-  //             axisLine: {
+  //           labelLine: {
+  //             normal: {
   //               lineStyle: {
   //                 color: echarts.axisLineColor,
   //               },
   //             },
-  //             splitLine: {
-  //               lineStyle: {
-  //                 color: echarts.splitLineColor,
-  //               },
-  //             },
-  //             axisLabel: {
-  //               textStyle: {
-  //                 color: echarts.textColor,
-  //               },
-  //             },
   //           },
-  //         ],
-  //         series: [
-  //           {
-  //             name: 'Score',
-  //             type: 'bar',
-  //             barWidth: '60%',
-  //             data: [10, 52, 200, 334, 390, 330, 220],
-  //           },
-  //         ],
-  //       };
-  //     });
+  //         },
+  //       ],
+  //     };
+  //   });
   // }
-  ngOnDestroy(): void {
-    // this.themeSubscription.unsubscribe();
-  }
+
+  // bar() {
+  //   this.themeSubscription = this.themeService.getJsTheme().subscribe(config => {
+  //     const colors = config.variables;
+  //     const echarts: any = config.variables.echarts;
+  //     this.options = {
+  //               backgroundColor: echarts.bg,
+  //               color: [colors.primaryLight],
+  //               tooltip: {
+  //                 trigger: 'axis',
+  //                 axisPointer: {
+  //                   type: 'shadow',
+  //                 },
+  //               },
+  //               grid: {
+  //                 left: '3%',
+  //                 right: '4%',
+  //                 bottom: '3%',
+  //                 containLabel: true,
+  //               },
+  //               xAxis: [
+  //                 {
+  //                   type: 'category',
+  //                   data: this.dataBar,
+  //                   axisTick: {
+  //                     alignWithLabel: true,
+  //                   },
+  //                   axisLine: {
+  //                     lineStyle: {
+  //                       color: echarts.axisLineColor,
+  //                     },
+  //                   },
+  //                   axisLabel: {
+  //                     textStyle: {
+  //                       color: echarts.textColor,
+  //                     },
+  //                   },
+  //                 },
+  //               ],
+  //               yAxis: [
+  //                 {
+  //                   type: 'value',
+  //                   axisLine: {
+  //                     lineStyle: {
+  //                       color: echarts.axisLineColor,
+  //                     },
+  //                   },
+  //                   splitLine: {
+  //                     lineStyle: {
+  //                       color: echarts.splitLineColor,
+  //                     },
+  //                   },
+  //                   axisLabel: {
+  //                     textStyle: {
+  //                       color: echarts.textColor,
+  //                     },
+  //                   },
+  //                 },
+  //               ],
+  //               series: [
+  //                 {
+  //                   name: 'Score',
+  //                   type: 'bar',
+  //                   barWidth: '60%',
+  //                   data: this.dataBarOption,
+  //                 },
+  //               ],
+  //             };
+  //   });
+  // }
+
 }

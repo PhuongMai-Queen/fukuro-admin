@@ -35,5 +35,5 @@ export const routedComponents = [
   AdminsComponent,
   AdminListComponent,
   CreateAdminComponent,
-  EditAdminComponent
+  EditAdminComponent,
 ];

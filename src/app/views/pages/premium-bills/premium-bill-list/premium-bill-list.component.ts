@@ -11,6 +11,7 @@ import {ToastrService} from 'ngx-toastr';
 })
 export class PremiumBillListComponent implements OnInit {
   limit: 6;
+  status: 'both';
   settings = {
     actions: {
       custom: [

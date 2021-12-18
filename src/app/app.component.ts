@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
     this.analytics.trackPageViews();
     this.seoService.trackCanonicalChanges();
     const timer = localStorage.getItem('timerAdmin');
-    if(timer){
+    if (timer) {
       this.auth.loggedIn();
     }
     if (timer && Date.now() > Number(timer)) {

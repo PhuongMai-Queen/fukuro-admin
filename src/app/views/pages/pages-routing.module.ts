@@ -74,6 +74,11 @@ const routes: Routes = [{
         .then(m => m.PremiumsModule),
     },
     {
+      path: 'notifications',
+      loadChildren: () => import('./notifications/notifications.module')
+        .then(m => m.NotificationsModule),
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',

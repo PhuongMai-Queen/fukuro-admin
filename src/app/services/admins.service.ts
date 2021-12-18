@@ -13,6 +13,8 @@ const baseUrl = `${environment.apiURL}/admins`;
 export class AdminsService {
   profileImageUpdate$ = new Subject<string>();
   profileName$ = new Subject<string>();
+  notifications$ = new Subject<string>();
+  listNotifications$ = new Subject<string>();
   constructor(private http: HttpClient) {}
 
   login(data: any): Observable<any> {
