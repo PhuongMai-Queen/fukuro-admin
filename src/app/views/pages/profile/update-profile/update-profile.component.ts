@@ -25,7 +25,7 @@ export class UpdateProfileComponent implements OnInit {
               private http: HttpClient)
   {
     this.admins = this.fb.group({
-      avatar: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      avatar: ['', Validators.compose([Validators.required])],
       username: ['', Validators.compose([Validators.required])],
       password: [''],
       email: ['', Validators.compose([Validators.required, Validators.email])],

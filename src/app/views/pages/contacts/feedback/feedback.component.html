@@ -17,8 +17,8 @@
           <nb-card-header>Nội dung</nb-card-header>
           <nb-card-body>
             <div class="form-group">
-<!--              <ckeditor [config]="{ extraPlugins: 'divarea', height: '320' }" formControlName="message"></ckeditor>-->
-              <textarea rows="8" nbInput fullWidth formControlName="message"></textarea>
+              <ckeditor [config]="{ extraPlugins: 'divarea', height: '320' }" formControlName="message"></ckeditor>
+<!--              <textarea rows="8" nbInput fullWidth formControlName="message"></textarea>-->
               <div *ngIf="submitted && f.message.errors">
                 <small *ngIf="f.message.errors.required" class="text-danger small-popup">Nội dung bài viết không được bỏ trống!</small>
               </div>

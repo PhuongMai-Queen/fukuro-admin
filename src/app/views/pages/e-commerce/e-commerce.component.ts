@@ -32,6 +32,7 @@ export class ECommerceComponent implements OnInit {
   dataEchartsOption: any;
   dataBar: any;
   dataBarOption: any;
+  arrCheck: any;
 
   lightCard: CardSettings = {
     title: 'TIN CHO THUÊ',
@@ -152,6 +153,7 @@ export class ECommerceComponent implements OnInit {
     this.dataBar = [];
     this.dataBarOption = [];
     this.questionCategories = [];
+    this.arrCheck = [];
     this.themeService.getJsTheme()
       .pipe(takeWhile(() => this.alive))
       .subscribe(theme => {
@@ -177,154 +179,166 @@ export class ECommerceComponent implements OnInit {
       .then((data) => {
         this.coffeeMakerCard.amount = data['count'];
       });
-    // this.contactsService.countQuestionByCategories(this.date, this.date2).toPromise()
-    //   .then((data: any) => {
-    //     this.dataEcharts = [];
-    //     this.dataEchartsOption = [];
-    //     if(data.length > 0) {
-    //       for (let item of data) {
-    //         this.dataEcharts.push(item.name);
-    //       }
-    //       this.dataEchartsOption = data;
-    //       this.echart();
-    //     }
-    //   });
-    // this.contactsService.countIncomeByDate(this.date, this.date2).toPromise()
-    //   .then((data: any) => {
-    //     console.log(data);
-    //     this.dataBar = [];
-    //     this.dataBarOption = [];
-    //     if(data.length > 0){
-    //       for (let item of data) {
-    //         this.dataBar.push(this.datepipe.transform(item.date, 'yyyy-MM-dd'));
-    //         this.dataBarOption.push(item.value);
-    //       }
-    //       this.bar();
-    //     }
-    //   });
+    this.contactsService.countQuestionByCategories(this.date, this.date2).toPromise()
+      .then((data: any) => {
+        this.dataEcharts = [];
+        this.dataEchartsOption = [];
+        if(data.length > 0) {
+          for (let item of data) {
+            this.dataEcharts.push(item.name);
+          }
+          this.dataEchartsOption = data;
+          this.echart();
+        }
+      });
+    this.contactsService.countIncomeByDate(this.date, this.date2).toPromise()
+      .then((data: any) => {
+        this.dataBar = [];
+        this.dataBarOption = [];
+        if(data.length > 0){
+          for (let item of data) {
+            this.arrCheck.push({date: this.datepipe.transform(item.date, 'yyyy-MM-dd'), value: item.value});
+            this.dataBar.push(this.datepipe.transform(item.date, 'yyyy-MM-dd'));
+          }
+          let uniqueArray = this.dataBar.filter(function(item, pos, self) {
+            return self.indexOf(item) == pos;
+          });
+          this.dataBar = uniqueArray;
+          const result = this.arrCheck.reduce((acc, curr) => {
+            const objInAcc = acc.find((o) => o.date === curr.date);
+            if (objInAcc) objInAcc.value += curr.value;
+            else acc.push(curr);
+            return acc;
+          }, []);
+          for (let item of result) {
+            this.dataBarOption.push(item.value);
+          }
+          this.bar();
+        }
+      });
   }
 
-  // echart() {
-  //   this.themeSubscription = this.themeService.getJsTheme().subscribe(config => {
-  //     const colors = config.variables;
-  //     const echarts: any = config.variables.echarts;
-  //     this.optionsCircle = {
-  //       backgroundColor: echarts.bg,
-  //       color: [colors.warningLight, colors.infoLight, colors.dangerLight, colors.successLight, colors.primaryLight],
-  //       tooltip: {
-  //         trigger: 'item',
-  //         formatter: '{a} <br/>{b} : {c} ({d}%)',
-  //       },
-  //       legend: {
-  //         orient: 'vertical',
-  //         left: 'left',
-  //         data: this.dataEcharts,
-  //         textStyle: {
-  //           color: echarts.textColor,
-  //         },
-  //       },
-  //       series: [
-  //         {
-  //           name: 'Thống kê hỏi đáp',
-  //           type: 'pie',
-  //           radius: '80%',
-  //           center: ['50%', '50%'],
-  //           data: this.dataEchartsOption,
-  //           itemStyle: {
-  //             emphasis: {
-  //               shadowBlur: 10,
-  //               shadowOffsetX: 0,
-  //               shadowColor: echarts.itemHoverShadowColor,
-  //             },
-  //           },
-  //           label: {
-  //             normal: {
-  //               textStyle: {
-  //                 color: echarts.textColor,
-  //               },
-  //             },
-  //           },
-  //           labelLine: {
-  //             normal: {
-  //               lineStyle: {
-  //                 color: echarts.axisLineColor,
-  //               },
-  //             },
-  //           },
-  //         },
-  //       ],
-  //     };
-  //   });
-  // }
+  echart() {
+    this.themeSubscription = this.themeService.getJsTheme().subscribe(config => {
+      const colors = config.variables;
+      const echarts: any = config.variables.echarts;
+      this.optionsCircle = {
+        backgroundColor: echarts.bg,
+        color: [colors.warningLight, colors.infoLight, colors.dangerLight, colors.successLight, colors.primaryLight],
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)',
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+          data: this.dataEcharts,
+          textStyle: {
+            color: echarts.textColor,
+          },
+        },
+        series: [
+          {
+            name: 'Thống kê hỏi đáp',
+            type: 'pie',
+            radius: '80%',
+            center: ['50%', '50%'],
+            data: this.dataEchartsOption,
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: echarts.itemHoverShadowColor,
+              },
+            },
+            label: {
+              normal: {
+                textStyle: {
+                  color: echarts.textColor,
+                },
+              },
+            },
+            labelLine: {
+              normal: {
+                lineStyle: {
+                  color: echarts.axisLineColor,
+                },
+              },
+            },
+          },
+        ],
+      };
+    });
+  }
 
-  // bar() {
-  //   this.themeSubscription = this.themeService.getJsTheme().subscribe(config => {
-  //     const colors = config.variables;
-  //     const echarts: any = config.variables.echarts;
-  //     this.options = {
-  //               backgroundColor: echarts.bg,
-  //               color: [colors.primaryLight],
-  //               tooltip: {
-  //                 trigger: 'axis',
-  //                 axisPointer: {
-  //                   type: 'shadow',
-  //                 },
-  //               },
-  //               grid: {
-  //                 left: '3%',
-  //                 right: '4%',
-  //                 bottom: '3%',
-  //                 containLabel: true,
-  //               },
-  //               xAxis: [
-  //                 {
-  //                   type: 'category',
-  //                   data: this.dataBar,
-  //                   axisTick: {
-  //                     alignWithLabel: true,
-  //                   },
-  //                   axisLine: {
-  //                     lineStyle: {
-  //                       color: echarts.axisLineColor,
-  //                     },
-  //                   },
-  //                   axisLabel: {
-  //                     textStyle: {
-  //                       color: echarts.textColor,
-  //                     },
-  //                   },
-  //                 },
-  //               ],
-  //               yAxis: [
-  //                 {
-  //                   type: 'value',
-  //                   axisLine: {
-  //                     lineStyle: {
-  //                       color: echarts.axisLineColor,
-  //                     },
-  //                   },
-  //                   splitLine: {
-  //                     lineStyle: {
-  //                       color: echarts.splitLineColor,
-  //                     },
-  //                   },
-  //                   axisLabel: {
-  //                     textStyle: {
-  //                       color: echarts.textColor,
-  //                     },
-  //                   },
-  //                 },
-  //               ],
-  //               series: [
-  //                 {
-  //                   name: 'Score',
-  //                   type: 'bar',
-  //                   barWidth: '60%',
-  //                   data: this.dataBarOption,
-  //                 },
-  //               ],
-  //             };
-  //   });
-  // }
+  bar() {
+    this.themeSubscription = this.themeService.getJsTheme().subscribe(config => {
+      const colors = config.variables;
+      const echarts: any = config.variables.echarts;
+      this.options = {
+                backgroundColor: echarts.bg,
+                color: [colors.primaryLight],
+                tooltip: {
+                  trigger: 'axis',
+                  axisPointer: {
+                    type: 'shadow',
+                  },
+                },
+                grid: {
+                  left: '3%',
+                  right: '4%',
+                  bottom: '3%',
+                  containLabel: true,
+                },
+                xAxis: [
+                  {
+                    type: 'category',
+                    data: this.dataBar,
+                    axisTick: {
+                      alignWithLabel: true,
+                    },
+                    axisLine: {
+                      lineStyle: {
+                        color: echarts.axisLineColor,
+                      },
+                    },
+                    axisLabel: {
+                      textStyle: {
+                        color: echarts.textColor,
+                      },
+                    },
+                  },
+                ],
+                yAxis: [
+                  {
+                    type: 'value',
+                    axisLine: {
+                      lineStyle: {
+                        color: echarts.axisLineColor,
+                      },
+                    },
+                    splitLine: {
+                      lineStyle: {
+                        color: echarts.splitLineColor,
+                      },
+                    },
+                    axisLabel: {
+                      textStyle: {
+                        color: echarts.textColor,
+                      },
+                    },
+                  },
+                ],
+                series: [
+                  {
+                    name: 'Score',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: this.dataBarOption,
+                  },
+                ],
+              };
+    });
+  }
 
 }
