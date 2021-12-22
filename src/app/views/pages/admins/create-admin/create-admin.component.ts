@@ -25,15 +25,15 @@ export class CreateAdminComponent implements OnInit {
               private http: HttpClient) {
     // Reactive Form
     this.admins = this.fb.group({
-      avatar: ['', Validators.compose([Validators.required])],
+      avatar: [''],
       username: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
       password: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
       cpassword: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
       email: ['', Validators.compose([Validators.required, Validators.email])],
-      firstName: ['', Validators.compose([Validators.required])],
-      lastName: ['', Validators.compose([Validators.required])],
-      phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
-      role: ['', Validators.compose([Validators.required])],
+      firstName: [''],
+      lastName: [''],
+      phone: [''],
+      role: [''],
       status: ['1'],
     },
     {
@@ -68,7 +68,7 @@ export class CreateAdminComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  //Save Admin
+  // Save Admin
   saveAdmin(): any {
     const formData = new FormData();
     formData.append('file', this.images);
@@ -78,7 +78,29 @@ export class CreateAdminComponent implements OnInit {
     if (this.admins.invalid) {
       return false;
     }
-    this.http.post(environment.apiPostImg, formData).toPromise().then(res => {
+    if(this.images == null){
+      const data = {
+        avatar: this.admins.value['avatar'],
+        username: this.admins.value['username'],
+        password: this.admins.value['password'],
+        email: this.admins.value['email'],
+        first_name: this.admins.value['firstName'],
+        last_name: this.admins.value['lastName'],
+        phone: this.admins.value['phone'],
+        role: this.admins.value['role'],
+        status: this.admins.value['status'],
+      };
+      this.adminsService.create(data).subscribe(
+        (response) => {
+          this.submitted = true;
+          this.newAdmin();
+          this.toastrService.success('Thêm mới thành công!');
+        },
+        (error) => {
+          this.toastrService.success('Thêm mới thất bại!');
+        });
+    }else{
+      this.http.post(environment.apiPostImg, formData).toPromise().then(res => {
         this.result = true;
         if(this.result == true){
           const data = {
@@ -103,6 +125,7 @@ export class CreateAdminComponent implements OnInit {
             });
         }
       });
+    }
   }
 
   // Reset form

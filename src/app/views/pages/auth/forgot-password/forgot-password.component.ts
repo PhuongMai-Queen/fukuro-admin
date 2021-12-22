@@ -54,7 +54,7 @@ export class ForgotPasswordComponent implements OnInit {
         }
         else {
           this.done = false;
-          this.toastrService.error(error.error.text);
+          this.toastrService.error('Tên người dùng hoặc email không đúng!');
         }
       });
   }

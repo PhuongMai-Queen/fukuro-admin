@@ -134,8 +134,13 @@ export class AdminListComponent implements OnInit {
           this.adminsService.getAll(this.limit)
             .subscribe(
               res => {
-                for (var i = 0; i < res['rows'].length; i++) {
-                  res['rows'][i].avatar = environment.linkImg+res['rows'][i].avatar;
+                for (let item of res['rows']) {
+                  if(item.avatar != null){
+                    item.avatar = item.avatar;
+                  }
+                  if(item.avatar == null){
+                    item.avatar = 'https://via.placeholder.com/200x200';
+                  }
                 }
                 this.source = new LocalDataSource(res['rows']);
               });

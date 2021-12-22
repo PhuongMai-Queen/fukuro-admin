@@ -27,12 +27,12 @@ export class EditCustomerComponent implements OnInit {
               private activatedRoute: ActivatedRoute) {}
 
   customers = this.fb.group({
-    avatar: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+    avatar: [''],
     username: ['', Validators.compose([Validators.required])],
     email: ['', Validators.compose([Validators.required, Validators.email])],
-    firstName: ['', Validators.compose([Validators.required])],
-    lastName: ['', Validators.compose([Validators.required])],
-    phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
+    firstName: [''],
+    lastName: [''],
+    phone: ['', Validators.compose([Validators.pattern('[0-9 ]{10}')])],
     status: [1],
     avatarCus: [''],
     });
@@ -51,12 +51,12 @@ export class EditCustomerComponent implements OnInit {
       .subscribe(
         data => {
           this.customers = this.fb.group({
-            avatar: [environment.linkImg+data.avatar, Validators.compose([Validators.required, Validators.minLength(6)])],
+            avatar: [environment.linkImg+data.avatar],
             username: [data.username, Validators.compose([Validators.required])],
             email: [data.email, Validators.compose([Validators.required, Validators.email])],
-            firstName: [data.firstName, Validators.compose([Validators.required])],
-            lastName: [data.lastName, Validators.compose([Validators.required])],
-            phone: [data.phone, Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
+            firstName: [data.firstName],
+            lastName: [data.lastName],
+            phone: [data.phone, Validators.compose([Validators.pattern('[0-9 ]{10}')])],
             status: [data.status],
             avatarCus: [data.avatar],
           });

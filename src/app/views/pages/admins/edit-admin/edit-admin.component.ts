@@ -23,13 +23,13 @@ export class EditAdminComponent implements OnInit {
   submitted = false;
   error = '';
   admins = this.fb.group({
-      avatar: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      avatar: [''],
       username: ['', Validators.compose([Validators.required])],
       email: ['', Validators.compose([Validators.required, Validators.email])],
-      firstName: ['', Validators.compose([Validators.required])],
-      lastName: ['', Validators.compose([Validators.required])],
-      phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
-      role: ['', Validators.compose([Validators.required])],
+      firstName: [''],
+      lastName: [''],
+      phone: [''],
+      role: [''],
       status: ['1'],
       avatarCus: [''],
     });
@@ -54,13 +54,13 @@ export class EditAdminComponent implements OnInit {
       .subscribe(
         data => {
           this.admins = this.fb.group({
-            avatar: [environment.linkImg+data.avatar, Validators.compose([Validators.required, Validators.minLength(6)])],
+            avatar: [environment.linkImg+data.avatar],
             username: [data.username, Validators.compose([Validators.required])],
             email: [data.email, Validators.compose([Validators.required, Validators.email])],
-            firstName: [data.firstName, Validators.compose([Validators.required])],
-            lastName: [data.lastName, Validators.compose([Validators.required])],
-            phone: [data.phone, Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
-            role: [data.role, Validators.compose([Validators.required])],
+            firstName: [data.firstName],
+            lastName: [data.lastName],
+            phone: [data.phone],
+            role: [data.role],
             status: [data.status],
             avatarCus: [data.avatar],
           });

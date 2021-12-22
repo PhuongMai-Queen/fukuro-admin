@@ -69,8 +69,8 @@ export class BlogListComponent implements OnInit {
           this.blogsService.getAll(this.limit)
             .subscribe(
               res => {
-                for (var i = 0; i < res['rows'].length; i++) {
-                  res['rows'][i].thumbnail = environment.linkImg+res['rows'][i].thumbnail;
+                for (let item of res['rows']) {
+                  item.thumbnail = environment.linkImg+item.thumbnail;
                 }
                 this.source = new LocalDataSource(res['rows']);
               });

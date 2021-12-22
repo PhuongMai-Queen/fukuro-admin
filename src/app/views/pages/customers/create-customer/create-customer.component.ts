@@ -23,14 +23,14 @@ export class CreateCustomerComponent implements OnInit {
               private http: HttpClient) {
     // Reactive Form
     this.customers = this.fb.group({
-      avatar: ['', Validators.compose([Validators.required])],
+      avatar: [''],
       username: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
       password: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
       cpassword: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.pattern(/^\S*$/)])],
       email: ['', Validators.compose([Validators.required, Validators.email])],
-      firstName: ['', Validators.compose([Validators.required])],
-      lastName: ['', Validators.compose([Validators.required])],
-      phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
+      firstName: [''],
+      lastName: [''],
+      phone: ['', Validators.compose([Validators.pattern('[0-9 ]{10}')])],
       status: ['1'],
     },
       {
@@ -73,30 +73,53 @@ export class CreateCustomerComponent implements OnInit {
     if (this.customers.invalid) {
       return false;
     }
-    this.http.post(environment.apiPostImg, formData).toPromise().then(res => {
-      this.result = true;
-      if(this.result == true){
-        const data = {
-          avatar: res['filename'],
-          username: this.customers.value['username'],
-          password: this.customers.value['password'],
-          email: this.customers.value['email'],
-          first_name: this.customers.value['firstName'],
-          last_name: this.customers.value['lastName'],
-          phone: this.customers.value['phone'],
-          status: this.customers.value['status'],
-        };
-        this.customersService.create(data).subscribe(
-          (response) => {
-            this.submitted = true;
-            this.newAdmin();
-            this.toastrService.success('Thêm mới thành công!');
-          },
-          (error) => {
-            this.toastrService.success('Thêm mới thất bại!');
-          });
-      }
-    });
+    if(this.images == null){
+      const data = {
+        avatar: this.customers.value['avatar'],
+        username: this.customers.value['username'],
+        password: this.customers.value['password'],
+        email: this.customers.value['email'],
+        first_name: this.customers.value['firstName'],
+        last_name: this.customers.value['lastName'],
+        phone: this.customers.value['phone'],
+        status: this.customers.value['status'],
+      };
+      this.customersService.create(data).subscribe(
+        (response) => {
+          this.submitted = true;
+          this.newAdmin();
+          this.toastrService.success('Thêm mới thành công!');
+        },
+        (error) => {
+          this.toastrService.success('Thêm mới thất bại!');
+        });
+    }else{
+      this.http.post(environment.apiPostImg, formData).toPromise().then(res => {
+        this.result = true;
+        if(this.result == true){
+          const data = {
+            avatar: res['filename'],
+            username: this.customers.value['username'],
+            password: this.customers.value['password'],
+            email: this.customers.value['email'],
+            first_name: this.customers.value['firstName'],
+            last_name: this.customers.value['lastName'],
+            phone: this.customers.value['phone'],
+            status: this.customers.value['status'],
+          };
+          this.customersService.create(data).subscribe(
+            (response) => {
+              this.submitted = true;
+              this.newAdmin();
+              this.toastrService.success('Thêm mới thành công!');
+            },
+            (error) => {
+              this.toastrService.success('Thêm mới thất bại!');
+            });
+        }
+      });
+    }
+
   }
 
   //Reset form

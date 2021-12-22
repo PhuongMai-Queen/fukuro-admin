@@ -25,13 +25,13 @@ export class UpdateProfileComponent implements OnInit {
               private http: HttpClient)
   {
     this.admins = this.fb.group({
-      avatar: ['', Validators.compose([Validators.required])],
+      avatar: [''],
       username: ['', Validators.compose([Validators.required])],
       password: [''],
       email: ['', Validators.compose([Validators.required, Validators.email])],
-      firstName: ['', Validators.compose([Validators.required])],
-      lastName: ['', Validators.compose([Validators.required])],
-      phone: ['', Validators.compose([Validators.required, Validators.pattern('[0-9 ]{10}')])],
+      firstName: [''],
+      lastName: [''],
+      phone: ['', Validators.compose([Validators.pattern('[0-9 ]{10}')])],
       role: ['1', Validators.compose([Validators.required])],
       status: ['1'],
       avatarCus: [''],

@@ -39,7 +39,7 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="label col-form-label">Email</label>
-                <input type="email" nbInput fullWidth formControlName="email">
+                <input type="email" nbInput fullWidth formControlName="email" readonly>
                 <div *ngIf="submitted && f.email.errors">
                   <small *ngIf="f.email.errors.required" class="text-danger small-popup">Email không được bỏ trống!</small>
                   <small *ngIf="f.email.errors.email" class="text-danger small-popup">Email chưa đúng định dạng!</small>

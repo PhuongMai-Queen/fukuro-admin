@@ -80,8 +80,16 @@ export class CustomerListComponent implements OnInit {
           this.customersService.getAll(this.limit)
             .subscribe(
               res => {
-                for (var i = 0; i < res['rows'].length; i++) {
-                  res['rows'][i].avatar = environment.linkImg+res['rows'][i].avatar;
+                for (let item of res['rows']) {
+                  if(item.avatar != null && item.googleId == null){
+                    item.avatar = environment.linkImg+item.avatar;
+                  }
+                  if(item.avatar != null && item.googleId != null){
+                    item.avatar = item.avatar;
+                  }
+                  if(item.avatar == null && item.googleId == null){
+                    item.avatar = 'https://via.placeholder.com/200x200';
+                  }
                 }
                 this.source = new LocalDataSource(res['rows']);
               });

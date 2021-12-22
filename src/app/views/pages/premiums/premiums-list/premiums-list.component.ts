@@ -38,10 +38,6 @@ export class PremiumsListComponent implements OnInit {
         title: 'Giá tiền',
         type: 'string',
       },
-      description: {
-        title: 'Mô tả',
-        type: 'string',
-      },
       status: {
         title: 'Trạng Thái',
         type: 'html',
