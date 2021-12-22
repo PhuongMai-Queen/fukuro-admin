@@ -31,6 +31,7 @@ export class CreatePremiumsComponent implements OnInit {
         description: ['', Validators.compose([Validators.required])],
         promotionId: ['', Validators.compose([Validators.required])],
         status: ['1'],
+        type: [''],
       });
   }
 
@@ -68,7 +69,8 @@ export class CreatePremiumsComponent implements OnInit {
       description: this.premiums.value['description'],
       promotion_id: this.premiums.value['promotionId'],
       status: this.premiums.value['status'],
-    }
+      type: this.premiums.value['type'],
+    };
     this.premiumsService.create(data).subscribe(
       (response) => {
         this.newPremium();

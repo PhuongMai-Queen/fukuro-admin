@@ -112,6 +112,7 @@ export class AdminListComponent implements OnInit {
               private toastrService: ToastrService) {}
 
   ngOnInit(): void {
+    this.limit = 6;
     this.retrieveAdmins();
     const id = localStorage.getItem('id');
     if (id) {

@@ -15,7 +15,7 @@ export class PremiumsService {
     return this.http.post(`${baseUrl}/login`, data);
   }
   getAll(limit: any): Observable<Premiums[]> {
-    return this.http.get<Premiums[]>(`${baseUrl}?limit=${limit}`);
+    return this.http.get<Premiums[]>(`${baseUrl}?limit=${limit}&orderby=desc`);
   }
 
   get(id: any): Observable<Premiums> {

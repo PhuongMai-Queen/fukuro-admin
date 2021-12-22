@@ -3,6 +3,7 @@ import {AdminNotificationsService} from '../../../../services/admin-notification
 import {Router} from '@angular/router';
 import {ToastrService} from "ngx-toastr";
 import {AdminsService} from "../../../../services/admins.service";
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'ngx-notification-list',
@@ -13,6 +14,8 @@ export class NotificationListComponent implements OnInit {
   limit = 6;
   status = 'both';
   notifications: any;
+  checkLink = 'hoi-dap';
+  linkClient = environment.linkClient;
   constructor(
               private adminNotificationsService: AdminNotificationsService,
               private _router: Router,
@@ -76,13 +79,25 @@ export class NotificationListComponent implements OnInit {
   }
   adminNotifications(item) {
     const data = {status: 1};
+    // console.log(item.detailUrl);
+    // console.log(this.checkLink);
     if(item.status == 0){
       this.adminNotificationsService.update(item.id, data).subscribe(
         (response) => {
           this.updateCount();
-          this._router.navigate([item.detailUrl]);
+          if(item.detailUrl.includes(this.checkLink)){
+            window.location.href = this.linkClient + item.detailUrl;
+          }else{
+            this._router.navigate([item.detailUrl]);
+          }
           this.getNotification();
         });
+    }else{
+      if(item.detailUrl.includes(this.checkLink)){
+        window.location.href = this.linkClient + item.detailUrl;
+      }else{
+        this._router.navigate([item.detailUrl]);
+      }
     }
   }
   delete(id) {

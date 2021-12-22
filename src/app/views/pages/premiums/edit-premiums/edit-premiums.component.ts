@@ -30,7 +30,8 @@ export class EditPremiumsComponent implements OnInit {
         price: [''],
         description: [''],
         promotionId: [''],
-        status: ['1'],
+        status: [''],
+        type: [''],
       });
   }
   ngOnInit(): void {
@@ -45,12 +46,14 @@ export class EditPremiumsComponent implements OnInit {
         data => {
           this.premiums = this.fb.group(
             {
-              name: [data.name, Validators.compose([Validators.required])],
-              price: [data.price, Validators.compose([Validators.required, Validators.pattern('^[0-9]*$')])],
-              description: [data.description,  Validators.compose([Validators.required])],
-              promotionId: [data.promotionId],
-              status: [data.status]});
-          this.retrievePromotion(data.promotionId);
+              name: [data['rows'][0].name, Validators.compose([Validators.required])],
+              price: [data['rows'][0].price, Validators.compose([Validators.required, Validators.pattern('^[0-9]*$')])],
+              description: [data['rows'][0].description,  Validators.compose([Validators.required])],
+              promotionId: [data['rows'][0].promotionId],
+              status: [data['rows'][0].status],
+              type: [data['rows'][0].type],
+            });
+          this.retrievePromotion(data['rows'].promotionId);
         },
         error => {
           console.log(error);

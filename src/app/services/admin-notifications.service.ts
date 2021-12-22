@@ -13,7 +13,7 @@ const baseUrl = `${environment.apiURL}/admin-notifications`;
 export class AdminNotificationsService {
   constructor(private http: HttpClient) {}
   getAll(limit: any, status: any): Observable<AdminNotifications[]> {
-    return this.http.get<AdminNotifications[]>(`${baseUrl}?limit=${limit}&status=${status}`);
+    return this.http.get<AdminNotifications[]>(`${baseUrl}?limit=${limit}&status=${status}&orderby=desc`);
   }
 
   get(id: any): Observable<AdminNotifications> {

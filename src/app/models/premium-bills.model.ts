@@ -8,4 +8,5 @@ export class PremiumBills {
   customerId?: string;
   premiumId?: string;
   status?: string;
+  transactionCode?: number;
 }

@@ -42,6 +42,16 @@ export class LoginComponent implements OnInit {
     return this.login.controls;
   }
 
+  checkExpire(): void {
+    this.adminsService.checkExpire()
+      .subscribe(
+        data => {
+          // console.log(data);
+        },
+        error => {
+          console.log(error);
+        });
+  }
   onSubmit(): any {
     this.submitted = true;
     // return validators
@@ -50,6 +60,7 @@ export class LoginComponent implements OnInit {
     }
     this.adminsService.login(this.login.value).subscribe(
       (res) => {
+        this.checkExpire();
         localStorage.setItem('tokenAdmin', res.token);
         const time_to_login = Date.now() + 604800000;
         localStorage.setItem('timerAdmin', JSON.stringify(time_to_login));

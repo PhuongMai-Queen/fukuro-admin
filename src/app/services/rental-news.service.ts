@@ -15,7 +15,7 @@ export class RentalNewsService {
     return this.http.post(`${baseUrl}/login`, data);
   }
   getAll(limit: any): Observable<RentalNews[]> {
-    return this.http.get<RentalNews[]>(`${baseUrl}?limit=${limit}`);
+    return this.http.get<RentalNews[]>(`${baseUrl}?limit=${limit}&orderby=desc`);
   }
 
   get(id: any): Observable<RentalNews> {

@@ -13,7 +13,7 @@ export class BlogsService {
   constructor(private http: HttpClient) {}
 
   getAll(limit: any): Observable<Blogs[]> {
-    return this.http.get<Blogs[]>(`${baseUrl}?limit=${limit}`);
+    return this.http.get<Blogs[]>(`${baseUrl}?limit=${limit}&orderby=desc`);
   }
 
   get(id: any): Observable<Blogs> {

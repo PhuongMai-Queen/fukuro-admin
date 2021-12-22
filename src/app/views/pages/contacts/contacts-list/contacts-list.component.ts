@@ -45,6 +45,17 @@ export class ContactsListComponent implements OnInit {
         title: 'Chủ đề',
         type: 'string',
       },
+      status: {
+        title: 'Trạng thái',
+        type: 'html',
+        valuePrepareFunction: (value: any) => {
+          if(value == 0){
+            return 'Chưa gửi phản hồi';
+          }else{
+            return 'Đã gửi phản hồi';
+          }
+        },
+      },
     },
   };
 

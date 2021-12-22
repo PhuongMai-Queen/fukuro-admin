@@ -4,5 +4,6 @@ export class Premiums {
   price?: number;
   description?: string;
   status?: string;
+  type?: number;
   promotionId?: string;
 }

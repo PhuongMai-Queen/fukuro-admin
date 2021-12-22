@@ -13,7 +13,7 @@ import {ToastrService} from 'ngx-toastr';
 export class BlogCategoryListComponent implements OnInit {
   blogCategories?: BlogCategories[];
   currentBlogCategories: BlogCategories = {};
-  limit: 6;
+  limit = 6;
   settings = {
     actions: {
       custom: [
@@ -57,6 +57,7 @@ export class BlogCategoryListComponent implements OnInit {
               private toastrService: ToastrService,
   ) {}
   ngOnInit(): void {
+    this.limit = 6;
     this.retrieveBlogCategories();
   }
   retrieveBlogCategories(): void {

@@ -13,7 +13,7 @@ export class QuestionCategoriesService {
   constructor(private http: HttpClient) {}
 
   getAll(limit: any): Observable<QuestionCategories[]> {
-    return this.http.get<QuestionCategories[]>(`${baseUrl}?limit=${limit}`);
+    return this.http.get<QuestionCategories[]>(`${baseUrl}?limit=${limit}&orderby=desc`);
   }
 
   get(id: any): Observable<QuestionCategories> {

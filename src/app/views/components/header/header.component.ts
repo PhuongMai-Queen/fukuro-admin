@@ -25,6 +25,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   status = 0;
   countNewNotification: any;
   notification: any;
+  checkLink = 'hoi-dap';
+  linkClient = environment.linkClient;
   themes = [
     {
       value: 'default',
@@ -103,7 +105,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.adminNotificationsService.update(item.id, data).subscribe(
         (response) => {
           this.getNotification();
-          this._router.navigate([item.path]);
+          if(item.path.includes(this.checkLink)){
+            window.location.href = this.linkClient + item.path;
+          }else{
+            this._router.navigate([item.path]);
+          }
         });
     }
   }

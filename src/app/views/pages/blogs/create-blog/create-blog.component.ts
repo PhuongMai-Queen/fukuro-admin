@@ -39,7 +39,7 @@ export class CreateBlogComponent implements OnInit {
       thumbnail: ['', Validators.compose([Validators.required])],
       summary: ['', Validators.compose([Validators.required])],
       description: ['', Validators.compose([Validators.required])],
-      tag: ['', Validators.compose([Validators.required])],
+      tag: [''],
       status: ['1'],
       blogCategoryId: ['', Validators.compose([Validators.required])],
     });

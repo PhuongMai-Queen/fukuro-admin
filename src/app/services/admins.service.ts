@@ -21,7 +21,7 @@ export class AdminsService {
     return this.http.post(`${baseUrl}/login`, data);
   }
   getAll(limit: any): Observable<Admins[]> {
-    return this.http.get<Admins[]>(`${baseUrl}?limit=${limit}&status=both`);
+    return this.http.get<Admins[]>(`${baseUrl}?limit=${limit}&status=both&orderby=desc`);
   }
 
   get(id: any): Observable<Admins> {
@@ -62,5 +62,8 @@ export class AdminsService {
 
   requestContact(id: any, data: any): Observable<any> {
     return this.http.post(`${environment.apiURL}/admin-contacts/request-contact/${id}`, data);
+  }
+  checkExpire(): Observable<any> {
+    return this.http.get(`${environment.apiURL}/customer-premium-services/check-expire`);
   }
 }

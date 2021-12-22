@@ -13,7 +13,7 @@ export class PromotionsService {
   constructor(private http: HttpClient) {}
 
   getAll(limit: any): Observable<Promotions[]> {
-    return this.http.get<Promotions[]>(`${baseUrl}?limit=${limit}`);
+    return this.http.get<Promotions[]>(`${baseUrl}?limit=${limit}&orderby=desc`);
   }
 
   get(id: any): Observable<Promotions> {

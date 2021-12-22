@@ -99,17 +99,17 @@
           </nb-card-body>
         </nb-card>
 
-        <nb-card>
-          <nb-card-header>Tag</nb-card-header>
-          <nb-card-body>
-            <div class="form-group">
-              <tag-input formControlName="tag"></tag-input>
-              <div *ngIf="submitted && f.tag.errors">
-                <small *ngIf="f.tag.errors.required" class="text-danger small-popup">Tạo thẻ bài viết!</small>
-              </div>
-            </div>
-          </nb-card-body>
-        </nb-card>
+<!--        <nb-card>-->
+<!--          <nb-card-header>Tag</nb-card-header>-->
+<!--          <nb-card-body>-->
+<!--            <div class="form-group">-->
+<!--              <tag-input formControlName="tag"></tag-input>-->
+<!--              <div *ngIf="submitted && f.tag.errors">-->
+<!--                <small *ngIf="f.tag.errors.required" class="text-danger small-popup">Tạo thẻ bài viết!</small>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </nb-card-body>-->
+<!--        </nb-card>-->
 
         <button type="submit" nbButton status="success" fullWidth>Lưu</button>
       </div>
