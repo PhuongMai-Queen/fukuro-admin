@@ -160,10 +160,11 @@ export class AdminListComponent implements OnInit {
           .subscribe(
             response => {
               this.retrieveAdmins();
-              this.toastrService.success(response.message);
+              // this.toastrService.success(response.message);
+              this.toastrService.success('Xóa thành công!');
             },
             error => {
-              this.toastrService.success(error);
+              this.toastrService.error('Không thể xóa!');
             });
       }
     }

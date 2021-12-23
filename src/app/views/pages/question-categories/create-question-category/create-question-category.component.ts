@@ -70,7 +70,9 @@ export class CreateQuestionCategoryComponent implements OnInit {
         this.toastrService.success('Thêm mới thành công!');
       },
       (error) => {
-        console.log(error);
+        // console.log(error);
+        this.toastrService.error(error.error.message);
+
       });
   }
   newBlogCategory(): void {

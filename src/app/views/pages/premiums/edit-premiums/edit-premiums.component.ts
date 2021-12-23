@@ -71,7 +71,7 @@ export class EditPremiumsComponent implements OnInit {
         this.toastrService.success(response.message);
       },
       (error) => {
-        this.toastrService.success(error);
+        this.toastrService.error(error);
       });
   }
 

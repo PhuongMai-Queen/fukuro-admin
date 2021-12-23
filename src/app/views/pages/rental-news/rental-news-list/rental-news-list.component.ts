@@ -84,10 +84,10 @@ export class RentalNewsListComponent implements OnInit {
           .subscribe(
             response => {
               this.retrieveRentalNews();
-              this.toastrService.success(response.message);
+              this.toastrService.success('Xóa thành công!');
             },
             error => {
-              this.toastrService.success(error);
+              this.toastrService.error('Không thể xóa!');
             });
       }
     }

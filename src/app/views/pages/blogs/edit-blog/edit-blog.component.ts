@@ -160,7 +160,7 @@ export class EditBlogComponent implements OnInit {
           this.toastrService.success(response.message);
         },
         (error) => {
-          this.toastrService.success('Thêm mới thất bại!');
+          this.toastrService.error('Thêm mới thất bại!');
         });
     }
     else{
@@ -196,7 +196,7 @@ export class EditBlogComponent implements OnInit {
               this.toastrService.success(response.message);
             },
             (error) => {
-              this.toastrService.success('Thêm mới thất bại!');
+              this.toastrService.error('Thêm mới thất bại!');
             });
         }
       });

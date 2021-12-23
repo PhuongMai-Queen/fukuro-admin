@@ -140,7 +140,9 @@ export class CreateBlogComponent implements OnInit {
               this.toastrService.success('Thêm mới thành công!');
             },
             (error) => {
-              this.toastrService.success('Thêm mới thất bại!');
+              // this.toastrService.error('Thêm mới thất bại!');
+              this.toastrService.error(error.error.message);
+
             });
         }
       });

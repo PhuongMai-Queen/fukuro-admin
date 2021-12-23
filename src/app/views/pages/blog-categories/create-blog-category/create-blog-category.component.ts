@@ -71,6 +71,8 @@ export class CreateBlogCategoryComponent implements OnInit {
       },
       (error) => {
         console.log(error);
+        this.toastrService.error(error.error.message);
+
       });
   }
   newBlogCategory(): void {

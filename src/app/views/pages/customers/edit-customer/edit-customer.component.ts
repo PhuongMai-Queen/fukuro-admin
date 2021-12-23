@@ -113,7 +113,7 @@ export class EditCustomerComponent implements OnInit {
           this.toastrService.success(response.message);
         },
         (error) => {
-          this.toastrService.success(error.message);
+          this.toastrService.error(error.message);
         });
     }else{
       this.customersService.get(this.id).toPromise().then(
@@ -147,7 +147,7 @@ export class EditCustomerComponent implements OnInit {
               this.toastrService.success(response.message);
             },
             (error) => {
-              this.toastrService.success(error.message);
+              this.toastrService.error(error.message);
             });
         }
       });

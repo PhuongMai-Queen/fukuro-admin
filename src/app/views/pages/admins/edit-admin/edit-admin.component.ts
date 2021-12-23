@@ -124,7 +124,7 @@ export class EditAdminComponent implements OnInit {
           this.toastrService.success(response.message);
         },
         (error) => {
-          this.toastrService.success(error.message);
+          this.toastrService.error(error.message);
         });
     }else{
       this.adminsService.get(this.id).toPromise().then(
@@ -164,7 +164,7 @@ export class EditAdminComponent implements OnInit {
               this.toastrService.success(response.message);
             },
             (error) => {
-              this.toastrService.success(error.message);
+              this.toastrService.error(error.message);
             });
         }
       });

@@ -107,10 +107,10 @@ export class NotificationListComponent implements OnInit {
           response => {
             this.updateCount();
             this.getNotification();
-            this.toastrService.success(response.message);
+            this.toastrService.success('Xóa thành công!');
           },
           error => {
-            this.toastrService.success(error.message);
+            this.toastrService.error('Không thể xóa!');
           });
     }
   }
@@ -121,10 +121,10 @@ export class NotificationListComponent implements OnInit {
           response => {
             this.updateCount();
             this.getNotification();
-            this.toastrService.success(response.message);
+            this.toastrService.success('Xóa thành công!');
           },
           error => {
-            this.toastrService.success(error.message);
+            this.toastrService.error('Không thể xóa!');
           });
     }
   }
